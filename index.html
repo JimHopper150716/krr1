@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Representation and Reasoning: Representing Knowledge as Rules</title>
+    <script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+    <style>
+        /* --- Base Dark Theme --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #000000;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        /* --- Typography & Headings --- */
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {;
+            margin-top: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        h3 {;
+            margin-top: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        strong {
+            color: #ffffff;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #333;
+            margin: 30px 0;
+        }
+
+        /* --- Table Styling (Dark Mode) --- */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #242424;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #3a3a3a;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #1a2f3a;
+            color: #aed6f1;
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #1a2f3a;
+            padding: 15px;
+            border-left: 4px solid #5dade2;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .takeaway {
+            background-color: #33290a;
+            padding: 15px;
+            border-left: 4px solid #f4d03f;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fcf3cf;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>A Brief History of Knowledge Representation and Reasoning (KRR)</h1>
+    <h2>Part 1: The Human Problem (Why do we need this?)</h2>
+    <p>Since the dawn of humanity, we have been trying to figure out how to represent and pass down knowledge. We started with myths, symbols, and stories to share ideas, discoveries, and warnings. We do this so the next generation can build on the experiences of the past.</p>
+
+    <h3>The Flaw in Human Tradition:</h3>
+    <p>While oral and written traditions are great vaults of knowledge, they fail the "test of time" and the "test of meaning."</p>
+    <ul>
+        <li><strong>Meanings change:</strong> Over time, the original intent of a text gets lost or altered.</li>
+        <li><strong>Language is vague:</strong> Human language is naturally ambiguous. Think of how many ways a single poem can be interpreted.</li>
+        <li><strong>Hard to update:</strong> As the world evolves, old texts can't easily be updated to reflect new realities.</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>The Goal:</strong> We want a way to manage knowledge with absolute <strong>guarantees</strong>. We want to represent information so precisely that anyone (or any machine) reading it interprets it <em>exactly</em> as intended, without needing a trained scholar to decipher metaphors.
+    </div>
+
+    <h2>Part 2: The First Attempt – Aristotle's Logic</h2>
+    <p>Fast forward to the Ancient Greeks. Aristotle was the first to try and create a mathematical system for language, focusing on <strong>valid inferences</strong> (how to logically deduce a new fact from existing facts).</p>
+    <p>He created a system called <strong>Syllogisms</strong>, which categorizes knowledge into classes using four basic types of sentences:</p>
+    <ul>
+        <li><strong>A:</strong> Every X is a Y <em>(e.g., Every human is mortal)</em></li>
+        <li><strong>E:</strong> Some X are Y <em>(e.g., Some humans are vegetarian)</em></li>
+        <li><strong>I:</strong> No X is a Y <em>(e.g., No human is a god)</em></li>
+        <li><strong>O:</strong> Some X are not Y <em>(e.g., Some humans are not athletes)</em></li>
+    </ul>
+
+    <h3>Sentence Algebra</h3>
+    <p>Aristotle created derivation rules (think of them as algebra for words) to extract consequences from these sentences. Some famous patterns were named BARBARA, CELARENT, DARII, and FERIO.</p>
+    <p><em>Example of "BARBARA":</em> If <strong>A</strong> (Every human is mortal) and <strong>A</strong> (Every Greek is a human), then we can definitively conclude <strong>A</strong> (Every Greek is mortal).</p>
+
+    <h3>Two Brilliant Insights from Aristotle:</h3>
+    <p>For a logic system to be perfect, it needs two features:</p>
+    <ol>
+        <li><strong>Soundness:</strong> If you put "true" facts into the system, it will only spit out "true" conclusions. It never accidentally creates a lie.</li>
+        <li><strong>Completeness:</strong> The system is capable of finding <em>every single possible truth</em> hidden within the facts you gave it.</li>
+    </ol>
+
+    <h3>The Limitations:</h3>
+    <p>Aristotle's system was groundbreaking but very weak. It could only compare two groups at a time. It couldn't handle "OR" statements (disjunctions), complex properties, or relationships between specific objects (e.g., it couldn't compute "John loves Mary").</p>
+
+    <h2>Part 3: The Long Gap and Classical Logic</h2>
+    <p>For about 2,000 years, logic didn't change much. It was mostly used by philosophers to win arguments.</p>
+    <p>Then, George Boole and other mathematicians created an "algebra of truth values" (Boolean logic, where things are strictly True or False). This led to two major classical languages:</p>
+
+    <ul>
+        <li><strong>Propositional Logic:</strong> A simple language that describes general True/False properties.
+            <br><em>The Problem:</em> It is too weak and inexpressive to describe complex real-world scenarios.</li>
+        <li><strong>Predicate Logic (First-Order Logic):</strong> A much richer language that allows for complex math, functions, and relationships between objects.
+            <br><em>The Problem:</em> It is too complex. Because it is so vast, computers struggle with it. It suffers from <strong>undecidability</strong>—meaning if you ask a computer to reason through Predicate Logic, it might get stuck calculating forever without ever giving you an answer.</li>
+    </ul>
+
+    <div class="highlight">
+        <strong>The Goldilocks Problem:</strong> Since then, computer scientists have been searching for the perfect balance: a language that is <em>expressive enough</em> to be useful, but <em>simple enough</em> that a computer can process it in a reasonable amount of time.
+    </div>
+
+    <h2>Part 4: The Era of Artificial Intelligence</h2>
+    <p>When computers were invented, the "AI Dream" was born. Early AI researchers wanted to build "Intelligent Agents" (AI systems) that could understand their environment. To be intelligent, an AI must be able to infer things that aren't explicitly told to it.</p>
+    <p>To build an AI, researchers realized they needed three specific things:</p>
+    <ol>
+        <li>A language that machines can read to store knowledge.</li>
+        <li>A formal, finite mechanism for the machine to reason and make deductions.</li>
+        <li>A query language so humans can ask the machine questions.</li>
+    </ol>
+
+    <h3>Early AI Failures:</h3>
+    <p>Researchers tried building visual, machine-tailored systems to map out knowledge:</p>
+    <ul>
+        <li><strong>Semantic Networks:</strong> Making a graph with arrows. (e.g., A box saying "Frog" with an arrow pointing to "Green" labeled "hasColor").</li>
+        <li><strong>Frames:</strong> Creating templates with blank fill-in-the-blank windows for properties (e.g., a master template for "Animal" that requires a specific "Color" and "Digestive System" to be filled in).</li>
+    </ul>
+    <p><em>Why they failed:</em> They had <strong>no formal semantics</strong> (no strict dictionary definition of how the machine should read the data). Every programmer's code interpreted the arrows and boxes differently. We were back to the human problem of ambiguity.</p>
+
+    <h2>Part 5: The Solution – Logic-Based KR & Description Logics</h2>
+    <p>To fix the AI problem, computer scientists realized they needed to go back to strict logic. They needed languages with a <strong>clear syntax</strong> (grammar) and <strong>formal semantics</strong> (absolute, unambiguous meaning).</p>
+
+    <p>This led to the creation of <strong>Description Logics (DLs)</strong>.</p>
+    <p>Description Logics are a family of knowledge languages. Remember First-Order Logic, which was too complex for computers? DLs take carefully chosen, safe "fragments" of First-Order Logic. By limiting what the language can do, they guarantee the computer can process it efficiently.</p>
+    <p>Because different applications require different levels of complexity, there are <em>many</em> different DLs. You choose the one that offers the best trade-off between expressivity and computing speed for your specific project.</p>
+
+    <h2>Part 6: Modern Applications – The Web and Knowledge Graphs</h2>
+    <h3>The Semantic Web:</h3>
+    <p>In the early days of the internet, humans could read webpages, but computers just saw a bunch of code. The goal of the Semantic Web was to add invisible, machine-readable tags to websites so computers could "understand" what a page was actually about. The foundation for these web languages (like OWL - Web Ontology Language) is built directly on Description Logics.</p>
+
+    <h3>Knowledge Graphs:</h3>
+    <p>In 2012, Google announced the "Knowledge Graph." (This is the technology that allows Google to show you a neat little fact box with relationships, birthdates, and spouses when you search for a famous person). Every major tech company immediately started building their own. What is a knowledge graph? It is simply whatever way of mapping and connecting data best fits a specific company's application.</p>
+
+    <h2>Part 7: Conclusion – The Curse of Reality</h2>
+    <p>Knowledge Representation and Reasoning (KRR) is a highly successful field that powers modern AI and search engines. However, there is a catch: <strong>Reality is not as logical as we want it to be.</strong></p>
+    
+    <p>Pure logic is black-and-white (True or False). But the real world is messy. To represent <em>real</em> knowledge, modern systems have to figure out how to handle:</p>
+    <ul>
+        <li><strong>Uncertainty & Vagueness:</strong> How does a computer define "tall" or "probably?"</li>
+        <li><strong>Time:</strong> Facts change. (e.g., The President of the US in 2010 is not the President in 2025).</li>
+        <li><strong>Contradictions:</strong> Humans hold conflicting rules and ideas.</li>
+        <li><strong>Changing Regulations and Updates:</strong> Knowledge isn't static.</li>
+    </ul>
+
+    <div class="takeaway">
+        The Takeaway: While pure, formal logic is an absolutely necessary starting point for Artificial Intelligence, every real-world application eventually requires custom, "ad-hoc" tweaks to deal with the messy reality of the human world.
+    </div>
+
+    <h1>Knowledge Representation and Reasoning</h1>
+
+
+    <h2>Part 1: The Basics of Boolean Algebra</h2>
+    <p>Boolean algebra is simply a mathematical system used to manipulate <strong>truth values</strong>. Instead of doing math with normal numbers, you are doing math with logic.</p>
+
+    <p>In this system, we only care about two possible values:</p>
+    <ul>
+        <li><strong>True</strong>, which is represented by the number <strong>1</strong>.</li>
+        <li><strong>False</strong>, which is represented by the number <strong>0</strong>.</li>
+    </ul>
+
+    <p>To manipulate these true/false values, we use three basic "operators" (think of these like the logical versions of plus, minus, and multiply):</p>
+    <ol>
+        <li><strong>Conjunction</strong> (AND)</li>
+        <li><strong>Disjunction</strong> (OR)</li>
+        <li><strong>Negation</strong> (NOT)</li>
+    </ol>
+
+    <h3>1. Conjunction (The "AND" Operator)</h3>
+    <ul>
+        <li><strong>Symbol:</strong> &and;</li>
+        <li><strong>Rule:</strong> An AND statement is only <strong>true</strong> if <strong>both</strong> of its parts are true. Otherwise, it is false.</li>
+        <li><strong>Math Hint:</strong> Think of AND as the <strong>minimum (min)</strong> function. If you compare two values, it always outputs the lowest one. The minimum of 1 and 0 is 0. The minimum of 1 and 1 is 1.</li>
+    </ul>
+
+    <p><strong>Truth Table for AND (&and;):</strong></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Left Value</th>
+                <th>Right Value</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0 (False)</td>
+                <td>0 (False)</td>
+                <td><strong>0 (False)</strong></td>
+            </tr>
+            <tr>
+                <td>0 (False)</td>
+                <td>1 (True)</td>
+                <td><strong>0 (False)</strong></td>
+            </tr>
+            <tr>
+                <td>1 (True)</td>
+                <td>0 (False)</td>
+                <td><strong>0 (False)</strong></td>
+            </tr>
+            <tr>
+                <td>1 (True)</td>
+                <td>1 (True)</td>
+                <td><strong>1 (True)</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>2. Disjunction (The "OR" Operator)</h3>
+    <ul>
+        <li><strong>Symbol:</strong> &or;</li>
+        <li><strong>Rule:</strong> An OR statement is <strong>true</strong> if <strong>at least one</strong> of its parts is true. It is only false if <em>both</em> parts are false.</li>
+        <li><strong>Math Hint:</strong> Think of OR as the <strong>maximum (max)</strong> function. It always outputs the highest value. The max of 1 and 0 is 1.</li>
+    </ul>
+
+    <p><strong>Truth Table for OR (&or;):</strong></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Left Value</th>
+                <th>Right Value</th>
+                <th>Result</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0 (False)</td>
+                <td>0 (False)</td>
+                <td><strong>0 (False)</strong></td>
+            </tr>
+            <tr>
+                <td>0 (False)</td>
+                <td>1 (True)</td>
+                <td><strong>1 (True)</strong></td>
+            </tr>
+            <tr>
+                <td>1 (True)</td>
+                <td>0 (False)</td>
+                <td><strong>1 (True)</strong></td>
+            </tr>
+            <tr>
+                <td>1 (True)</td>
+                <td>1 (True)</td>
+                <td><strong>1 (True)</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>3. Negation (The "NOT" Operator)</h3>
+    <ul>
+        <li><strong>Symbol:</strong> &not;</li>
+        <li><strong>Rule:</strong> NOT simply flips the value. If something is true, NOT makes it false. If it is false, NOT makes it true.</li>
+        <li><strong>Math Hint:</strong> This represents <strong>duality</strong>&mdash;the exact opposite of the current state.</li>
+    </ul>
+
+    <p><strong>Truth Table for NOT (&not;):</strong></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Value</th>
+                <th>Result (&not;)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0 (False)</td>
+                <td><strong>1 (True)</strong></td>
+            </tr>
+            <tr>
+                <td>1 (True)</td>
+                <td><strong>0 (False)</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>4. Other Operators (Like XOR)</h3>
+    <p>There are other logical operators beyond the basic three. A common one is <strong>XOR</strong> (Exclusive OR).</p>
+    <ul>
+        <li><strong>Rule:</strong> XOR is true <strong>if and only if exactly one</strong> value is true. If both are true, or both are false, the result is false.</li>
+    </ul>
+    <p><em>Lecture Exercise:</em> Build an XOR table.<br>
+    <em>(Here is the solution based on the rule above)</em>:</p>
+    <ul>
+        <li>0 XOR 0 = 0</li>
+        <li>0 XOR 1 = 1</li>
+        <li>1 XOR 0 = 1</li>
+        <li>1 XOR 1 = 0</li>
+    </ul>
+
+    <h3>Complex Expressions</h3>
+    <p>We can string these operators together to build complex math-like equations.<br>
+    For example, look at this expression:<br>
+    <strong>(&not;(1 &or; 0)) &and; (1 &or; (1 &and; 0))</strong></p>
+    
+    <p>Let's solve it step-by-step like a math problem:</p>
+    <ol>
+        <li>Solve inner parentheses: (1 &or; 0) is 1. (1 &and; 0) is 0.</li>
+        <li>Now we have: (&not; 1) &and; (1 &or; 0)</li>
+        <li>Solve the next steps: &not; 1 becomes 0. (1 &or; 0) becomes 1.</li>
+        <li>Finally we have: 0 &and; 1, which equals <strong>0</strong>.</li>
+    </ol>
+
+    <p>Working with just 1s and 0s is a bit boring. To make this useful, we replace the 1s and 0s with <strong>variables</strong> (like <i>x</i>, <i>y</i>, <i>z</i>).</p>
+
+    <hr>
+
+    <h2>Part 2: Propositional Logic</h2>
+    <p>Propositional logic is a system used to combine <strong>propositions</strong> (which are just sentences or statements) so we can figure out if the overall conclusion is True or False.</p>
+
+    <p><strong>Atomic Propositions</strong><br>
+    These are the most basic, simple sentences that state one specific fact or property. Examples from the lecture:</p>
+    <ul>
+        <li>"Mammals are vertebrate"</li>
+        <li>"Vertebrates are vegetarians"</li>
+        <li>"Cars have umbrellas"</li>
+        <li>"It's Slay" (slang/joke example)</li>
+        <li>Or simply the variable "<i>x</i>"</li>
+    </ul>
+
+    <p>We take these simple sentences and use logic <strong>formulas</strong> to combine them into complex statements.</p>
+
+    <h3>Logic as a Language</h3>
+    <p>Any logical system is just a type of language. To use a language properly, you need two things:</p>
+    <ol>
+        <li><strong>Syntax:</strong> The grammar. What expressions and symbols are legally allowed to be written together?</li>
+        <li><strong>Semantics:</strong> The meaning. What do those legal expressions actually tell us?</li>
+    </ol>
+
+    <h3>The Syntax (Grammar Rules)</h3>
+    <p>Let's define the grammar of Propositional Logic. We start with a set of <strong>propositional variables</strong> (atomic statements like <i>x</i>, <i>y</i>, <i>w</i>, <i>z</i>).</p>
+
+    <p>A "legal" formula is defined by these rules:</p>
+    <ol>
+        <li>Any single variable by itself is a valid formula.</li>
+        <li>If you have two valid formulas (let's call them <i>&phi;</i> and <i>&psi;</i>), you can combine them to make new valid formulas using our operators:
+            <ul>
+                <li>&not;<i>&phi;</i> (NOT <i>&phi;</i>)</li>
+                <li><i>&phi;</i> &and; <i>&psi;</i> (<i>&phi;</i> AND <i>&psi;</i>)</li>
+                <li><i>&phi;</i> &or; <i>&psi;</i> (<i>&phi;</i> OR <i>&psi;</i>)</li>
+            </ul>
+        </li>
+    </ol>
+
+    <p><strong>Operator Precedence (Order of Operations):</strong><br>
+    If you don't have parentheses to guide you, you must evaluate operators in this specific order:</p>
+    <ol>
+        <li>First, apply all <strong>NOT</strong>s (&not;)</li>
+        <li>Second, apply all <strong>AND</strong>s (&and;)</li>
+        <li>Third, apply all <strong>OR</strong>s (&or;)</li>
+    </ol>
+
+    <p><strong>Examples of well-formed syntax using variables <i>w</i>, <i>x</i>, <i>y</i>, <i>z</i>:</strong></p>
+    <ul>
+        <li>&not;<i>w</i></li>
+        <li>&not;<i>w</i> &and; <i>z</i> (Because of precedence, this means (&not;<i>w</i>) &and; <i>z</i>)</li>
+        <li><i>x</i> &or; <i>y</i></li>
+        <li>&not;(<i>x</i> &or; <i>y</i>)</li>
+        <li>&not;(<i>x</i> &or; <i>y</i>) &and; (&not;<i>w</i> &and; <i>z</i>)</li>
+    </ul>
+
+    <p>Basically, anything that intuitively looks "well-formed" following the rules is allowed.</p>
+
+    <hr>
+
+    <h2>Part 3: The Semantics (What it all means)</h2>
+    <p>We know that basic atomic propositions (variables) can be either true (1) or false (0). But how do we find the truth value of a giant, complex formula?</p>
+
+    <p>The truth of a big formula depends entirely on the truth of its smaller components (subformulas). To figure it out, you <strong>must specify a truth value for every single variable involved.</strong> Once you do that, the final answer is locked in.</p>
+
+    <h3>Valuations (Assigning values)</h3>
+    <p>A <strong>valuation</strong> is the act of assigning a truth value to <em>each</em> variable.<br>
+    In formal math terms, it is a function: <i>V</i> : <i>P</i> &rarr; {0, 1}.<br>
+    <em>(Translation: A function named V looks at a set of variables P and assigns either a 0 or 1 to every single one).</em></p>
+
+    <p><strong>Example of a Valuation:</strong><br>
+    Let's say we have variables <i>w</i>, <i>x</i>, <i>y</i>, <i>z</i>. We can assign them values like this:</p>
+    <ul>
+        <li><i>V</i>(<i>w</i>) = 0 (<i>w</i> is false)</li>
+        <li><i>V</i>(<i>x</i>) = 1 (<i>x</i> is true)</li>
+        <li><i>V</i>(<i>y</i>) = 1 (<i>y</i> is true)</li>
+        <li><i>V</i>(<i>z</i>) = 0 (<i>z</i> is false)</li>
+    </ul>
+
+    <p>Once we have a valuation, we can extend it to solve whole formulas, being very careful with the exact meaning of our operators:</p>
+    <ul>
+        <li><strong>NOT:</strong> <i>V</i>(&not;<i>&phi;</i>) = 1 if and only if <i>V</i>(<i>&phi;</i>) = 0. (If the variable is 0, the NOT formula becomes 1).</li>
+        <li><strong>AND:</strong> <i>V</i>(<i>&phi;</i> &and; <i>&psi;</i>) = 1 if and only if <em>both</em> <i>V</i>(<i>&phi;</i>) = 1 AND <i>V</i>(<i>&psi;</i>) = 1.</li>
+        <li><strong>OR:</strong> <i>V</i>(<i>&phi;</i> &or; <i>&psi;</i>) = 1 if and only if <i>V</i>(<i>&phi;</i>) = 1 OR <i>V</i>(<i>&psi;</i>) = 1.</li>
+    </ul>
+
+    <h3>Evaluating Complex Truth Tables</h3>
+    <p>By plugging these valuations into a table, we can solve larger equations. Here is an example evaluating a complex formula using the valuations we set above (<i>w</i>=0, <i>x</i>=1, <i>y</i>=1, <i>z</i>=0):</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th><i>w</i></th>
+                <th><i>x</i></th>
+                <th><i>y</i></th>
+                <th><i>z</i></th>
+                <th>&not;<i>w</i></th>
+                <th>&not;<i>w</i> &and; <i>z</i></th>
+                <th><i>x</i> &or; <i>y</i></th>
+                <th>&not;(<i>x</i> &or; <i>y</i>)</th>
+                <th><strong>Final:</strong> &not;(<i>x</i> &or; <i>y</i>) &and; (&not;<i>w</i> &and; <i>z</i>)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td><strong>0</strong></td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td><strong>1</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>Here is another quick example using a single variable, <i>u</i>:</p>
+    <table>
+        <thead>
+            <tr>
+                <th><i>u</i></th>
+                <th>&not;<i>u</i></th>
+                <th>&not;<i>u</i> &or; <i>u</i></th>
+                <th>&not;<i>u</i> &and; <i>u</i></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Part 4: Categorizing Formulas and Equivalence</h2>
+
+    <h3>Three Kinds of Formulas</h3>
+    <p>If you look at the final outputs of a truth table, formulas fall into three categories:</p>
+    <ol>
+        <li><strong>Tautologies:</strong> These are formulas that ALWAYS evaluate to 1 (true), no matter what valuation you give the variables. (Example: <i>u</i> &or; &not;<i>u</i> will <em>always</em> be true).</li>
+        <li><strong>Contradictions:</strong> These are formulas that ALWAYS evaluate to 0 (false), no matter the valuation. (Example: <i>u</i> &and; &not;<i>u</i> will <em>always</em> be false).</li>
+        <li><strong>Satisfiable (non-tautological):</strong> These are all other formulas. They are sometimes true and sometimes false, depending on the variable values you plug in.</li>
+    </ol>
+
+    <h3>Formulas as Functions</h3>
+    <p>Think of a formula with <i>n</i> number of variables as a computer function. You input <i>n</i> truth values, and the function spits out exactly one truth value at the end. What truly defines a formula is its <strong>behavior</strong> as a function&mdash;meaning its final truth table outputs.</p>
+
+    <h3>Equivalence (Formulas that mean the same thing)</h3>
+    <p>Two formulas are considered <strong>equivalent</strong> (written with the symbol &equiv;) if and only if they have the exact same final truth table. Even if the expressions look totally different syntactically, if their final column of 1s and 0s matches, they mean the same thing.</p>
+
+    <p><strong>Example:</strong><br>
+    The formula <i>x</i> &and; <i>y</i> is perfectly equivalent to (<i>x</i> &and; <i>y</i>) &and; (<i>x</i> &or; <i>y</i>).<br>
+    We write this as: <i>x</i> &and; <i>y</i> &equiv; (<i>x</i> &and; <i>y</i>) &and; (<i>x</i> &or; <i>y</i>).</p>
+
+    <p><strong>Variable Accumulation:</strong><br>
+    When you are comparing two formulas that don't have the same variables, you have to mentally expand their truth tables so they share all variables.</p>
+    <ul>
+        <li>Example of non-equivalence: <i>x</i> &or; <i>y</i> &nequiv; <i>x</i> &or; <i>z</i> (They don't mean the same thing because they rely on different variables).</li>
+        <li><em>Lecture Exercise:</em> Prove that <i>x</i> &and; <i>y</i> &equiv; <i>x</i> &and; <i>y</i> &and; (<i>z</i> &or; &not;<i>z</i>). <em>(Hint: Because <i>z</i> &or; &not;<i>z</i> is a tautology and is ALWAYS true, ANDing it to <i>x</i> &and; <i>y</i> does not change the truth value of the original statement).</em></li>
+    </ul>
+
+    <h3>Special Constant Formulas</h3>
+    <ul>
+        <li>All tautologies are functionally identical, so we use a special symbol to represent an arbitrary, always-true formula: <strong>&top; (called "Top")</strong>.</li>
+        <li>All contradictions are functionally identical, so we use a special symbol for an arbitrary, always-false formula: <strong>&perp; (called "Bottom")</strong>.</li>
+    </ul>
+
+    <p><strong>Helpful Properties using Top and Bottom:</strong></p>
+    <ul>
+        <li><i>&phi;</i> &and; &top; &equiv; <i>&phi;</i> (Something AND True just equals that same something)</li>
+        <li><i>&phi;</i> &or; &top; &equiv; &top; (Something OR True is always True)</li>
+        <li><i>&phi;</i> &or; &perp; &equiv; <i>&phi;</i> (Something OR False just equals that same something)</li>
+        <li><i>&phi;</i> &and; &perp; &equiv; &perp; (Something AND False is always False)</li>
+    </ul>
+
+    <hr>
+
+    <h2>Part 5: Advanced Operator Concepts</h2>
+
+    <h3>We don't need all the operators!</h3>
+    <p>We can invent as many new operators as we want. For example:</p>
+    <ul>
+        <li><strong>NAND:</strong> "Not both true"</li>
+        <li><strong>Implication (<i>x</i> &rarr; <i>y</i>):</strong> "If <i>x</i>, then <i>y</i>"</li>
+    </ul>
+
+    <p>However, we have a concept called <strong>Completeness of Operators</strong>. This means that <strong>ALL</strong> possible logical operations and formulas can be expressed using <em>only</em> our basic three: <strong>&not; (NOT), &and; (AND), and &or; (OR)</strong>.</p>
+
+    <p><strong>Examples of translating other operators into the basic three:</strong></p>
+    <ul>
+        <li>XOR translated: <i>x</i> XOR <i>y</i> &equiv; (<i>x</i> &or; <i>y</i>) &and; &not;(<i>x</i> &and; <i>y</i>) <em>(Translation: "One or the other is true, AND they are not both true")</em></li>
+        <li>Implication translated: <i>x</i> &rarr; <i>y</i> &equiv; &not;<i>x</i> &or; <i>y</i> <em>(Translation: "Either x is false, or y is true")</em></li>
+        <li><em>Lecture Exercise:</em> Find the equivalent for NAND. <em>(Hint: NAND means NOT AND, so it is simply &not;(<i>x</i> &and; <i>y</i>)).</em></li>
+    </ul>
+
+    <h3>You can build ANY formula from a Truth Table</h3>
+    <p>Using just NOT, AND, and OR, you can create a logical formula for literally any truth table, no matter how many variables there are.</p>
+
+    <p><strong>How to do it (Example from slide):</strong><br>
+    Look at a truth table. Find every row where the final output is 1. Create an AND statement for that specific row, and then stick ORs between them.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th><i>x</i></th>
+                <th><i>y</i></th>
+                <th><i>z</i></th>
+                <th>Result (<i>&phi;</i>)</th>
+                <th>How to write the rule for this specific row</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>(Ignore, result is 0)</td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>(Ignore, result is 0)</td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>(Ignore, result is 0)</td>
+            </tr>
+            <tr>
+                <td><strong>0</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>(&not;<i>x</i> &and; <i>y</i> &and; <i>z</i>)</strong></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>(Ignore, result is 0)</td>
+            </tr>
+            <tr>
+                <td><strong>1</strong></td>
+                <td><strong>0</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>(<i>x</i> &and; &not;<i>y</i> &and; <i>z</i>)</strong></td>
+            </tr>
+            <tr>
+                <td><strong>1</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>0</strong></td>
+                <td><strong>1</strong></td>
+                <td><strong>(<i>x</i> &and; <i>y</i> &and; &not;<i>z</i>)</strong></td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                <td>(Ignore, result is 0)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>To make a formula for this whole table, just take the bolded formulas and connect them with OR (&or;):<br>
+    <strong>(&not;<i>x</i> &and; <i>y</i> &and; <i>z</i>) &or; (<i>x</i> &and; &not;<i>y</i> &and; <i>z</i>) &or; (<i>x</i> &and; <i>y</i> &and; &not;<i>z</i>)</strong></p>
+
+    <h3>Fundamental Equivalences (Important Math Rules)</h3>
+    <p>Here are some mathematical laws you can use to simplify formulas:</p>
+
+    <p><strong>1. DeMorgan's Laws</strong> (How to distribute a NOT sign into parentheses):</p>
+    <ul>
+        <li>&not;(<i>x</i> &and; <i>y</i>) &equiv; &not;<i>x</i> &or; &not;<i>y</i> (NOTting an AND turns it into an OR with flipped variables)</li>
+        <li>&not;(<i>x</i> &or; <i>y</i>) &equiv; &not;<i>x</i> &and; &not;<i>y</i> (NOTting an OR turns it into an AND with flipped variables)</li>
+    </ul>
+
+    <p><strong>2. Distributivity</strong> (Like distributing multiplication over addition in math):</p>
+    <ul>
+        <li><i>x</i> &and; (<i>y</i> &or; <i>z</i>) &equiv; (<i>x</i> &and; <i>y</i>) &or; (<i>x</i> &and; <i>z</i>)</li>
+        <li><i>x</i> &or; (<i>y</i> &and; <i>z</i>) &equiv; (<i>x</i> &or; <i>y</i>) &and; (<i>x</i> &or; <i>z</i>)</li>
+    </ul>
+
+    <p><strong>3. Involution</strong> (Double Negatives):</p>
+    <ul>
+        <li>&not;&not;<i>x</i> &equiv; <i>x</i> (Two NOTs cancel each other out)</li>
+    </ul>
+
+    <hr>
+
+    <h2>Part 6: OK, But Why? (The Big Picture)</h2>
+
+    <p>Why are we learning all these 1s, 0s, and symbols? What does this have to do with <strong>Knowledge Representation (KR)</strong>?</p>
+
+    <ul>
+        <li><strong>Knowledge Bases</strong> in computer science and AI are essentially massive sets of logical formulas.</li>
+        <li>These formulas act as <strong>constraints</strong>. They tell the computer system what interpretations of the real world are allowed to be true and what is logically impossible.</li>
+        <li><strong>Reasoning</strong> is the process of having the computer analyze new formulas and questions under these specific constraints to find answers.</li>
+    </ul>
+
+    <p>To get to that advanced point, we have to start by mastering this simpler language of Boolean algebra and propositional logic.</p>
+
+    <h1>Knowledge Representation and Reasoning: Rules with Predicates</h1>
+
+    <h2>Part 1: Moving from Basic Logic to Predicate Logic</h2>
+
+    <h3>The Problem with Propositional Logic</h3>
+    <p>Basic logic (Propositional Logic) is very rigid. It treats facts as single, isolated objects. For example, you can have a fact like <code>Ana_is_a_professor</code>, which can either be true or false.</p> 
+
+    <p>However, in the real world, we need to relate objects to one another, often implicitly. We want to be able to say things like:</p>
+    <ul>
+        <li>Ana is a professor.</li>
+        <li>Ana supervises Bob.</li>
+        <li>A grandparent is the parent of a parent.</li>
+        <li>Uncles have siblings who are parents.</li>
+        <li>Two people are siblings if they share the same parent.</li>
+    </ul>
+
+    <p>Propositional logic cannot handle these relationships easily. To achieve our goal of writing rules that handle this kind of knowledge, we must "dive into" <strong>Predicate Logic</strong>.</p>
+
+    <h3>Introducing Predicates and Variables</h3>
+    <p>Instead of writing a rigid proposition like <code>Mammal_Dumbo</code>, we separate the property from the object. We write <code>Mammal(dumbo)</code> or <code>Mammal(phineas)</code>. We can also show relationships, like <code>Parent(ana, bob)</code>. Just like simple propositions, these statements evaluate to either True or False.</p>
+
+    <p>To make general rules, we need <strong>variables</strong> (like $x, y, z$). These act as placeholders for actual objects. If you just write <code>parent(ana, x)</code>, it logically makes no sense on its own because we don't know what $x$ stands for. We must give the variable a <strong>scope</strong> using quantifiers:</p>
+    <ul>
+        <li><strong>$\exists x . parent(ana, x)$</strong>: This means "There exists <em>at least one</em> object $x$ that makes this true." (Ana is the parent of someone).</li>
+        <li><strong>$\forall x . parent(ana, x)$</strong>: This means "<em>Every</em> possible object $x$ makes this true." (Ana is the parent of literally everyone).</li>
+    </ul>
+
+    <div class="highlight">
+        <p><em>Note: For this course, we are not using the full, complex version of predicate logic. We are using a restricted version to keep the concepts simple and easy to present.</em></p>
+    </div>
+
+    <hr>
+
+    <h2>Part 2: The Syntax (How We Write It)</h2>
+
+    <p>To write in our restricted Predicate Logic, we have an unlimited number of the following building blocks (which are all distinct from one another):</p>
+    <ol>
+        <li><strong>Constants ($\mathcal{C}$):</strong> $a, b, c...$ (These represent specific, named objects).</li>
+        <li><strong>Predicate Symbols ($\mathcal{P}$):</strong> $P, Q, R...$ (These represent properties or relationships). They can be <strong>unary</strong> (taking one object, like a property) or <strong>binary</strong> (taking two objects, like a relationship).</li>
+        <li><strong>Variables ($\mathcal{V}$):</strong> $x, y, z...$ (Placeholders).</li>
+    </ol>
+
+    <p><em>A <strong>Term</strong> is a catch-all word meaning either a variable or a constant.</em></p>
+
+    <div class="highlight">
+        <p><strong>Key Definitions:</strong></p>
+        <ul>
+            <li>A <strong>Predicate</strong> looks like $P(t)$ or $Q(t, s)$, where $t$ and $s$ are terms. You must be careful to use the correct number of terms inside the parentheses (the "arity").</li>
+            <li>A <strong>Literal</strong> is a predicate (e.g., $P(x)$) or a negated predicate (e.g., $\neg P(x)$).</li>
+            <li>A <strong>Predicate Horn Clause</strong> is a rule made of an "OR" statement (disjunction) of literals, but it can have <strong>at most one positive literal</strong>.</li>
+        </ul>
+    </div>
+
+    <p><strong>Examples of valid Predicates:</strong></p>
+    <ul>
+        <li>$P(x)$</li>
+        <li>$P(b)$</li>
+        <li>$Q(x, a)$</li>
+    </ul>
+    <p><em>(Note: just $P$ is not a predicate, it's just a symbol. It needs terms inside parentheses).</em></p>
+
+    <h3>Understanding Clauses as Rules</h3>
+    <p>We usually write Horn clauses in a "Rule Form" using an arrow ($\leftarrow$).</p>
+    <p>Example: <code>grandparent(x, y) &leftarrow; parent(x, z), parent(z, y)</code></p>
+
+    <p>How do we read this? It means: <em>Whenever</em> we can find three individuals (let's say Ana, Bob, and Carla) where Ana is the parent of Bob ($x, z$), and Bob is the parent of Carla ($z, y$), <em>then</em> Ana is the grandparent of Carla ($x, y$).</p>
+
+    <div class="takeaway">
+        <p><strong>Crucial Rule:</strong> In these rules, all variables are implicitly <strong>universally quantified</strong>. This means the rule applies to <em>every</em> possible combination of objects in your universe.</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 3: Semantics (What It Actually Means)</h2>
+
+    <p>Just knowing the syntax isn't enough; we need to know how to figure out if a statement is true. In propositional logic, we just flipped switches (True/False). Here, that's not enough. We must specify exactly <em>which</em> objects satisfy <em>which</em> properties and relationships.</p>
+
+    <h3>Interpretation-based Semantics</h3>
+    <p>To give meaning to our logic, we create an <strong>Interpretation</strong>, denoted by the symbol $\mathcal{I}$. An interpretation is made of two parts: $\mathcal{I} = (\Delta^\mathcal{I}, \cdot^\mathcal{I})$</p>
+
+    <ol>
+        <li><strong>A Domain ($\Delta^\mathcal{I}$):</strong> This is a set containing all the actual objects of interest in our universe.</li>
+        <li><strong>An Interpretation Function ($\cdot^\mathcal{I}$):</strong> This is the rulebook that maps our written symbols to the actual objects in the domain.
+            <ul>
+                <li>A constant $a$ becomes a specific object $a^\mathcal{I}$ in our domain.</li>
+                <li>A unary predicate $P$ becomes a specific <em>set</em> of objects $P^\mathcal{I}$ that share that property.</li>
+                <li>A binary predicate $P$ becomes a set of <em>pairs</em> of objects $P^\mathcal{I}$ that share a relationship.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3>Interpretations as Labeled Graphs</h3>
+    <p>Because we restricted ourselves to unary (1 term) and binary (2 terms) predicates, we can easily draw our interpretations as <strong>Graphs</strong>.</p>
+    <ul>
+        <li><strong>Nodes (Dots):</strong> Represent the objects (constants).</li>
+        <li><strong>Unary Predicates:</strong> Represented as labels written next to a node (e.g., node 'a' has the label 'P').</li>
+        <li><strong>Binary Predicates:</strong> Represented as arrows connecting nodes, with the relationship written on the arrow (e.g., an arrow from node $a$ to node $b$ labeled 'parent').</li>
+    </ul>
+
+    <h3>Predicate Rules and Knowledge Bases</h3>
+    <p>A <strong>Predicate Rule</strong> is written as: $P(\bar{t}) \leftarrow Q_1(\bar{t}_1), \dots, Q_n(\bar{t}_n)$<br>
+    <em>(Where $\bar{t}$ just represents a sequence of terms).</em></p>
+
+    <div class="takeaway">
+        <p><strong>Strict Constraint:</strong> Every single variable that appears in the "Head" of the rule (the left side, $P$) <strong>must</strong> also appear somewhere in the "Body" of the rule (the right side, the $Q$'s).</p>
+    </div>
+    <ul>
+        <li>Valid: <code>grandparent(x, y) &leftarrow; parent(x, z), parent(z, y)</code></li>
+        <li>Invalid: <code>parent(x, y) &leftarrow; person(x)</code> (Because $y$ is in the head, but we have no idea what $y$ is from the body).</li>
+    </ul>
+
+    <p>A <strong>Predicate Knowledge Base (KB)</strong> is simply a finite collection of these rules.</p>
+
+    <h3>Models and Entailment</h3>
+    <p>When is a rule considered true? An interpretation $\mathcal{I}$ <strong>satisfies</strong> a rule if the following is true: <em>Whenever the interpretation makes the body of the rule true, it MUST also make the head of the rule true.</em></p>
+
+    <ul>
+        <li>An interpretation $\mathcal{I}$ is called a <strong>Model</strong> of a Knowledge Base if it satisfies <em>every single rule</em> in that KB.</li>
+        <li><strong>Entailment ($K \models P(a)$):</strong> A Knowledge Base "entails" a fact (like $P(a)$) if and only if that fact is true in <strong>ALL possible models</strong> of the KB. <br>
+        <em>(Note: We only ask queries about "ground" predicates—meaning specific facts without variables, like "Is Ana a professor?" not "Is X a professor?").</em></li>
+    </ul>
+
+    <hr>
+
+    <h2>Part 4: The Canonical Model (How We Solve It)</h2>
+
+    <p>Checking "all possible models" in the universe is impossible. Instead, we propagate the knowledge to build a <strong>minimal representation</strong> of all possible models. This is called the <strong>Canonical Interpretation</strong> ($\mathcal{I}_{can}$). It's "minimal" not necessarily in size, but in the sense that we only add facts that are strictly forced to be true by the rules. No guessing.</p>
+
+    <h3>The 3-Step Construction Process</h3>
+    <p>We start with a totally empty graph and build it step-by-step:</p>
+
+    <ol>
+        <li><strong>Create Relevant Nodes:</strong><br> Take every single constant mentioned in your Knowledge Base and draw a node for it. We use the "standard name construction," meaning the constant $a$ is just interpreted as the node $a$.</li>
+        
+        <li><strong>Add the Facts (Fact Encoding):</strong><br> Look at the facts in your KB (rules with empty bodies, written like <code>P(a) &leftarrow;</code>). 
+            <ul>
+                <li>For unary facts ($P(a)$), add the label $P$ to node $a$.</li>
+                <li>For binary facts ($Q(a, b)$), draw an arrow from $a$ to $b$ and label it $Q$.</li>
+            </ul>
+        </li>
+        
+        <li><strong>Propagate the Rules:</strong><br> Take a rule that has variables. For every possible way you can swap those variables with the constants you have (called a <strong>substitution</strong>, $\sigma$), check if the Body of the rule is true in your graph. If the body is true, you <strong>must</strong> encode the Head of the rule into your graph (add the label or arrow). Keep doing this until no new labels or arrows can be added.</li>
+    </ol>
+
+    <h3>Monotone Construction</h3>
+    <p>This is a <strong>monotonically constructive</strong> approach. This means we only ever <em>add</em> things to the graph; we never delete them.</p>
+    <ul>
+        <li>This works perfectly for "definite" Horn clauses (rules that have a clear head).</li>
+        <li>It does <em>not</em> work for non-definite clauses (constraints, which are rules with an empty head, essentially stating something that is impossible). While building the canonical interpretation, we simply ignore constraints.</li>
+    </ul>
+
+    <div class="takeaway">
+        <p><strong>The Golden Rule:</strong> If the Knowledge Base has no logical contradictions (is consistent), then the Canonical Interpretation we just built is a <strong>Model</strong> of the KB. It satisfies all the definite clauses. We call it the <strong>Canonical Model</strong>.</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 5: Reasoning and Querying</h2>
+
+    <p>Assuming our KB is consistent, how do we answer questions?</p>
+
+    <ul>
+        <li><strong>Checking a Fact:</strong> A fact $P(a)$ is entailed by the KB if and only if it appears in the Canonical Model. (Just look at your graph—if the label or arrow is there, it's true!).</li>
+        <li><strong>Query Answering:</strong> If you want to know "Find all objects $x$ that have property $P$", you just explore the graph and list every node that has the label $P$. 
+        <div class="highlight"><em>Important note: this will only return "named" objects (constants) that are part of the KB.</em></div></li>
+    </ul>
+
+    <h3>Proving Correctness (Soundness and Completeness)</h3>
+    <p>How do we know this graph method is mathematically sound? We have to prove two things:</p>
+
+    <p><strong>1. Completeness (Every consequence is found):</strong><br>
+    If our Canonical Model graph does <em>not</em> have the fact $P(a)$, then the KB does not entail $P(a)$.<br>
+    <em>Why?</em> Because Entailment requires a fact to be true in <em>all</em> possible models. Since the Canonical Model <em>is</em> a model, and it doesn't have $P(a)$, then $P(a)$ is not universally true.</p>
+
+    <p><strong>2. Soundness (Every fact in the graph is a universal consequence):</strong><br>
+    We must prove that if $P(a)$ is in our Canonical Model, it is in <em>all</em> possible models. We do this by proving that every possible model $\mathcal{I}$ "contains" the Canonical Model $\mathcal{I}_{can}$.</p>
+
+    <p>We prove this using a math concept called a <strong>Homomorphism</strong>. We map every constant in our minimal graph to an object in any other valid model $\mathcal{I}$.<br>
+    We prove by induction (following the 3 steps of how we built the graph):</p>
+    <ul>
+        <li>Step 1 & 2 (Facts): Any valid model <em>must</em> contain the basic facts by definition.</li>
+        <li>Step 3 (Rules): If we added a new fact because a rule's body triggered it, that same rule's body must also exist in the other model $\mathcal{I}$. Because $\mathcal{I}$ is a valid model, it must obey the rule, meaning it is also forced to add that new fact.</li>
+    </ul>
+    <p>Therefore, whatever the Canonical graph says, <em>any</em> other valid model will also say (though the other model might contain extra, unforced things).</p>
+
+    <div class="takeaway">
+        <p><strong>Conclusion:</strong> To derive all grounded, atomic (basic) consequences of a consistent KB, we only ever need to look at the Canonical Model.</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 6: Complexity, Advanced Queries, and Issues</h2>
+
+    <h3>Computational Complexity</h3>
+    <p>Can we always build this canonical model effectively? Yes, because every ground fact can only be added to the graph once. However, it can take time.<br>
+    If your KB has $k$ constants, and a rule has $n$ variables, there are $k^n$ possible ways to substitute constants into that rule. If you have $m$ rules, the maximum number of checks the computer has to do is <strong>$m \cdot k^n$</strong>.</p>
+
+    <h3>Complex Queries</h3>
+    <p>What if you want to find something complex, like "Find all pairs $(x, y)$ where $x$ has property $P$ and there is a path of $Q$ arrows connecting $x$ to $y$"?<br>
+    You can't just look at the graph directly for this. Instead, you write new, temporary rules into your KB to represent the query:</p>
+    <ol>
+        <li>Define a path: <code>QPath(x, y) &leftarrow; Q(x, y)</code></li>
+        <li>Define a multi-step path: <code>QPath(x, y) &leftarrow; Q(x, z), QPath(z, y)</code></li>
+        <li>Define the final query: <code>R(x, y) &leftarrow; P(x), QPath(x, y)</code></li>
+    </ol>
+    <p>Then you just ask the graph for all pairs connected by the new <code>R</code> relationship. This is called a <strong>Conjunctive Query</strong> (a query linking multiple predicates with "AND").</p>
+
+    <div class="highlight">
+        <p><em>Limitation:</em> We cannot check if a KB entails a general, variable-based rule like <code>Q(x) &leftarrow; P(x)</code>. The canonical model can only prove specific, grounded facts, not overarching rules.</p>
+    </div>
+
+    <h3>Dealing with Inconsistency</h3>
+    <p>Sometimes rules contradict facts.<br>
+    Example:</p>
+    <ul>
+        <li><code>Platypus(perry) &leftarrow;</code> (Perry is a platypus)</li>
+        <li><code>Duck(perry) &leftarrow;</code> (Perry is a duck)</li>
+        <li><code>&leftarrow; Platypus(x), Duck(x)</code> (Constraint: Nothing can be both a duck and a platypus).</li>
+    </ul>
+
+    <p>In logic, if you have a contradiction, it triggers the <strong>Principle of Explosion (ex falso quodlibet)</strong>: literally everything becomes mathematically "true," ruining the system.</p>
+
+    <p>How do we check for this? We look for <strong>Interpretation Unsoundness</strong>.<br>
+    An interpretation is unsound with respect to a constraint if there is a way to substitute variables such that the <em>body</em> of the constraint rule is found in the graph. (e.g., if we find a node labeled both Duck and Platypus).</p>
+
+    <div class="takeaway">
+        <p><strong>Rule:</strong> A KB is inconsistent if and only if its canonical interpretation is unsound. Therefore, all reasoning requires us to just build the canonical interpretation and check it.</p>
+    </div>
+
+    <hr>
+
+    <h2>Part 7: Final Generalizations</h2>
+
+    <p><strong>Arity Generalization:</strong><br>
+    Throughout the presentation, we only used unary (1) and binary (2) predicates so we could easily draw them as nodes and arrows on a graph. Technically, the math works exactly the same for $n$-ary predicates (relations involving 3, 4, or 100 objects). If we use more than 2, we just lose the ability to draw it as a simple 2D graph.</p>
+
+    <p><strong>Grounding vs. Predicates (Why use Predicates?):</strong><br>
+    Earlier, we mentioned "substituting" constants into rules. If you take a rule like <code>P(x) &leftarrow; Q(y, x), Q(x, z)</code> and replace the variables with every possible combination of constants ($a, b, c, e...$), you create a massive list of specific, rigid rules.<br>
+    This process is called <strong>Grounding</strong>.<br>
+    The grounding of a predicate KB turns it back into a standard Propositional KB (just with very elaborate variable names like "Q_a_b").<br>
+    So why use Predicate logic? Because the predicate representation is incredibly <strong>compact and succinct</strong>. Instead of writing hundreds of specific rules for every object, we can write a single, elegant rule using variables.</p>
+
+</body>
+</html>
