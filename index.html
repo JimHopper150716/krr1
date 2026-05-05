@@ -920,6 +920,299 @@
     This process is called <strong>Grounding</strong>.<br>
     The grounding of a predicate KB turns it back into a standard Propositional KB (just with very elaborate variable names like "Q_a_b").<br>
     So why use Predicate logic? Because the predicate representation is incredibly <strong>compact and succinct</strong>. Instead of writing hundreds of specific rules for every object, we can write a single, elegant rule using variables.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRR 1</title>
+    <script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #000000;
+            max-width: 750px;     
+            margin: 40px auto;    
+            padding: 0 20px;      
+        }
+        
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {;
+            margin-top: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        h3 {;
+            margin-top: 20px;
+        }
+        p {
+            margin-bottom: 15px;
+        }
+        ul, ol {
+            margin-bottom: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        strong {
+            color: #ffffff;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #333;
+            margin: 30px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #242424;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #3a3a3a;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #1a2f3a;
+            color: #aed6f1;
+            font-weight: bold;
+        }
+        .highlight {
+            background-color: #1a2f3a;
+            padding: 15px;
+            border-left: 4px solid #5dade2;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .takeaway {
+            background-color: #33290a;
+            padding: 15px;
+            border-left: 4px solid #f4d03f;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fcf3cf;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Knowledge Representation and Reasoning: Extensions of Rules and Description Logics</h1>
+
+    <h2>Part 1: The Limits of Basic "If-Then" Rules</h2>
+
+    <h3>Rules as Programming</h3>
+    <p>In computer logic, we often use basic rules that look like this: <code>H ← B</code>. <br>
+    You can read this as: <em>"If B is true, then H is true."</em></p>
+
+    <p>The problem with these basic rules is that they are <strong>unidirectional</strong>—they only push information one way (from B to H). Beyond simple constraints, these basic rules have no limits, which leads to "trivial models" (oversimplified ways the computer understands the world).</p> 
+
+    <p>Because of these limitations, basic rules cannot express complex, real-world ideas such as:</p>
+    <ul>
+        <li><strong>Maximums:</strong> "A person can have <em>at most</em> two parents."</li>
+        <li><strong>Minimums:</strong> "A person must have <em>at least</em> two parents."</li>
+        <li><strong>Exact Equivalences:</strong> "Someone is alive <em>if and only if</em> they are not dead."</li>
+    </ul>
+
+    <h3>The Problem with Negation / Saying "Not"</h3>
+    <p>How do we tell a computer system that something is <em>not</em> true? We can use "constraints" to partially do this.</p>
+    <ul>
+        <li><em>Example 1:</em> <code>← Platypus(phineas)</code> means "Phineas is NOT a platypus."</li>
+        <li><em>Example 2:</em> <code>← Alive(x), Dead(x)</code> means "No single thing (x) can be both alive AND dead."</li>
+    </ul>
+
+    <p>However, this is still flawed. Under these basic rules, something could theoretically be <em>neither</em> alive nor dead! Basic rules struggle if we want to firmly state exact definitions, like: "Not being alive strictly means being dead," or if we want to describe "mammals which are <em>not</em> platypuses."</p>
+
+    <h3>The Problem of "Domain Closure" / Unknown Objects</h3>
+    <p>Basic rules can only talk about specific objects that the system already knows about. They <strong>never introduce new objects</strong>. This means they cannot represent knowledge that involves "anonymous" or unnamed individuals.</p>
+    <ul>
+        <li>We intuitively know that "every parent has a child" and "every person has a parent."</li>
+        <li>However, if we don't know the exact name of a person's parent, basic rules cannot handle the concept of that unnamed parent existing.</li>
+    </ul>
+
+    <h3>The Problem of Disjunctions / Saying "Or"</h3>
+    <p>Basic rules (specifically a type called "Horn clauses") cannot express scenarios where there are multiple possibilities—what we call "case enumeration" or "OR" statements. Basic rules cannot express things like:</p>
+    <ul>
+        <li>"If it is a weekday, then it is Monday OR Tuesday OR Wednesday..."</li>
+        <li>"A monotreme is either a platypus OR an echidna."</li>
+        <li>"University employees are either professors OR administrators."</li>
+    </ul>
+
+    <hr>
+
+    <h2>Part 2: Extending the Language (And the Mess It Causes)</h2>
+
+    <h3>Language Extensions)</h3>
+    <p>To fix the problems above, we need to upgrade our rule languages. We want our Knowledge Bases (KBs) to be able to express:</p>
+    <ol>
+        <li><strong>Negations</strong> (Saying "Not")</li>
+        <li><strong>Anonymous individuals</strong> (Talking about things that exist, even if we don't know their names)</li>
+        <li><strong>Disjunctions</strong> (Saying "Or")</li>
+    </ol>
+
+    <p>To do this, we allow rules to be written as "arbitrary clauses." For example, we can now write:</p>
+    <ul>
+        <li><code>¬Weekday(x) ∨ Monday(x) ∨ Tuesday(x) ∨ ...</code> (Something is NOT a weekday, OR it is Monday, OR it is Tuesday...)</li>
+        <li><code>Dead(x) ∨ Alive(x)</code> (Something is Dead OR Alive).</li>
+    </ul>
+
+    <h3>Anonymous Objects / Existential Rules</h3>
+    <p>To allow anonymous objects, we let rules introduce brand-new variables in the "head" (the conclusion part) of the rule.</p>
+    <ul>
+        <li><em>Example:</em> <code>HasChild(x, y) ← Parent(x)</code></li>
+        <li><em>Translation:</em> For any <code>x</code>, if <code>x</code> is a parent, then <strong>there exists an object <code>y</code></strong> which is a child of <code>x</code>.</li>
+    </ul>
+
+    <p>Because <code>y</code> is a new, unnamed variable, we say it is "existentially quantified" (we know it exists, but we don't have a specific name for it).</p>
+
+    <h3>The Nightmare of Infinite Models</h3>
+    <p>Adding "Or," "Not," and "Unknowns" seems like a basic upgrade, but it drastically changes the way the computer has to reason. The biggest issue is that anonymous objects can multiply endlessly.</p>
+
+    <p>Look at these rules:</p>
+    <ol>
+        <li><code>HasParent(x, y) ← Person(x)</code> <em>(If x is a person, they have an unknown parent y)</em></li>
+        <li><code>Person(y) ← HasParent(x, y), Person(x)</code> <em>(That unknown parent y is also a person)</em></li>
+    </ol>
+
+    <p>If we start with one fact: <code>Person(herb)</code> <em>(Herb is a person)</em>...</p>
+    <ul>
+        <li>Herb has an unknown parent (let's call it Unknown 1).</li>
+        <li>Unknown 1 is a person, so Unknown 1 must have an unknown parent (Unknown 2).</li>
+        <li>Unknown 2 is a person, so Unknown 2 must have an unknown parent...</li>
+    </ul>
+    <div class="takeaway">The computer gets trapped in an <strong>infinite loop</strong>, creating an endless family tree of anonymous objects.</div>
+
+    <h3>Inconsistency in Anonymous Objects (Slide 11)</h3>
+    <p>Things get worse when we combine these endless anonymous objects with strict constraints. Hidden logical errors (inconsistencies) can pop up deep inside that infinite chain. <br>
+    This leaves computer scientists with tough questions: Can we force the computer to stop building this endless model early? How big will it grow before we find an error? Is it even useful to build these massive chains?</p>
+
+    <h3>Too Much Freedom (Slide 12)</h3>
+    <p>Ultimately, these "existential rules" (rules that create unnamed objects) are mathematically very messy. While they work fine if you are only analyzing known, specific facts, their grammar is just too free. Because you can combine conditions arbitrarily and generate endless new variables, it is incredibly difficult for computers to formally analyze them.</p>
+
+    <hr>
+
+    <h2>Part 3: A Better Way — Datalog± and Description Logics</h2>
+
+    <h3>Reasoning About General Knowledge (Slide 13)</h3>
+    <p>Instead of getting bogged down in specific facts (like tracing Herb's exact family tree), what if we want the computer to reason about <strong>general truths</strong>? For example, we want the system to figure out: <em>"Are all biped mammals primates?"</em></p>
+
+    <h3>Datalog± (Slide 14)</h3>
+    <p>To answer general questions without getting stuck in infinite loops, researchers created a family of languages under the umbrella term <strong>Datalog±</strong>. This field studies how to place smart restrictions on existential rules. These restrictions guarantee that the computer can:</p>
+    <ol>
+        <li>Build a safe, master interpretation (a canonical model).</li>
+        <li>Reason with that model correctly.</li>
+        <li><strong>Finish calculating in a finite amount of time.</strong></li>
+    </ol>
+
+    <h3>Introducing $\mathcal{EL}^\bot$ and Description Logics (Slide 15 & 16)</h3>
+    <p>We are going to focus on a specific language called <strong>$\mathcal{EL}^\bot$</strong> (pronounced "EL-bottom"). It strikes a perfect balance:</p>
+    <ul>
+        <li>It limits the wild expressivity of basic rules.</li>
+        <li>But it <em>does</em> allow constraints and anonymous objects.</li>
+        <li>Best of all: it has highly effective and incredibly fast methods for reasoning.</li>
+    </ul>
+
+    <p>$\mathcal{EL}^\bot$ belongs to an important family of Knowledge Representation languages called <strong>Description Logics (DLs)</strong>. <br>
+    Description Logics are characterized by two main things:</p>
+    <ol>
+        <li><strong>Clear Syntax:</strong> A strict grammar for how things are written.</li>
+        <li><strong>Unambiguous Semantics:</strong> Strict, formal mathematical rules dictating exactly what the code means.</li>
+    </ol>
+
+    <h3>A Bit of History: From KL-ONE to Today (Slide 17 & 18)</h3>
+    <p>Description Logics evolved from older "semantic networks." They were built to represent the vocabulary (the "terminological knowledge") of a specific subject. They describe the classes (categories) of things, how those things relate to one another, and the strict rules those relationships must follow.</p>
+
+    <p>The grandfather of all Description Logics was an early system called <strong>KL-ONE</strong>. The reasoning techniques invented for KL-ONE are still used in modern AI systems today. In fact, early DLs were just referred to as "KL-ONE-like" systems.</p>
+
+    <hr>
+
+    <h2>Part 4: Expressivity vs. Complexity (The Great Trade-off)</h2>
+
+    <div class="highlight">
+    <h3>The Trade-off (Slide 19 & 20)</h3>
+    <p>In AI, there is a universal law: <strong>The more expressive a language is, the harder it is for a computer to process.</strong></p>
+    <ul>
+        <li>If a language can express <em>anything</em>, the computer has to analyze way too many cases, requiring massive amounts of time and memory.</li>
+    </ul>
+    </div>
+
+    <p>Because of this, Description Logics do not offer one single "super language" that does everything. Instead, they offer a massive spectrum of different, incomparable languages. You get to "mix and match" the features you need depending on your specific use-case.</p>
+    <ul>
+        <li>Need to express incredibly complex ideas? You choose a heavy language and accept it will be slow.</li>
+        <li>Need lightning-fast answers? You choose a simple language with fewer features.</li>
+    </ul>
+
+    <h3>The Global Constraint: Decidability (Slide 21)</h3>
+    <p>No matter which DL you choose, the ultimate goal is <strong>Decidable Reasoning</strong>. This means the algorithms running the logic must be:</p>
+    <ul>
+        <li><em>Sound:</em> The answers are correct.</li>
+        <li><em>Complete:</em> It finds all the correct answers.</li>
+        <li><em>Terminating:</em> <strong>It actually finishes calculating and doesn't run forever.</strong></li>
+    </ul>
+    <p>To guarantee this, almost all Description Logics restrict themselves to the "two-variable fragment of first-order predicate logic" (a safe, mathematically stable subset of logic).</p>
+
+    <h3>The First Description Logics (Slide 22)</h3>
+    <p>The very first formal Description Logic was called <strong>$\mathcal{AL}$ (Attribute Language)</strong>. It was quickly upgraded to <strong>$\mathcal{ALC}$</strong> to include "complements" (which is just the formal word for negations/saying "not").</p>
+
+    <p>$\mathcal{ALC}$ uses specific symbols to build complex categories. For example:</p>
+    <ul>
+        <li><code>¬Mortal</code> means the class of objects that are NOT mortal (immortal objects).</li>
+        <li><code>Green $\sqcap$ Fragile</code> means objects that are BOTH green AND fragile.</li>
+        <li><code>$\exists$hasChild.Female</code> means people who have AT LEAST ONE (Some) female child.</li>
+        <li><code>$\forall$hasChild.Female</code> means people whose children are ALL (Only) female.</li>
+    </ul>
+
+    <h3>Early Discoveries & Pushing for Growth (Slide 23 & 24)</h3>
+    <p>Early research mapped out how complex these languages were, found the optimal algorithms to run them, and linked them to other types of mathematical logic (like Modal Logic K).</p>
+
+    <p>Naturally, researchers wanted to push the boundaries. They kept asking: <em>"How many features can we add before the computer crashes?"</em> They tried adding:</p>
+    <ul>
+        <li><strong>Quantification:</strong> Being able to use exact numbers (e.g., "has <em>at most</em> three children").</li>
+        <li><strong>Inverse relations:</strong> Understanding two-way streets (e.g., if X "hasChild" Y, then Y "hasParent" X).</li>
+        <li><strong>Transitivity:</strong> Understanding chains (e.g., if X is the ancestor of Y, and Y is the ancestor of Z, then X is the ancestor of Z).</li>
+    </ul>
+
+    <h3>The Counterflow: Small is Beautiful (Slide 25 & 26)</h3>
+    <p>Eventually, researchers realized that adding too many features made systems too slow. The trend reversed, and people started stripping constructors <em>away</em> to make ultra-fast languages.</p>
+
+    <p>This resulted in stripped-down DLs like:</p>
+    <ul>
+        <li><strong>$\mathcal{EL}$:</strong> Only allows "AND" ($\sqcap$) and "EXISTS/SOME" ($\exists$).</li>
+        <li><strong>$\mathcal{FL}_0$:</strong> Only allows "AND" ($\sqcap$) and "ALL/ONLY" ($\forall$).</li>
+        <li><strong>DL-Lite:</strong> Another very lightweight logic.</li>
+    </ul>
+
+    <p>It turns out, these simple, lightning-fast languages are exactly what the real world needed. When the W3C (the main international standards organization for the World Wide Web) decided to create <strong>OWL</strong> (the standard language for the "Semantic Web"), they built specific profiles based on these lightweight logics:</p>
+    <ul>
+        <li><strong>OWL 2 EL</strong> is based directly on the $\mathcal{EL}^\bot$ logic.</li>
+        <li><strong>OWL 2 QL</strong> is based directly on DL-Lite.</li>
+        <li><strong>OWL 2 RL</strong> is based on traditional rules.</li>
+    </ul>
+
+    <h3>Further Developments (Slide 27)</h3>
+    <p>Research in Knowledge Representation is still ongoing. Scientists are currently working on extending Description Logics to handle non-standard situations:</p>
+    <ul>
+        <li><strong>Explaining itself:</strong> Forcing the AI to explain <em>why</em> it came to a certain conclusion.</li>
+        <li><strong>Inconsistency-tolerance:</strong> Allowing the system to keep functioning even if two pieces of data contradict each other.</li>
+        <li><strong>Time and Uncertainty:</strong> Expanding the logic to understand chronological events and calculate probabilities (uncertainty).</li>
+    </ul>
 
 </body>
 </html>
