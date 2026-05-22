@@ -608,5 +608,121 @@
     </div>
 
     
+    <!-- Exercise 2.5 -->
+    <h2 class="exercise-title">Exercise 2.5. Horn</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Build an example that shows why the unit resolution (aka truth propagation) method does not work for clauses which are not Horn.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>A Horn clause is a clause with at most one positive literal. The unit resolution method works by repeatedly finding a unit clause (a clause with only one literal), assigning it the truth value that satisfies it, and propagating that truth value to simplify the remaining clauses. If a set of clauses is Horn and unsatisfiable, unit resolution is guaranteed to find a contradiction (derive the empty clause).</p>
+        <p>To show that this method is incomplete for non-Horn clauses, we can construct an unsatisfiable knowledge base without any initial unit clauses. Consider the following set of 4 clauses:</p>
+        <ol>
+            <li>\( x \lor y \)</li>
+            <li>\( x \lor \neg y \)</li>
+            <li>\( \neg x \lor y \)</li>
+            <li>\( \neg x \lor \neg y \)</li>
+        </ol>
+        <h4>Why unit resolution fails here:</h4>
+        <ul>
+            <li>Clause (1) is <strong>not a Horn clause</strong> because it contains two positive literals (\( x \) and \( y \)).</li>
+            <li>The set is logically unsatisfiable because no matter what truth values you assign to \( x \) and \( y \), at least one of these four clauses will evaluate to False.</li>
+            <li>However, if we attempt to apply unit resolution (truth propagation), the method gets stuck immediately. Because there are <strong>no unit clauses</strong> (clauses with a single literal) available to start the propagation process, the method cannot make any deductions and fails to derive the empty clause (contradiction). This proves that unit resolution is incomplete for non-Horn clauses.</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 2.6 -->
+    <h2 class="exercise-title">Exercise 2.6. Tableaux</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Consider the knowledge base \( K = \{ x \land y, (\neg x \lor z) \land \neg w \} \), which is consistent.</p>
+        <p>Verify that the valuation \( V \) with \( V(w) = 0, V(x) = V(y) = V(z) = 1 \) satisfies both formulas.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We evaluate the truth value of each formula in the knowledge base by substituting the given truth values from the valuation \( V \):</p>
+        <ul>
+            <li>\( V(w) = 0 \) (False)</li>
+            <li>\( V(x) = 1 \) (True)</li>
+            <li>\( V(y) = 1 \) (True)</li>
+            <li>\( V(z) = 1 \) (True)</li>
+        </ul>
+        <ol>
+            <li><strong>First formula:</strong> \( F_1 = x \land y \)<br>
+            \( V(F_1) = V(x) \land V(y) = 1 \land 1 = 1 \).<br>
+            The valuation satisfies \( x \land y \).</li>
+            <br>
+            <li><strong>Second formula:</strong> \( F_2 = (\neg x \lor z) \land \neg w \)
+                <ul>
+                    <li>First, evaluate \( \neg x \): \( V(\neg x) = \neg 1 = 0 \).</li>
+                    <li>Next, evaluate the disjunction \( (\neg x \lor z) \): \( 0 \lor V(z) = 0 \lor 1 = 1 \).</li>
+                    <li>Then, evaluate \( \neg w \): \( V(\neg w) = \neg 0 = 1 \).</li>
+                    <li>Finally, evaluate the main conjunction: \( V(F_2) = 1 \land 1 = 1 \).</li>
+                </ul>
+            The valuation satisfies \( (\neg x \lor z) \land \neg w \).
+            </li>
+        </ol>
+        <p>Since \( V \) evaluates both formulas to 1 (True), it is a valid model that satisfies the knowledge base.</p>
+    </div>
+
+    <!-- Exercise 2.7 -->
+    <h2 class="exercise-title">Exercise 2.7. Reasoning</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Consider the propositional KB \( K \) formed by the following rules:</p>
+        <ul>
+            <li>\( w \leftarrow \)</li>
+            <li>\( x \leftarrow \)</li>
+            <li>\( v \leftarrow u, w \)</li>
+            <li>\( y \leftarrow x, z, w \)</li>
+            <li>\( z \leftarrow w, x \)</li>
+            <li>\( \leftarrow y, z \)</li>
+        </ul>
+        <ol>
+            <li>Find all the facts that are entailed by \( K \)</li>
+            <li>Decide which of the following rules are entailed by \( K \):
+                <ul>
+                    <li>\( u \leftarrow v \)</li>
+                    <li>\( z \leftarrow u \)</li>
+                    <li>\( t \leftarrow x, v \)</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Let's translate the rules into standard logic and apply forward chaining (truth propagation) to see what \( K \) derives:</p>
+        <ol>
+            <li>\( w \leftarrow \) (Base fact: \( w \) is True)</li>
+            <li>\( x \leftarrow \) (Base fact: \( x \) is True)</li>
+            <li>\( v \leftarrow u, w \) (\( u \land w \rightarrow v \))</li>
+            <li>\( y \leftarrow x, z, w \) (\( x \land z \land w \rightarrow y \))</li>
+            <li>\( z \leftarrow w, x \) (\( w \land x \rightarrow z \))</li>
+            <li>\( \leftarrow y, z \) (Constraint: \( y \land z \rightarrow \bot \), meaning \( y \) and \( z \) cannot be both true)</li>
+        </ol>
+        
+        <h4>Forward Chaining Derivation:</h4>
+        <ul>
+            <li><strong>Step 1:</strong> From rules 1 and 2, we know <strong>\( w \)</strong> and <strong>\( x \)</strong> are True.</li>
+            <li><strong>Step 2:</strong> From rule 5 (\( z \leftarrow w, x \)), because \( w \) and \( x \) are True, we derive that <strong>\( z \)</strong> is True.</li>
+            <li><strong>Step 3:</strong> From rule 4 (\( y \leftarrow x, z, w \)), because \( x \), \( z \), and \( w \) are all True, we derive that <strong>\( y \)</strong> is True.</li>
+            <li><strong>Step 4:</strong> From rule 6 (\( \leftarrow y, z \)), because we have derived that both \( y \) and \( z \) are True, this rule triggers a <strong>contradiction</strong> (\( \bot \)).</li>
+        </ul>
+        <p>Because the knowledge base derives a contradiction, <strong>\( K \) is logically inconsistent</strong>. In classical logic, according to the <em>Principle of Explosion</em> (<em>ex falso quodlibet</em>), an inconsistent knowledge base entails absolutely everything.</p>
+        
+        <h4>Answers:</h4>
+        <ol>
+            <li><strong>Find all the facts that are entailed by \( K \):</strong><br>
+            Because \( K \) is inconsistent, <strong>every possible fact</strong> (propositional variable) in your domain is logically entailed by \( K \) (e.g., \( w, x, y, z, u, v, t \), etc.).<br>
+            <em>(Note: If your instructor strictly expects the facts explicitly derived by the forward chaining algorithm before it crashed on the contradiction, those are \( w, x, z \), and \( y \).)</em></li>
+            <br>
+            <li><strong>Decide which of the following rules are entailed by \( K \):</strong>
+                <ul>
+                    <li>\( u \leftarrow v \)</li>
+                    <li>\( z \leftarrow u \)</li>
+                    <li>\( t \leftarrow x, v \)</li>
+                </ul>
+            Because an inconsistent knowledge base logically entails any arbitrary formula, <strong>all of the above rules are entailed by \( K \)</strong>.
+            </li>
+        </ol>
+    </div>
 </body>
 </html>
