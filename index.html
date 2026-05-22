@@ -1428,7 +1428,6 @@
 
     <h1>Knowledge Representation and Reasoning: A Propositionally-closed Description Logic ($\mathcal{ALC}$)</h1>
 
-    <p><em>Based on the lectures by Rafael Peñaloza (Milano-Bicocca, 2025-2026)</em></p>
 
     <hr>
 
@@ -1730,6 +1729,177 @@
         <li><strong>Generalisation inferences</strong>: Discovering new, broader rules automatically.</li>
         <li><strong>Explanations and Debugging</strong>: Finding out exactly <em>why</em> your rulebook has a contradiction.</li>
     </ul>
+
+    <h1>Knowledge Representation and Reasoning: More Expressive Description Logics</h1>
+
+    <hr>
+
+    <h2>The Goal: Why Do We Need "More Expressivity"?</h2>
+    <p>In Description Logics (a type of formal language used in computer science to represent knowledge), the foundational languages are called <strong>$\mathcal{EL}$</strong> and <strong>$\mathcal{ALC}$</strong>.</p>
+    
+    <p>These basic languages give us a good starting point, but they are not always powerful enough to describe the complex rules of real-world applications. To fix this, Description Logics allow us to use a <strong>"mix-and-match" approach</strong>. We can add new building blocks (called "constructors") to our logic system to make it more expressive depending on what we need.</p>
+
+    <p>Below are the different constructors we can add to our logic toolbox.</p>
+
+    <hr>
+
+    <h2>1. Nominals (Represented by the letter $\mathcal{O}$)</h2>
+    <div class="highlight">
+        <strong>What it means in plain English:</strong><br>
+        Normally, logic groups things into broad categories (like "Countries"). A <strong>nominal</strong> allows us to turn one specific, individual thing into its own category. It is a concept that contains exactly <em>one</em> named element.
+    </div>
+
+    <ul>
+        <li><strong>How we write it (Syntax):</strong> $\{a\}$ <br><em>(Where $a$ is an individual name from our vocabulary, $N_I$)</em></li>
+        <li><strong>How the computer understands it (Semantics):</strong> $(\{a\})^\mathcal{I} = \{a^\mathcal{I}\}$ <br><em>(This simply means the mathematical interpretation of this concept is a set containing exactly that one individual).</em></li>
+    </ul>
+
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li><strong>$EUCountry \sqsubseteq \{austria\} \sqcup \{belgium\} \sqcup \dots \sqcup \{sweden\}$</strong>
+            <ul>
+                <li><em>Translation:</em> An EU Country is exactly defined as being either the specific country of Austria, OR Belgium, OR ... OR Sweden.</li>
+            </ul>
+        </li>
+        <li><strong>$French \sqsubseteq \exists hasPresident.\{macron\}$</strong>
+            <ul>
+                <li><em>Translation:</em> To be considered French means you belong to a group of people who have a relationship ("hasPresident") specifically pointing to the individual named Macron.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>2. Cardinality Constraints (Represented by $\mathcal{Q}$ and $\mathcal{N}$)</h2>
+    <div class="highlight">
+        <strong>What it means in plain English:</strong><br>
+        This lets us set limits on the <em>number</em> of connections an object is allowed to have.
+    </div>
+
+    <ul>
+        <li><strong>How we write it (Syntax):</strong> $\geq n\ r.C$ <br><em>(Where $n$ is a number, $r$ is a relationship/role from our vocabulary $N_R$, and $C$ is a concept).</em></li>
+        <li><strong>How the computer understands it (Semantics):</strong> $(\geq n\ r.C)^\mathcal{I} = \{\delta \mid \#\{\eta \in C^\mathcal{I} \mid (\delta, \eta) \in r^\mathcal{I}\} \geq n\}$ <br><em>(This looks complicated, but it just means: "Find all objects ($\delta$) that have at least $n$ connections of type $r$ pointing to things ($\eta$) that belong to category $C$").</em></li>
+    </ul>
+
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li><strong>$\{bai\} \sqsubseteq \neg(\geq 181 hasStudent.\top)$</strong>
+            <ul>
+                <li><em>Translation:</em> The individual named "Bai" belongs to the group of things that do NOT ($\neg$) have 181 or more "hasStudent" relationships to anything ($\top$). In short: Professor Bai cannot have 181 or more students.</li>
+            </ul>
+        </li>
+        <li><strong>$\geq 3 proficientIn.Language \sqsubseteq Polyglot$</strong>
+            <ul>
+                <li><em>Translation:</em> Anyone who has 3 or more "proficientIn" relationships connecting them to things in the "Language" category is classified as a "Polyglot".</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>3. Inverse Roles (Represented by $\mathcal{I}$)</h2>
+    <div class="highlight">
+        <strong>What it means in plain English:</strong><br>
+        This allows us to read a relationship backward. If person A points to person B, the inverse role lets person B point back to person A.
+    </div>
+
+    <ul>
+        <li><strong>How we write it (Syntax):</strong> $r^-$ <br><em>(The minus sign means the reverse of the relationship $r$).</em></li>
+        <li><strong>How the computer understands it (Semantics):</strong> $(r^-)^\mathcal{I} = \{(\delta, \eta) \mid (\eta, \delta) \in r^\mathcal{I}\}$ <br><em>(This just means you take the original pair of connected objects and flip their order).</em></li>
+    </ul>
+
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li><strong>$Male \sqcap \exists hasChild^-.\top \sqsubseteq Son$</strong>
+            <ul>
+                <li><em>Translation:</em> If you are "Male" AND ($\sqcap$) you are the target of a backward "hasChild" relationship (meaning someone has you as a child), then you belong to the category "Son".</li>
+            </ul>
+        </li>
+        <li><strong>$\top \sqsubseteq \neg(\geq 3 hasChild^-.\top)$</strong>
+            <ul>
+                <li><em>Translation:</em> "Everything" ($\top$) belongs to the group that does NOT have 3 or more backward "hasChild" relationships. In short: Nobody can be the biological child of 3 or more parents.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>4. The "Self" Constructor</h2>
+    <div class="highlight">
+        <strong>What it means in plain English:</strong><br>
+        This is used to describe "local reflexivity," which is a fancy way of saying an object has a relationship <em>with itself</em>.
+    </div>
+
+    <ul>
+        <li><strong>How we write it (Syntax):</strong> $\exists r.Self$</li>
+        <li><strong>How the computer understands it (Semantics):</strong> $(\exists r.Self)^\mathcal{I} = \{\delta \mid (\delta, \delta) \in r^\mathcal{I}\}$ <br><em>(This defines a group of objects where the object connects to itself using relationship $r$).</em></li>
+    </ul>
+
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li><strong>$\top \sqsubseteq \neg(\exists hasSibling.Self)$</strong>
+            <ul>
+                <li><em>Translation:</em> "Everything" ($\top$) belongs to the group that does NOT have a "hasSibling" connection to itself. In short: Nobody can be their own sibling.</li>
+            </ul>
+        </li>
+        <li><strong>$Freelance \sqsubseteq \exists hasBoss.Self$</strong>
+            <ul>
+                <li><em>Translation:</em> A "Freelance" worker belongs to the group of people who have a "hasBoss" relationship pointing to themselves. In short: Freelancers are their own bosses.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>5. Transitivity (Represented by $\mathcal{S}$)</h2>
+    <div class="highlight">
+        <strong>What it means in plain English:</strong><br>
+        A transitivity rule says that if A is connected to B, and B is connected to C, then A is automatically connected to C.
+    </div>
+
+    <ul>
+        <li><strong>How we write it (Syntax):</strong> $trans(r)$</li>
+        <li><strong>How the computer understands it (Semantics):</strong> The logic system satisfies this rule if and only if the relationship $r$ mathematically behaves transitively.</li>
+    </ul>
+
+    <p><strong>Examples:</strong></p>
+    <ul>
+        <li><strong>$trans(hasDescendant)$</strong>
+            <ul>
+                <li><em>Translation:</em> The relationship "hasDescendant" is transitive. (If you have a child, and that child has a child, that grandchild is automatically your descendant).</li>
+            </ul>
+        </li>
+        <li><strong>$trans(hasPart)$</strong>
+            <ul>
+                <li><em>Translation:</em> "hasPart" is transitive. (If a car has an engine, and the engine has a piston, then the car has a piston).</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>6. Role Hierarchies (Represented by $\mathcal{H}$)</h2>
+    <div class="highlight">
+        <strong>What it means in plain English:</strong><br>
+        Just like we can say a "Dog" is a sub-category of "Animal", this constructor allows us to say that one <em>relationship</em> is a sub-category of another relationship.
+    </div>
+
+    <ul>
+        <li><strong>How we write it (Syntax):</strong> $r \sqsubseteq s$ <br><em>(Where $r$ and $s$ are both roles/relationships).</em></li>
+        <li><strong>How the computer understands it (Semantics):</strong> The logic system satisfies this if and only if every time relationship $r$ happens, it is mathematically considered a subset ($\subseteq$) of relationship $s$ occurring.</li>
+    </ul>
+
+    <hr>
+
+    <div class="takeaway">
+        <h2>Conclusion: Language Hierarchies</h2>
+        <p>By mixing and matching these different constructors ($\mathcal{O}, \mathcal{Q}, \mathcal{I}, \mathcal{H}, \mathcal{S}$, etc.), we create a whole family—or <strong>hierarchy</strong>—of logic languages.</p>
+        <p>There is a trade-off:</p>
+        <ul>
+            <li><strong>Expressivity:</strong> The more building blocks you add, the more complex real-world concepts you can accurately describe.</li>
+            <li><strong>Complexity:</strong> However, the more you add, the harder and slower it becomes for a computer program to reason with the data and solve problems.</li>
+        </ul>
+    </div>
 
 
 </body>
