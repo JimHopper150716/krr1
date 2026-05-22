@@ -18,9 +18,10 @@
             color: #c9d1d9;
             font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 40px 20px;
-        }        }
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
         h1 {
             text-align: center;
             color: #ffffff;
@@ -293,6 +294,191 @@
         <p>\(f(a,b,c,d) = (a \land b \land \neg c \land \neg d) \lor (a \land \neg b \land c \land \neg d) \lor (a \land \neg b \land \neg c \land d) \lor (\neg a \land b \land c \land \neg d) \lor (\neg a \land b \land \neg c \land d) \lor (\neg a \land \neg b \land c \land d)\)</p>
     </div>
 
+
+    <!-- Exercise 1.6 -->
+    <h2 class="exercise-title">Exercise 1.6. Formula Construction II (**)</h2>
+    <div class="question">
+        <p>Build a formula that represents the Boolean function expressed by the following table:</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>\(x\)</th>
+                        <th>\(y\)</th>
+                        <th>\(z\)</th>
+                        <th>\(\varphi\)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+                    <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="solution">
+        <h3>Solution</h3>
+        <ol>
+            <li><strong>Identify the minterms</strong> (rows where \(\varphi = 1\)):
+                <ul>
+                    <li>Row 1: \(x=0, y=0, z=0 \implies (\neg x \land \neg y \land \neg z)\)</li>
+                    <li>Row 3: \(x=0, y=1, z=0 \implies (\neg x \land y \land \neg z)\)</li>
+                    <li>Row 4: \(x=0, y=1, z=1 \implies (\neg x \land y \land z)\)</li>
+                    <li>Row 6: \(x=1, y=0, z=1 \implies (x \land \neg y \land z)\)</li>
+                    <li>Row 8: \(x=1, y=1, z=1 \implies (x \land y \land z)\)</li>
+                </ul>
+            </li>
+            <li><strong>Combine to form the Disjunctive Normal Form (DNF):</strong><br>
+                \(\varphi = (\neg x \land \neg y \land \neg z) \lor (\neg x \land y \land \neg z) \lor (\neg x \land y \land z) \lor (x \land \neg y \land z) \lor (x \land y \land z)\)
+            </li>
+            <li><strong>Simplify the formula</strong> (grouping terms):
+                <ul>
+                    <li>Combine rows 1 and 3: \((\neg x \land \neg y \land \neg z) \lor (\neg x \land y \land \neg z) \equiv \neg x \land \neg z\)</li>
+                    <li>Combine rows 4 and 8: \((\neg x \land y \land z) \lor (x \land y \land z) \equiv y \land z\)</li>
+                    <li>Combine rows 6 and 8: \((x \land \neg y \land z) \lor (x \land y \land z) \equiv x \land z\)</li>
+                </ul>
+                <p>Putting it together yields the simplified formula:</p>
+                <p><strong>\(\varphi = (\neg x \land \neg z) \lor (y \land z) \lor (x \land z)\)</strong></p>
+                <p><em>(Note: This can be further factored to \(\varphi = (\neg x \land \neg z) \lor (z \land (x \lor y))\) )</em></p>
+            </li>
+        </ol>
+    </div>
+
+    <!-- Exercise 1.7 -->
+    <h2 class="exercise-title">Exercise 1.7. Formula Properties (**)</h2>
+    <div class="question">
+        <p>Let \(\varphi\) and \(\psi\) be two propositional formulas. Check which of the following statements are true, providing a justification:</p>
+        <ol>
+            <li>if \(\varphi\) and \(\psi\) are satisfiable, then \(\varphi \land \psi\) is satisfiable;</li>
+            <li>if \(\varphi\) and \(\psi\) are satisfiable, then \(\varphi \lor \psi\) is satisfiable;</li>
+            <li>if \(\varphi\) and \(\psi\) are satisfiable, then \(\varphi \land \neg\psi\) is satisfiable;</li>
+            <li>if \(\varphi\) and \(\psi\) are tautologies, then \(\varphi \land \psi\) is a tautology;</li>
+            <li>if \(\varphi\) and \(\psi\) are contradictions, then \(\varphi \lor \psi\) is a contradiction;</li>
+            <li>if \(\varphi\) is a tautology, then \(\varphi \to \psi\) is satisfiable;</li>
+            <li>if \(\varphi\) is a tautology, then \(\psi \to \varphi\) is a tautology.</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <ol>
+            <li><strong>if \(\varphi\) and \(\psi\) are satisfiable, then \(\varphi \land \psi\) is satisfiable;</strong><br>
+                <span class="ans-false">False.</span> <em>Justification:</em> Counterexample: Let \(\varphi = p\) and \(\psi = \neg p\). Both are independently satisfiable, but \(\varphi \land \psi \equiv p \land \neg p\), which is a contradiction (never satisfiable).
+            </li>
+            <br>
+            <li><strong>if \(\varphi\) and \(\psi\) are satisfiable, then \(\varphi \lor \psi\) is satisfiable;</strong><br>
+                <span class="ans-true">True.</span> <em>Justification:</em> If \(\varphi\) is satisfiable, there is at least one truth assignment that makes it True. Under this same assignment, the disjunction \(\varphi \lor \psi\) will evaluate to True, making it satisfiable.
+            </li>
+            <br>
+            <li><strong>if \(\varphi\) and \(\psi\) are satisfiable, then \(\varphi \land \neg\psi\) is satisfiable;</strong><br>
+                <span class="ans-false">False.</span> <em>Justification:</em> Counterexample: Let \(\varphi = p\) and \(\psi = p\). Both are satisfiable, but \(\varphi \land \neg\psi \equiv p \land \neg p\), which is a contradiction.
+            </li>
+            <br>
+            <li><strong>if \(\varphi\) and \(\psi\) are tautologies, then \(\varphi \land \psi\) is a tautology;</strong><br>
+                <span class="ans-true">True.</span> <em>Justification:</em> A tautology is True under <em>all</em> truth assignments. Since \(\varphi\) and \(\psi\) are both always True, \(\varphi \land \psi\) will evaluate to \(\text{True} \land \text{True} \equiv \text{True}\) under all assignments.
+            </li>
+            <br>
+            <li><strong>if \(\varphi\) and \(\psi\) are contradictions, then \(\varphi \lor \psi\) is a contradiction;</strong><br>
+                <span class="ans-true">True.</span> <em>Justification:</em> A contradiction is False under <em>all</em> assignments. Because \(\varphi\) and \(\psi\) are always False, \(\varphi \lor \psi\) evaluates to \(\text{False} \lor \text{False} \equiv \text{False}\) under all assignments.
+            </li>
+            <br>
+            <li><strong>if \(\varphi\) is a tautology, then \(\varphi \to \psi\) is satisfiable;</strong><br>
+                <span class="ans-false">False.</span> <em>Justification:</em> Counterexample: Let \(\psi\) be a contradiction (e.g., \(q \land \neg q\)). Because \(\varphi\) is a tautology (always True), the implication \(\varphi \to \psi\) evaluates to \(\text{True} \to \text{False}\), which equals False under all assignments, making it unsatisfiable.
+            </li>
+            <br>
+            <li><strong>if \(\varphi\) is a tautology, then \(\psi \to \varphi\) is a tautology.</strong><br>
+                <span class="ans-true">True.</span> <em>Justification:</em> By definition, an implication \(A \to B\) is equivalent to \(\neg A \lor B\). Here, it translates to \(\neg\psi \lor \varphi\). Since \(\varphi\) is a tautology (always True), the disjunction \(\neg\psi \lor \text{True}\) is always True, making the entire expression a tautology.
+            </li>
+        </ol>
+    </div>
+
+    <!-- Exercise 1.8 -->
+    <h2 class="exercise-title">Exercise 1.8. Variable Accumulation (**)</h2>
+    <div class="question">
+        <p>Verify that:</p>
+        <p style="text-align: center;">\(x \land y \equiv x \land y \land (w \lor \neg w)\)</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <ol>
+            <li>According to the Law of Excluded Middle, a variable or its negation (\(w \lor \neg w\)) is always True (it is a tautology).</li>
+            <li>Therefore, substitute \((w \lor \neg w)\) with \(\top\) (True):<br> 
+                \(x \land y \land (w \lor \neg w) \equiv x \land y \land \top\)
+            </li>
+            <li>According to the Identity Law of Conjunction, \(A \land \top \equiv A\).</li>
+            <li>Applying this to our formula:<br>
+                \(x \land y \land \top \equiv x \land y\).<br>
+                Thus, the equivalence \(x \land y \equiv x \land y \land (w \lor \neg w)\) is fully verified.
+            </li>
+        </ol>
+    </div>
+
+    <!-- Exercise 1.9 -->
+    <h2 class="exercise-title">Exercise 1.9. Shefter (***)</h2>
+    <div class="question">
+        <ol>
+            <li>Describe the NAND operator, which is true if at least one of its parameters is false as a truth table and as a formula.</li>
+            <li>Show how one can express conjunction (\(\land\)), disjunction (\(\lor\)), and negation (\(\neg\)) using only NAND.</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><em>(Note: "Shefter" is a typo in the provided document; it refers to the Sheffer stroke / NAND gate).</em></p>
+        
+        <h4>1. Describe the NAND operator as a truth table and as a formula.</h4>
+        <p><strong>Formula:</strong> \(p \text{ NAND } q \equiv \neg(p \land q)\)</p>
+        <p><strong>Truth Table:</strong></p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>\(p\)</th>
+                        <th>\(q\)</th>
+                        <th>\(p \text{ NAND } q\)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>0</td><td>0</td><td>1</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h4>2. Show how one can express conjunction (\(\land\)), disjunction (\(\lor\)), and negation (\(\neg\)) using only NAND.</h4>
+        <ul>
+            <li>
+                <strong>Negation (\(\neg p\)):</strong><br>
+                We need an output that is opposite to \(p\).<br>
+                \(\neg p \equiv p \text{ NAND } p\)<br>
+                <em>(Proof: \(\neg(p \land p) \equiv \neg p\))</em>
+            </li>
+            <br>
+            <li>
+                <strong>Conjunction (\(p \land q\)):</strong><br>
+                We know \(p \land q\) is the exact inverse of \(p \text{ NAND } q\). Thus, we simply negate a NAND using the negation setup shown above.<br>
+                \(p \land q \equiv \neg(p \text{ NAND } q)\)<br>
+                \(p \land q \equiv (p \text{ NAND } q) \text{ NAND } (p \text{ NAND } q)\)
+            </li>
+            <br>
+            <li>
+                <strong>Disjunction (\(p \lor q\)):</strong><br>
+                According to De Morgan's laws, \(p \lor q \equiv \neg(\neg p \land \neg q)\). This matches the definition of a NAND operation on inverted inputs (\((\neg p) \text{ NAND } (\neg q)\)).<br>
+                Substitute the negation rule for both \(p\) and \(q\):<br>
+                \(p \lor q \equiv (p \text{ NAND } p) \text{ NAND } (q \text{ NAND } q)\)
+            </li>
+        </ul>
+    </div>
 
 </body>
 </html>
