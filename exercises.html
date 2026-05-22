@@ -480,5 +480,133 @@
         </ul>
     </div>
 
+    <h1>2 Propositional Knowledge Bases</h1>
+
+    <!-- EXERCISE 2.1 -->
+    <h2 class="exercise-title">Exercise 2.1. Knowledge Bases (**)</h2>
+    <div class="question">
+        <p>For the following truth table, construct a knowledge base (expressed as a set of propositional rules) which represents the same knowledge, or argue why it cannot be done.</p>
+        <table>
+            <tr><th>x</th><th>y</th><th>z</th><th>K</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+        </table>
+    </div>
+
+    <div class="solution">
+        <h3>Answer</h3>
+        <p>It <span class="strong-text">cannot</span> be done.</p>
+        
+        <h3>Justification</h3>
+        <p>In the context of knowledge bases, a "propositional rule" restricts us to Horn clauses (rules of the form \(Body \rightarrow Head\), where the body is a conjunction of positive literals and the head is a single positive literal or <code>false</code>).</p>
+        
+        <p>A fundamental property of any knowledge base composed of Horn clauses is that its set of valid models (satisfying assignments) must be <span class="strong-text">closed under intersection</span>. The intersection of two models is found by performing a bitwise AND on their truth values (i.e., a variable is <span class="ans-true">true</span> in the intersection if and only if it is <span class="ans-true">true</span> in both models).</p>
+
+        <p>Let's identify the models from the truth table where \(K = 1\). We represent a model as the set of variables that are assigned <code>1</code> (<span class="ans-true">true</span>):</p>
+        <ul>
+            <li>\(M_1 = \{\}\) <em>(from 0 0 0)</em></li>
+            <li>\(M_2 = \{y\}\) <em>(from 0 1 0)</em></li>
+            <li>\(M_3 = \{y, z\}\) <em>(from 0 1 1)</em></li>
+            <li>\(M_4 = \{x, z\}\) <em>(from 1 0 1)</em></li>
+            <li>\(M_5 = \{x, y\}\) <em>(from 1 1 0)</em></li>
+        </ul>
+
+        <p>Now, let's take the intersection of models \(M_3\) and \(M_4\):<br>
+        \(M_3 \cap M_4 = \{y, z\} \cap \{x, z\} = \{z\}\)</p>
+
+        <p>This resulting intersection corresponds to the assignment \(x=0, y=0, z=1\). If we look at the truth table for this assignment, the output is <span class="strong-text">\(K = 0\)</span>. </p>
+
+        <p>Because the intersection of two valid models resulted in an invalid model, the set of assignments is not closed under intersection. Therefore, it is mathematically impossible to represent this exact truth table using a knowledge base of propositional rules (Horn clauses).</p>
+    </div>
+
+    <!-- EXERCISE 2.2 -->
+    <h2 class="exercise-title">Exercise 2.2. Expressivity (**)</h2>
+    <div class="question">
+        <p>Express the following properties as Horn clauses and as propositional rules:</p>
+        <ol>
+            <li>\(x\) must be false</li>
+            <li>if \(y\) is true, then \(x\) is false</li>
+            <li>if \(x\) or \(y\) is true then \(z\) is true</li>
+            <li>if \(x\) is true, then \(y\) and \(z\) are true</li>
+        </ol>
+        <p>Which of these Horn clauses are definite?</p>
+    </div>
+
+    <div class="solution">
+        <h3>Answer</h3>
+        <p><em>(Note: in rule notation, an implication is usually written as \(Head \leftarrow Body\), and <code>false</code> is used for constraints).</em></p>
+
+        <h4>1. \(x\) must be <span class="ans-false">false</span></h4>
+        <ul>
+            <li><strong>Horn clause:</strong> \(\neg x\)</li>
+            <li><strong>Propositional rule:</strong> \(\text{false} \leftarrow x\)</li>
+        </ul>
+
+        <h4>2. if \(y\) is <span class="ans-true">true</span>, then \(x\) is <span class="ans-false">false</span></h4>
+        <ul>
+            <li><strong>Horn clause:</strong> \(\neg y \vee \neg x\)</li>
+            <li><strong>Propositional rule:</strong> \(\text{false} \leftarrow x \wedge y\)</li>
+        </ul>
+
+        <h4>3. if \(x\) or \(y\) is <span class="ans-true">true</span> then \(z\) is <span class="ans-true">true</span></h4>
+        <ul>
+            <li><strong>Horn clauses:</strong> \((\neg x \vee z)\) and \((\neg y \vee z)\)</li>
+            <li><strong>Propositional rules:</strong> \(z \leftarrow x\) and \(z \leftarrow y\)</li>
+        </ul>
+
+        <h4>4. if \(x\) is <span class="ans-true">true</span>, then \(y\) and \(z\) are <span class="ans-true">true</span></h4>
+        <ul>
+            <li><strong>Horn clauses:</strong> \((\neg x \vee y)\) and \((\neg x \vee z)\)</li>
+            <li><strong>Propositional rules:</strong> \(y \leftarrow x\) and \(z \leftarrow x\)</li>
+        </ul>
+
+        <h4>Which of these Horn clauses are definite?</h4>
+        <p>A <span class="strong-text">definite clause</span> is a strict subset of Horn clauses defined as having <span class="strong-text">exactly one</span> positive literal.</p>
+        <ul>
+            <li>Clauses for 1 and 2 have <em>zero</em> positive literals (they are constraints).</li>
+            <li>Clauses for 3 and 4 each have <em>exactly one</em> positive literal (the heads \(y\) or \(z\)).</li>
+        </ul>
+        <p><strong>Conclusion:</strong> Therefore, the Horn clauses for properties <span class="strong-text">3 and 4</span> are definite.</p>
+    </div>
+
+    <!-- EXERCISE 2.3 -->
+    <h2 class="exercise-title">Exercise 2.3. Consistency (**)</h2>
+    <div class="question">
+        <p>Is every knowledge base without constraints consistent? <strong>Justify your answer</strong></p>
+    </div>
+
+    <div class="solution">
+        <h3>Answer</h3>
+        <p><span class="ans-true">Yes</span>, every knowledge base without constraints is consistent.</p>
+
+        <h3>Justification</h3>
+        <p>A "constraint" is a rule that has <code>false</code> as its head (e.g., \(\text{false} \leftarrow b_1 \wedge \dots \wedge b_n\)). A knowledge base without constraints consists entirely of definite clauses, meaning every single rule has a positive atom as its head. </p>
+        
+        <p>If you create an interpretation where <span class="strong-text">every variable is assigned <span class="ans-true">true</span></span>, the head of every rule evaluates to <span class="ans-true">true</span>. Because an implication (\(Body \rightarrow Head\)) is always true when its Head is true, all rules in the knowledge base are satisfied. Since there is at least one valid model (the "all-true" interpretation), the knowledge base is guaranteed to be consistent.</p>
+    </div>
+
+    <!-- EXERCISE 2.4 -->
+    <h2 class="exercise-title">Exercise 2.4. Consistency (***)</h2>
+    <div class="question">
+        <p>Is every knowledge base without facts consistent? <strong>Justify your answer</strong></p>
+    </div>
+
+    <div class="solution">
+        <h3>Answer</h3>
+        <p><span class="ans-true">Yes</span>, every knowledge base without facts is consistent.</p>
+
+        <h3>Justification</h3>
+        <p>A "fact" is a rule with an empty body (or equivalently, a body that unconditionally evaluates to <span class="ans-true">true</span>, such as \(Head \leftarrow \text{true}\)). In a knowledge base without facts, every rule is guaranteed to have at least one positive atom in its body. </p>
+        
+        <p>If you create an interpretation where <span class="strong-text">every variable is assigned <span class="ans-false">false</span></span>, the body of every rule will evaluate to <span class="ans-false">false</span>. An implication with a false antecedent (\(\text{False} \rightarrow Head\)) is vacuously true. Therefore, the "all-false" interpretation will satisfy every rule in the knowledge base without ever triggering a contradiction, meaning the knowledge base is guaranteed to be consistent.</p>
+    </div>
+
+    
 </body>
 </html>
