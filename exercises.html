@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boolean Algebra Exercises</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #c9d1d9;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: #161b22;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            border: 1px solid #30363d;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        h2.exercise-title {
+            color: #58a6ff;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+            margin-top: 50px;
+        }
+        .question {
+            background-color: #21262d;
+            border-left: 4px solid #d29922;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            color: #e6edf3;
+        }
+        .question p {
+            margin-top: 0;
+        }
+        .question ol {
+            margin-bottom: 0;
+        }
+        .solution {
+            background-color: #0d1117;
+            border-left: 4px solid #2ea043;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 0 6px 6px 0;
+        }
+        .solution h3 {
+            margin-top: 0;
+            color: #2ea043;
+            font-size: 1.2em;
+        }
+        .solution h4 {
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 30px 0;
+            font-size: 15px;
+            background-color: #161b22;
+        }
+        table, th, td {
+            border: 1px solid #30363d;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #21262d;
+            color: #c9d1d9;
+        }
+        tr:nth-child(even) {
+            background-color: #1c2128;
+        }
+        .ans-true {
+            color: #3fb950;
+            font-weight: bold;
+        }
+        .ans-false {
+            color: #f85149;
+            font-weight: bold;
+        }
+        em {
+            color: #8b949e;
+        }
+        code {
+            background-color: #30363d;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>1 Boolean Algebra</h1>
+
+    <!-- EXERCISE 1.1 -->
+    <h2 class="exercise-title">Exercise 1.1. Truth Tables (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong></p>
+        <p>Build the truth tables of the following formulas. Remember the precedence of the operators.</p>
+        <ol>
+            <li>\(\neg(x \lor y) \land \neg z\)</li>
+            <li>\(w \land \neg(x \lor w)\)</li>
+            <li>\(\neg x \lor y \land x \lor \neg y\)</li>
+            <li>\(\neg(x \land y) \lor \neg z\)</li>
+            <li>\(w \land \neg x \lor \neg x\)</li>
+            <li>\((x \land y \lor \neg x \lor \neg w) \land z\)</li>
+        </ol>
+    </div>
+    
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><em>Note: In all truth tables, standard operator precedence is used: \(\neg\) evaluates first, then \(\land\), and finally \(\lor\).</em></p>
+
+        <h4>1. \(\neg(x \lor y) \land \neg z\)</h4>
+        <table>
+            <tr><th>x</th><th>y</th><th>z</th><th>\(x \lor y\)</th><th>\(\neg(x \lor y)\)</th><th>\(\neg z\)</th><th>\(\neg(x \lor y) \land \neg z\)</th></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td>T</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td>T</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+        </table>
+
+        <h4>2. \(w \land \neg(x \lor w)\)</h4>
+        <table>
+            <tr><th>w</th><th>x</th><th>\(x \lor w\)</th><th>\(\neg(x \lor w)\)</th><th>\(w \land \neg(x \lor w)\)</th></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>T</td><td>F</td><td class="ans-false">F</td></tr>
+        </table>
+
+        <h4>3. \(\neg x \lor y \land x \lor \neg y\)</h4>
+        <p><em>(Evaluates as \(\neg x \lor (y \land x) \lor \neg y\))</em></p>
+        <table>
+            <tr><th>x</th><th>y</th><th>\(\neg x\)</th><th>\(y \land x\)</th><th>\(\neg y\)</th><th>\(\neg x \lor (y \land x) \lor \neg y\)</th></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td>F</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>F</td><td>F</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td class="ans-true">T</td></tr>
+        </table>
+
+        <h4>4. \(\neg(x \land y) \lor \neg z\)</h4>
+        <table>
+            <tr><th>x</th><th>y</th><th>z</th><th>\(x \land y\)</th><th>\(\neg(x \land y)\)</th><th>\(\neg z\)</th><th>\(\neg(x \land y) \lor \neg z\)</th></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+        </table>
+
+        <h4>5. \(w \land \neg x \lor \neg x\)</h4>
+        <p><em>(Evaluates as \((w \land \neg x) \lor \neg x\))</em></p>
+        <table>
+            <tr><th>w</th><th>x</th><th>\(\neg x\)</th><th>\(w \land \neg x\)</th><th>\((w \land \neg x) \lor \neg x\)</th></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+        </table>
+
+        <h4>6. \((x \land y \lor \neg x \lor \neg w) \land z\)</h4>
+        <p><em>(Evaluates as \((((x \land y) \lor \neg x) \lor \neg w) \land z\))</em></p>
+        <table>
+            <tr><th>w</th><th>x</th><th>y</th><th>z</th><th>\(x \land y\)</th><th>\(\neg x\)</th><th>\(\neg w\)</th><th>\((x \land y) \lor \neg x \lor \neg w\)</th><th>Formula</th></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td>T</td><td>T</td><td>F</td><td>T</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>F</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>T</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>T</td><td>T</td><td>T</td><td>F</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+        </table>
+    </div>
+
+    <!-- EXERCISE 1.2 -->
+    <h2 class="exercise-title">Exercise 1.2. Formula Type (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong></p>
+        <p>Determine which of the previous formulas are tautologies, contradictions, or non-tautological satisfiable formulas. Explain your answer.</p>
+    </div>
+    
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Based on the truth tables above:</p>
+        <ol>
+            <li><strong>Satisfiable but non-tautological</strong>: It is only True when \(x\), \(y\), and \(z\) are all False.</li>
+            <li><strong>Contradiction</strong>: It evaluates to False under all possible truth assignments.</li>
+            <li><strong>Tautology</strong>: It evaluates to True under all possible truth assignments.</li>
+            <li><strong>Satisfiable but non-tautological</strong>: It is False only when \(x\), \(y\), and \(z\) are all True, and True otherwise.</li>
+            <li><strong>Satisfiable but non-tautological</strong>: It yields True when \(x\) is False and False when \(x\) is True.</li>
+            <li><strong>Satisfiable but non-tautological</strong>: It contains a mix of True and False evaluations (e.g., True for <code>F, F, F, T</code>, but False for <code>T, T, F, T</code>).</li>
+        </ol>
+    </div>
+
+    <!-- EXERCISE 1.3 -->
+    <h2 class="exercise-title">Exercise 1.3. Boolean Functions (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong></p>
+        <p>Build a ternary Boolean function (over the variables \(x, y, z\)) that returns true when exactly one variable is true.<br>
+        Express this Boolean function as a formula and as a truth table.</p>
+    </div>
+    
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Formula:</strong><br>
+        A function that is true when <em>exactly one</em> variable is true can be built by explicitly declaring the three valid conditions:</p>
+        <p>\(f(x, y, z) = (x \land \neg y \land \neg z) \lor (\neg x \land y \land \neg z) \lor (\neg x \land \neg y \land z)\)</p>
+
+        <p><strong>Truth Table:</strong></p>
+        <table>
+            <tr><th>x</th><th>y</th><th>z</th><th>\(f(x, y, z)\)</th></tr>
+            <tr><td>F</td><td>F</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>F</td><td>F</td><td>T</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>F</td><td>T</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>F</td><td>F</td><td class="ans-true">T</td></tr>
+            <tr><td>T</td><td>F</td><td>T</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>F</td><td class="ans-false">F</td></tr>
+            <tr><td>T</td><td>T</td><td>T</td><td class="ans-false">F</td></tr>
+        </table>
+    </div>
+
+    <!-- EXERCISE 1.4 -->
+    <h2 class="exercise-title">Exercise 1.4. Formula Construction (**)</h2>
+    <div class="question">
+        <p><strong>Question:</strong></p>
+        <p>Build (i) a tautology and (ii) a contradiction which use at least three propositional variables.</p>
+    </div>
+    
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We can explicitly guarantee the use of at least three propositional variables (let&#39;s use \(x, y,\) and \(z\)) like so:</p>
+        <p><strong>i) Tautology:</strong><br>
+        \((x \land y \land z) \lor \neg(x \land y \land z)\)<br>
+        <em>(This evaluates to True regardless of the variables&#39; states).</em></p>
+        
+        <p><strong>ii) Contradiction:</strong><br>
+        \((x \land y \land z) \land \neg(x \land y \land z)\)<br>
+        <em>(This evaluates to False regardless of the variables&#39; states).</em></p>
+    </div>
+
+    <!-- EXERCISE 1.5 -->
+    <h2 class="exercise-title">Exercise 1.5. Formula Construction I (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong></p>
+        <p>Build a formula over four propositional variables which is true if and only if any two of the input variables is true.</p>
+    </div>
+    
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Let the four propositional variables be \(a, b, c,\) and \(d\). The phrasing &quot;if any two [...] is true&quot; typically distinguishes between two subtle meanings in logic. Here is the formula based on the most direct interpretations:</p>
+
+        <p><strong>Interpretation A: &quot;At least two variables are true&quot;</strong> <em>(Most standard logical translation for &#39;if any two...&#39;):</em><br>
+        You just require finding any two un-negated variables combined by an AND.</p>
+        <p>\(f(a,b,c,d) = (a \land b) \lor (a \land c) \lor (a \land d) \lor (b \land c) \lor (b \land d) \lor (c \land d)\)</p>
+
+        <p><strong>Interpretation B: &quot;Exactly two variables are true&quot;</strong> <em>(In case it is contrasting with &#39;exactly one&#39; from Ex 1.3):</em></p>
+        <p>\(f(a,b,c,d) = (a \land b \land \neg c \land \neg d) \lor (a \land \neg b \land c \land \neg d) \lor (a \land \neg b \land \neg c \land d) \lor (\neg a \land b \land c \land \neg d) \lor (\neg a \land b \land \neg c \land d) \lor (\neg a \land \neg b \land c \land d)\)</p>
+    </div>
+
+</div>
+
+</body>
+</html>
