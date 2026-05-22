@@ -1426,5 +1426,311 @@
         <p>While $\mathcal{ELI}$ looks almost identical to $\mathcal{EL}$, and normalizes in a very similar way (by just reversing the arguments of $r$), it carries a massive computational penalty. <strong>Reasoning in $\mathcal{ELI}$ requires Exponential Time.</strong> This shows how adding even a tiny feature to a "lightweight" logic can completely destroy its fast, polynomial-time efficiency.</p>
     </div>
 
+    <h1>Knowledge Representation and Reasoning: A Propositionally-closed Description Logic ($\mathcal{ALC}$)</h1>
+
+    <p><em>Based on the lectures by Rafael Peñaloza (Milano-Bicocca, 2025-2026)</em></p>
+
+    <hr>
+
+    <h2>Part 1: The Need for Negation and the $\mathcal{ALC}$ Language (Slides 1-8)</h2>
+
+    <h3>Why do we need something new?</h3>
+    <p>In previous lessons, you likely learned about a logic system called <strong>$\mathcal{EL}$</strong>. The problem with $\mathcal{EL}$ is that it has no way to express the word <strong>"NOT"</strong> (negation).</p>
+    
+    <p>In an extended version called <strong>$\mathcal{EL}^\perp$</strong>, we found a partial workaround. We could say that two concepts clash and create a contradiction (represented by the "bottom" symbol $\perp$).</p>
+    <ul>
+        <li><strong>Example</strong>: $Mortal \sqcap Immortal \sqsubseteq \perp$. This means "If you are Mortal AND Immortal, that is a contradiction." Effectively, it means $Mortal \sqsubseteq \neg Immortal$ (Mortals are not immortal).</li>
+    </ul>
+    
+    <p>This works if we want to say two things can't overlap. However, it fails to capture true negation. What if we want to say: <em>"If a living being is <strong>not mortal</strong>, then it must be <strong>immortal</strong>"</em>?<br>
+    In symbols, we want to write: $\neg Mortal \sqsubseteq Immortal$. The $\mathcal{EL}^\perp$ logic simply does not allow us to write a "NOT" ($\neg$) on the left side of an equation.</p>
+
+    <h3>Enter $\mathcal{ALC}$</h3>
+    <p>To solve this, we just include the "NOT" symbol directly into our language. This new, upgraded logic language is called <strong>$\mathcal{ALC}$</strong>.</p>
+    
+    <p>$\mathcal{ALC}$ is exactly like $\mathcal{EL}$, but extended with the negation operator ($\neg$). Here is the syntax (the building blocks) of $\mathcal{ALC}$:</p>
+    <ul>
+        <li><strong>$A$</strong>: A basic concept name (e.g., <em>Human</em>)</li>
+        <li><strong>$\top$</strong>: "Top" or Everything (the entire universe of objects)</li>
+        <li><strong>$C \sqcap C$</strong>: "AND" / Intersection (e.g., <em>Smart AND Human</em>)</li>
+        <li><strong>$\exists r.C$</strong>: "EXISTS" / Existential restriction (e.g., <em>Has a child that is Human</em>)</li>
+        <li><strong>$\neg C$</strong>: "NOT" / Negation (e.g., <em>NOT Human</em>)</li>
+    </ul>
+
+    <p><strong>The Semantics (The Meaning):</strong><br>
+    In set theory, if $C$ is a circle containing all humans, then $\neg C$ contains <strong>every object in the universe that does not belong to $C$</strong>.</p>
+
+    <h3>Reusing Old Rules &amp; Useful Shortcuts</h3>
+    <p>Everything you already know from $\mathcal{EL}^\perp$ transfers perfectly to $\mathcal{ALC}$:</p>
+    <ul>
+        <li><strong>GCI (General Concept Inclusion)</strong>: $C \sqsubseteq D$ means "All C's are D's" (Every element in C must also be in D).</li>
+        <li><strong>TBox (Terminology Box)</strong>: A finite set of GCI rules (your "rulebook" for a domain).</li>
+        <li><strong>Satisfiability</strong>: Asking, "Is it logically possible for a concept to exist without causing a contradiction?"</li>
+        <li><strong>Consistency</strong>: Asking, "Is it possible for a whole world (a model) to exist that follows all our rules?"</li>
+    </ul>
+
+    <p><strong>Useful Abbreviations:</strong><br>
+    Instead of creating new fundamental rules for everything, we can use the building blocks of $\mathcal{ALC}$ to define familiar shortcuts:</p>
+    <ul>
+        <li><strong>Bottom / Empty Set ($\perp$)</strong>: Defined as $A \sqcap \neg A$. (It's impossible to be $A$ and <em>not</em> $A$ at the same time, so this represents nothingness/contradiction).</li>
+        <li><strong>Top / Everything ($\top$)</strong>: Defined as $\neg \perp$ (The opposite of nothing is everything).</li>
+        <li><strong>OR / Union ($\sqcup$)</strong>: Defined using "AND" and "NOT". $C \sqcup D$ is exactly the same as $\neg(\neg C \sqcap \neg D)$.</li>
+        <li><strong>FOR ALL / Value Restriction ($\forall$)</strong>: $\forall r.C$ is defined as $\neg(\exists r.\neg C)$. (Saying "All my children are humans" is the same as saying "I do NOT have a child that is NOT human").
+            <ul>
+                <li><em>Warning:</em> You must be careful with "FOR ALL" ($\forall$). If you say "Person $\sqsubseteq$ $\forall$ hasChild.Person" and "$\forall$ hasAccess.Stairs $\sqsubseteq$ Inaccessible", these rules are technically satisfied if a person has <strong>zero</strong> children, or a room has <strong>zero</strong> stairs! Lack of successors makes a $\forall$ rule automatically true.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <hr>
+
+    <h2>Part 2: Negation Normal Form (NNF) (Slides 9-12)</h2>
+
+    <p>To make it easier for computers to process this logic, we will treat all our shortcuts (NOT $\neg$, AND $\sqcap$, OR $\sqcup$, EXISTS $\exists$, FOR ALL $\forall$) as official parts of the $\mathcal{ALC}$ language.</p>
+
+    <p>However, we are going to enforce one massive rule for the rest of this process: <strong>All concepts must always be expressed in Negation Normal Form (NNF).</strong></p>
+
+    <p><strong>What is NNF?</strong><br>
+    NNF means that the "NOT" symbol ($\neg$) is only allowed to touch <strong>basic concept names</strong>. It cannot sit outside of a bracket.</p>
+    <ul>
+        <li><em>Allowed:</em> $\neg Human$</li>
+        <li><em>Not Allowed:</em> $\neg(Human \sqcap Smart)$</li>
+    </ul>
+
+    <p><strong>How to transform anything into NNF:</strong><br>
+    You can rewrite any concept into NNF by pushing the "NOT" symbols inward using these three mathematical tricks:</p>
+    <ol>
+        <li><strong>De Morgan's Laws</strong>: 
+            <ul>
+                <li>$\neg(C \sqcap D)$ becomes $\neg C \sqcup \neg D$</li>
+                <li>$\neg(C \sqcup D)$ becomes $\neg C \sqcap \neg D$</li>
+            </ul>
+        </li>
+        <li><strong>Duality of Quantification</strong> (Flipping exists/forall):
+            <ul>
+                <li>$\neg(\exists r.C)$ becomes $\forall r.\neg C$</li>
+                <li>$\neg(\forall r.C)$ becomes $\exists r.\neg C$</li>
+            </ul>
+        </li>
+        <li><strong>Elimination of Double Negation</strong>:
+            <ul>
+                <li>$\neg\neg C$ just becomes $C$</li>
+            </ul>
+        </li>
+    </ol>
+
+    <div class="highlight">
+        <p><strong>Example Transformation:</strong><br>
+        Let's turn $\neg(\exists r.(\neg A \sqcap B) \sqcup \forall s.C)$ into NNF.</p>
+        <ol>
+            <li>First, push the outside NOT inward, which flips the OR ($\sqcup$) to an AND ($\sqcap$):<br>
+            $\neg(\exists r.(\neg A \sqcap B)) \sqcap \neg(\forall s.C)$</li>
+            <li>Next, push the NOTs into the quantifiers (flipping $\exists$ to $\forall$, and $\forall$ to $\exists$):<br>
+            $\forall r.\neg(\neg A \sqcap B) \sqcap \exists s.\neg C$</li>
+            <li>Finally, push the NOT inside the remaining bracket (flipping the AND to an OR, and removing the double negative on A):<br>
+            $\forall r.(A \sqcup \neg B) \sqcap \exists s.\neg C$</li>
+        </ol>
+    </div>
+
+    <p><em>From now on, assume every concept we deal with has implicitly been transformed into NNF first.</em></p>
+
+    <hr>
+
+    <h2>Part 3: The Tableaux Algorithm - Concept Satisfiability (Slides 13-30)</h2>
+
+    <p>We want an algorithm to get a computer to automatically decide if:</p>
+    <ol>
+        <li>A concept makes sense (Concept Satisfiability).</li>
+        <li>A rulebook makes sense (TBox Consistency).</li>
+        <li>A world with specific objects makes sense (Knowledge Base Consistency).</li>
+    </ol>
+
+    <p>We do this using a <strong>Tableaux Algorithm</strong>. Think of the Tableau as a "model-constructing mechanism." It is basically a game where the computer tries to build a mini-world that satisfies the rules. If it can build it without any logical explosions, the concept is satisfiable!</p>
+
+    <h3>The Basic Idea</h3>
+    <p>You build a model by taking a big, complicated concept and decomposing (breaking down) it into smaller, atomic parts.</p>
+
+    <p><strong>Initialization:</strong><br>
+    To check if concept $C$ is satisfiable, we start by inventing a fake object (let's call it $a$) and asserting that it belongs to $C$.</p>
+    <ul>
+        <li>We start with a set of assertions: $\mathcal{A} = \{C(a)\}$</li>
+    </ul>
+
+    <p><strong>Decomposition (The Tableaux Rules):</strong><br>
+    We then look at our set of assertions and apply rules to break them down.</p>
+    <ul>
+        <li><strong>The AND ($\sqcap$) rule</strong>: If our set contains $C \sqcap D(x)$, we add two new facts: $C(x)$ and $D(x)$.</li>
+        <li><strong>The OR ($\sqcup$) rule</strong>: If our set contains $C \sqcup D(x)$, we have to make a choice. We branch our reality into two possibilities and try adding <em>either</em> $C(x)$ <em>or</em> $D(x)$.</li>
+        <li><strong>The EXISTS ($\exists$) rule</strong>: If our set says $\exists r.C(x)$ (meaning $x$ has a relationship $r$ with something that is $C$), we <strong>create a brand new object</strong> $y$. We add the facts: $r(x, y)$ and $C(y)$.</li>
+        <li><strong>The FOR ALL ($\forall$) rule</strong>: If our set says $\forall r.C(x)$, and we already know that $x$ is connected to $y$ via $r$ ($r(x, y)$), we add the fact that $C(y)$ must be true.</li>
+    </ul>
+
+    <p><em>Notice: There is no rule for NEGATION ($\neg$).</em> Because we put everything in NNF, negation only applies to basic concepts (like $\neg A(x)$). We don't break negations down; we just leave them alone and use them at the very end to check for contradictions.</p>
+
+    <h3>Saturation and Closure</h3>
+    <p>As the computer applies these rules, it stops when one of two things happens:</p>
+    <ol>
+        <li><strong>Saturated</strong>: The set of assertions is saturated if no more rules can be applied (everything is broken down to its most atomic pieces).</li>
+        <li><strong>Closed</strong>: The set is closed if it contains a blatant contradiction for the exact same object. Specifically, if you have both $A(a)$ AND $\neg A(a)$ in your set. This is a dead end.
+            <ul>
+                <li>If it does <em>not</em> contain a contradiction, the set is <strong>open</strong>.</li>
+            </ul>
+        </li>
+    </ol>
+
+    <div class="takeaway">
+        <p><strong>The Golden Rule of Reasoning:</strong><br>
+        The concept $C$ is satisfiable if the Tableaux algorithm yields a set of assertions that is <strong>both saturated and open</strong>.</p>
+    </div>
+
+    <h3>Why is this Correct?</h3>
+    <p>If the algorithm finishes with a saturated, open set, that set serves as a "witness" (a blueprint for a satisfying interpretation). We basically just built a mini-universe:</p>
+    <ul>
+        <li>The objects in our universe are the nodes ($a, b, c$) we created.</li>
+        <li>If we wrote down $A(a)$, then $a$ belongs to concept $A$.</li>
+        <li>If we wrote down $r(a, b)$, then $a$ relates to $b$.</li>
+    </ul>
+    <p>Because the set is open, there are no obvious contradictions (like $a$ being $A$ and NOT $A$). Through mathematical induction, we can prove that because all the atomic pieces are true and don't contradict, the massive complex concept we started with must also be true.</p>
+
+    <p>Furthermore, we are guaranteed <strong>Termination</strong>. Every time we apply a rule, we take a complex concept and break it into simpler sub-concepts. Because concepts are finite in length, the algorithm will eventually run out of things to break down. (Note: it might take a very long time—exponentially long based on the length of the input—but it <em>will</em> stop).</p>
+
+    <hr>
+
+    <h2>Part 4: Adding a TBox and The Infinite Loop Problem (Slides 31-41)</h2>
+
+    <p>Everything above works perfectly if we are just checking a single concept. But what if we have a <strong>TBox</strong> (a set of General Concept Inclusions, or universal rules, like "All Humans are Mammals")?</p>
+
+    <p>The basic Tableaux algorithm does not consider GCIs.<br>
+    Remember, a GCI $C \sqsubseteq D$ means that in our world, <strong>every single element</strong> that is $C$ must also be $D$. Alternatively, we can say: for every element in the universe, it is either NOT $C$, or it is $D$.</p>
+    <ul>
+        <li><strong>GCI Equivalence</strong>: $C \sqsubseteq D$ is logically identical to saying $\top \sqsubseteq \neg C \sqcup D$.</li>
+    </ul>
+
+    <h3>The New TBox Rule ($\sqsubseteq$)</h3>
+    <p>To handle a TBox, we create a new rule for our algorithm:</p>
+    <ul>
+        <li><strong>The TBox ($\sqsubseteq$) rule</strong>: If $C \sqsubseteq D$ is a rule in our TBox, and an object $x$ appears anywhere in our assertions, we must immediately add the fact: $\neg C \sqcup D(x)$ to our set (after converting it to NNF, of course).</li>
+    </ul>
+
+    <p>To check if a TBox is consistent, we just invent one starting element, $a$, and say it exists ($\top(a)$), and then run our rules to try and find a saturated, open set.</p>
+
+    <h3>Wait, is that all? (The Infinite Loop Problem)</h3>
+    <p>We have a massive problem. The new $\sqsubseteq$ rule does <strong>not</strong> add simpler concepts. It applies a big rule to every single object we create. This threatens our guarantee that the algorithm will terminate.</p>
+
+    <div class="highlight">
+        <p><strong>Example of an Infinite Loop:</strong><br>
+        Imagine a TBox with just one rule: $\top \sqsubseteq \exists r.\top$ (Every object must have a relationship $r$ to some object).</p>
+        <ol>
+            <li>We start with object $a$.</li>
+            <li>The TBox rule applies: $a$ must have a relation $r$.</li>
+            <li>The EXISTS rule triggers: We create a new object $b$, and say $r(a, b)$.</li>
+            <li>But wait! $b$ is a new object. The TBox rule applies to it too! $b$ must have a relation $r$.</li>
+            <li>The EXISTS rule triggers: We create a new object $c$...</li>
+        </ol>
+        <p>This will go on forever: $a \to b \to c \to d \to \dots$</p>
+    </div>
+
+    <p>However, notice something: we are just building an infinite sequence of nodes that are <strong>exactly the same</strong>. They are just generic objects that need a successor. Once we recognize this repeating pattern (a cycle), further calculation is useless.</p>
+
+    <p>If this cyclic pattern is free of contradictions, then we know the full, infinite model would also be free of contradictions. We have proven that a model <em>can</em> exist, even without constructing the infinite thing.</p>
+
+    <hr>
+
+    <h2>Part 5: Blocking (The Solution to Infinite Loops) (Slides 42-48)</h2>
+
+    <p>To teach the computer to recognize these repeating patterns and stop calculating, we introduce a mechanism called <strong>Blocking</strong>.</p>
+
+    <p>Think of the objects we generate as forming a tree (Object $a$ is the root, it creates $b$, which creates $c$, etc.).<br>
+    For every node (object) $x$ we create, we keep a list of all the concepts it satisfies. We call this list $Cons_\mathcal{A}(x)$.</p>
+
+    <p><strong>The Blocking Rule:</strong><br>
+    A node $a$ is "blocked" by an older node $b$ if:</p>
+    <ol>
+        <li>$b$ is an ancestor (predecessor) of $a$ (but not the very root of the tree), AND</li>
+        <li>Every concept that $a$ satisfies is also satisfied by $b$. In math terms: $Cons_\mathcal{A}(a) \subseteq Cons_\mathcal{A}(b)$.</li>
+    </ol>
+    <p>If node $a$ is basically a clone (or a simpler version) of its ancestor $b$, we say $a$ is blocked.</p>
+
+    <div class="highlight">
+        <p><strong>Modified Rule Application:</strong><br>
+        We update our EXISTS ($\exists$) rule: The $\exists$ rule is ONLY allowed to trigger and create a new object if the node is <strong>not blocked</strong> and none of its ancestors are blocked.</p>
+    </div>
+
+    <p>By freezing the tree whenever a pattern repeats, we force the algorithm to terminate.</p>
+
+    <p><strong>Will it always terminate?</strong><br>
+    Yes. For any node, the list of properties it can have is limited to the subconcepts that actually exist in the TBox. If a TBox has $n$ subconcepts, there are at most $2^n$ possible unique combinations of properties a node can have.<br>
+    Therefore, if a branch gets deep enough (at most depth $2^n + 2$), it is mathematically guaranteed to repeat a combination, trigger the blocking rule, and stop.</p>
+    <ul>
+        <li><strong>Complexity:</strong> Because the tree can get up to $2^n$ deep, deciding TBox consistency takes exponential time. We say it is <strong>ExpTime-complete</strong>.</li>
+    </ul>
+
+    <p><strong>Other Reasoning Cheat-Sheet:</strong></p>
+    <ul>
+        <li><strong>Satisfiability</strong>: To check if concept $C$ is satisfiable given a TBox $\mathcal{T}$, just start the algorithm with $\{C(a)\}$.</li>
+        <li><strong>Subsumption</strong>: To check if $C$ is a subcategory of $D$ ($\mathcal{T} \models C \sqsubseteq D$), just ask the algorithm if $C \sqcap \neg D$ is unsatisfiable. If you cannot exist as $C$ and NOT $D$, then all $C$'s must be $D$'s.</li>
+    </ul>
+
+    <hr>
+
+    <h2>Part 6: ABoxes (Adding Specific Individuals) (Slides 49-60)</h2>
+
+    <p>So far, our TBoxes have only dealt with <em>terminological knowledge</em>—general rules and definitions about a domain (e.g., defining what a "Parent" is). But what if we want to talk about specific, real-world objects?</p>
+
+    <p>We want to say things like: "Rafael has a child named Joe, therefore Rafael is a Parent."<br>
+    This is called <strong>Assertional Knowledge</strong>, and we store it in an <strong>ABox</strong> (Assertion Box).</p>
+
+    <p><strong>Defining an ABox:</strong><br>
+    We introduce a set of individual names ($N_I$), like 'Rafael', 'Joe', or 'c', 'a', 'b'. These are specific constants, separate from concept names and role names.<br>
+    An assertion looks like this:</p>
+    <ul>
+        <li>$C(a)$: Individual $a$ belongs to concept $C$.</li>
+        <li>$r(a, b)$: Individual $a$ relates to individual $b$ via role $r$.</li>
+    </ul>
+    <p>An <strong>ABox ($\mathcal{A}$)</strong> is a finite set of these assertions.</p>
+
+    <p>A complete <strong>Knowledge Base (KB)</strong> is a pair: $\mathcal{K} = (\mathcal{T}, \mathcal{A})$ (It contains both the general rulebook $\mathcal{T}$, and the specific facts $\mathcal{A}$).</p>
+
+    <p><strong>Semantics (Meaning) of ABoxes:</strong><br>
+    An interpretation ($\mathcal{I}$) maps every individual name (like 'Rafael') to a specific element in our universe ($\Delta^\mathcal{I}$).<br>
+    A model satisfies the ABox if:</p>
+    <ul>
+        <li>$a^\mathcal{I}$ is actually inside the set $C^\mathcal{I}$.</li>
+        <li>The connection between $a^\mathcal{I}$ and $b^\mathcal{I}$ actually exists in the relationship $r^\mathcal{I}$.</li>
+    </ul>
+
+    <h3>Reasoning with a Knowledge Base</h3>
+    <p>A Knowledge Base is <strong>consistent</strong> if a model can exist that obeys both the TBox rules and the ABox facts.<br>
+    How do we test this? We use our trusted Tableaux algorithm, but we apply it to a large initial set of assertions (the ABox).</p>
+
+    <p>Because the individuals in an ABox can be connected to each other in messy, complex webs (unlike the neat trees we generate from scratch), we divide the algorithm into two strict steps to keep things clean:</p>
+
+    <ol>
+        <li><strong>Root Pre-completion</strong>: Take your starting ABox facts. Apply all rules that do <strong>NOT</strong> generate new objects (The AND, OR, FOR ALL, and TBox rules) to the specific individuals already existing in the ABox. Do this until no more of these rules can be applied (saturation).</li>
+        <li><strong>Expansion</strong>: Now that the original individuals are fully processed, allow the EXISTS ($\exists$) rule to trigger. This will start generating brand-new, unnamed objects, branching off from your pre-completed specific individuals like trees. Use the blocking rules here just like before.</li>
+    </ol>
+
+    <div class="takeaway">
+        <p><strong>The Ultimate Theorem:</strong><br>
+        The Knowledge Base $(\mathcal{T}, \mathcal{A})$ is consistent <em>if and only if</em> this two-step Tableaux algorithm produces a saturated and open ABox (and you didn't forget to use blocking!).</p>
+    </div>
+
+    <p><strong>Forest Models:</strong><br>
+    When this algorithm succeeds, the model it generates looks like a "Forest."</p>
+    <ul>
+        <li>The roots (the ground) are the specific ABox individuals, which can be connected to each other in any arbitrary, messy way.</li>
+        <li>Growing out of those specific individuals are neat, predictable "trees" of newly generated, anonymous objects created by the $\exists$ rule.</li>
+    </ul>
+
+    <p><strong>Other Things You Can Do with This System:</strong><br>
+    Now that you have a fully functioning Knowledge Base and a Tableaux algorithm, you can use it for:</p>
+    <ul>
+        <li><strong>Instance checking</strong>: Asking "Is Rafael definitely a Parent based on these facts?"</li>
+        <li><strong>Query answering</strong>: Pulling data out of the system.</li>
+        <li><strong>Generalisation inferences</strong>: Discovering new, broader rules automatically.</li>
+        <li><strong>Explanations and Debugging</strong>: Finding out exactly <em>why</em> your rulebook has a contradiction.</li>
+    </ul>
+
+
 </body>
 </html>
