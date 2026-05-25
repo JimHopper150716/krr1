@@ -1949,6 +1949,411 @@
         </ul>
     </div>
 
+    <h1>Knowledge Representation and Reasoning: Temporal Logic</h1>
+    
+    <p><strong>Instructor:</strong> Rafael Peñaloza (Università di Milano-Bicocca)<br>
+    <strong>Term:</strong> 2025-2026</p>
+
+    <hr>
+
+    <h2>1. The Need for Time: Static vs. Dynamic Knowledge</h2>
+    <p>Up to this point in logic and knowledge representation, the languages we use view knowledge as <strong>static</strong>. It is like looking at a single photograph; it describes a world that is frozen in place.</p>
+    <p>While static logic is incredibly useful for describing many domains (like categorizing animals or defining family trees), it completely fails when we need to describe <strong>processes</strong>—things that change. To model a changing world, we need a way to deal with <strong>time</strong> and <strong>dynamic knowledge</strong>.</p>
+
+    <h2>2. Choosing the Nature of Time</h2>
+    <p>Before we can add time to our logical rules, we have to decide <em>how</em> time behaves in our universe. There are several philosophical and mathematical choices to make:</p>
+    <ul>
+        <li><strong>Discrete or Continuous?</strong> Does time step forward in clear, separate chunks (like a digital clock ticking seconds: 1, 2, 3), or does it flow smoothly without breaks (like pouring water)?</li>
+        <li><strong>Linear or Branching?</strong> Is there only one single, predetermined future timeline (linear), or does time branch out into a multiverse of different possible futures based on choices (branching)?</li>
+        <li><strong>Unidirectional or Bidirectional?</strong> Can we only look ahead into the future, or are we allowed to look backward into the past?</li>
+        <li><strong>Bounded, Finite, or Infinite?</strong> Will time eventually stop? If so, does it stop at a specific, known boundary, an unknown but finite point, or does it go on forever?</li>
+    </ul>
+    <p>Each of these choices completely changes the mathematical strategy we must use.</p>
+
+    <h2>3. Introducing $\text{LTL}_\text{f}$ (Linear Temporal Logic on Finite Traces)</h2>
+    <p>To showcase the main ideas of temporal logic, this course focuses on a specific flavor called <strong>$\text{LTL}_\text{f}$</strong>. Here is how $\text{LTL}_\text{f}$ answers the questions about time:</p>
+    <ol>
+        <li><strong>Discrete time:</strong> Time moves in step-by-step increments.</li>
+        <li><strong>Linear evolution:</strong> There is only one timeline.</li>
+        <li><strong>Future only:</strong> We only look forward, never into the past.</li>
+        <li><strong>Finite (but unbounded) time:</strong> The timeline will eventually end, but we don’t necessarily know exactly <em>when</em> it will end.</li>
+    </ol>
+    <p>To make standard propositional logic understand time, $\text{LTL}_\text{f}$ introduces two new superpower operators:</p>
+    <ul>
+        <li>$\bigcirc$ : Read as <strong>"Next"</strong></li>
+        <li>$\mathcal{U}$ : Read as <strong>"Until"</strong></li>
+    </ul>
+
+    <h3>The Syntax (Grammar) of $\text{LTL}_\text{f}$</h3>
+    <p>Formulas in $\text{LTL}_\text{f}$ are built using a simple set of grammar rules. A valid formula ($\varphi$) can be constructed using:</p>
+    <ul>
+        <li>$x$ : A basic variable (e.g., "The light is red").</li>
+        <li>$\neg\varphi$ : <strong>NOT</strong> $\varphi$ (Standard logic).</li>
+        <li>$\varphi \land \psi$ : $\varphi$ <strong>AND</strong> $\psi$ (Standard logic).</li>
+        <li>$\bigcirc\varphi$ : $\varphi$ will be true at the very <strong>next</strong> point in time.</li>
+        <li>$\varphi \mathcal{U} \psi$ : $\varphi$ remains true <strong>until</strong> the moment $\psi$ becomes true.</li>
+    </ul>
+
+    <h2>4. The Semantics: How We Evaluate Truth in $\text{LTL}_\text{f}$</h2>
+    <p>How do we know if an $\text{LTL}_\text{f}$ formula is actually true?</p>
+    <p>First, we imagine a finite sequence of timepoints: $\{0, 1, \dots, n\}$.</p>
+    <ul>
+        <li>Timepoint <strong>$0$</strong> represents the <strong>present</strong> (right now).</li>
+        <li>At every single timepoint, we have a <strong>propositional valuation</strong> (basically, a list of which basic variables are currently true and which are false).</li>
+    </ul>
+    <p>A full <strong>Temporal Model</strong> (let's call it $M$) is just the sequence of these valuations from start to finish: $M = \mathcal{V}_0, \dots, \mathcal{V}_n$. The number $n$ is the <em>length</em> of the temporal model.</p>
+
+    <h3>The Rules of Satisfaction</h3>
+    <p>If we are looking at our timeline $M$, and we are currently at a specific time step $k$ (where $0 \le k \le n$), here are the strict mathematical rules for whether a formula is true ($\models$) or false ($\not\models$):</p>
+    <ul>
+        <li><strong>Basic Fact:</strong> $M, k \models x$ if and only if the valuation $\mathcal{V}_k$ says $x$ is true. <em>(Translation: Variable $x$ is true at time $k$)</em>.</li>
+        <li><strong>Not:</strong> $M, k \models \neg\varphi$ if and only if $M, k \not\models \varphi$.</li>
+        <li><strong>And:</strong> $M, k \models \varphi \land \psi$ if and only if both $\varphi$ and $\psi$ are true at time $k$.</li>
+        <li><strong>Next:</strong> $M, k \models \bigcirc\varphi$ if and only if $k &lt; n$ (meaning time hasn't ended yet) AND the formula $\varphi$ is true at time $k+1$.</li>
+        <li><strong>Until:</strong> $M, k \models \varphi \mathcal{U} \psi$ if and only if there is some future time $\ell$ (where $k \le \ell \le n$) where $\psi$ becomes true, AND for every single moment $j$ between now and then ($k \le j &lt; \ell$), $\varphi$ is true.</li>
+    </ul>
+
+    <p><strong>Overall Satisfiability:</strong><br>
+    We say that a whole temporal model $M$ <em>satisfies</em> a formula $\varphi$ if the formula is true right at the beginning ($M, 0 \models \varphi$). A formula is considered <strong>satisfiable</strong> if there exists at least one valid temporal model out there that satisfies it.</p>
+
+    <h3>A Concrete Example</h3>
+    <p>Imagine a timeline with 6 points in time (0 to 5) tracking variables $x$ and $y$:</p>
+    <ul>
+        <li><strong>Time 0:</strong> (nothing is true)</li>
+        <li><strong>Time 1:</strong> $y$ is true</li>
+        <li><strong>Time 2:</strong> $x, y$ are both true</li>
+        <li><strong>Time 3:</strong> $x$ is true</li>
+        <li><strong>Time 4:</strong> (nothing is true)</li>
+        <li><strong>Time 5:</strong> $y$ is true</li>
+    </ul>
+    <p>Let's test some formulas on this timeline:</p>
+    <ul>
+        <li><strong>$\neg x \land y$</strong> (Not $x$ AND $y$): This is true only at steps <strong>$k \in \{1, 5\}$</strong>.</li>
+        <li><strong>$\bigcirc(\neg x \land y)$</strong> (Next time, "Not $x$ AND $y$" is true): Because the above is true at 1 and 5, this "Next" statement is true at the steps immediately preceding them: <strong>$k \in \{0, 4\}$</strong>.</li>
+        <li><strong>$\bigcirc\neg y$</strong> (Next time, $y$ is false): This is true at steps <strong>$k \in \{2, 3\}$</strong>, because at steps 3 and 4, $y$ is indeed false.</li>
+        <li><strong>$x \land \bigcirc\neg y$</strong> ($x$ is true NOW, AND next time $y$ is false): Both these conditions overlap and are true at steps <strong>$k \in \{2, 3\}$</strong>.</li>
+        <li><strong>$y \mathcal{U} (x \land \bigcirc\neg y)$</strong> ($y$ is true UNTIL the above statement happens): This holds true for steps <strong>$k \in \{0, 1, 2, 3\}$</strong>.</li>
+        <li>Finally, let's put it all together to test our ultimate complex formula:<br>
+        <strong>$\bigcirc(\neg x \land y) \land (y \mathcal{U} (x \land \bigcirc\neg y))$</strong><br>
+        This giant formula requires both halves to be true at the same time. Looking at the steps where both halves overlap, it is ONLY true at step <strong>$k = 0$</strong>.</li>
+    </ul>
+    <p><em>(Note: Another example formula shown is $\neg((x \lor \neg x) \mathcal{U} \neg\bigcirc x)$, which showcases how complex these logical statements can get).</em></p>
+
+    <h2>5. Useful Shorthand Abbreviations</h2>
+    <p>To make writing formulas easier, we create some standard shortcuts:</p>
+    <ul>
+        <li><strong>$\bot$ (False):</strong> Defined as $x \land \neg x$ (It is impossible for a variable to be true and false at the same time).</li>
+        <li><strong>$\top$ (True):</strong> Defined as $\neg\bot$ (The opposite of false).</li>
+        <li><strong>$\lozenge x$ (Eventually $x$):</strong> Defined as $\top \mathcal{U} x$. This literally means "True continues to be true until $x$ happens," which simply guarantees that $x$ will happen <em>at some point in the future</em>.</li>
+        <li><strong>$\square x$ (Always $x$):</strong> Defined as $\neg\lozenge\neg x$. This translates to "It is NOT true that eventually $x$ will be false." If $x$ can never be false, it means $x$ is true <em>always</em> (until the timeline ends).</li>
+    </ul>
+
+    <h2>6. How Do We Check Satisfiability? (The Clever Approach)</h2>
+    <p>If we want to check if a formula is satisfiable (meaning, is it logically possible?), we might initially try to build a traditional logic tree (a "tableaux"). However, this is dangerous in temporal logic because:</p>
+    <ol>
+        <li>We have to be very careful with multiple "Next" ($\bigcirc$) formulas, since in a linear timeline, there is only <em>one</em> single next moment.</li>
+        <li>We must find a way to handle "Until" ($\mathcal{U}$) without getting stuck in infinite loops.</li>
+    </ol>
+    <p>Instead of a standard logic tree, we use a different approach: <strong>We build a graph structure that describes ALL possible temporal models that satisfy our formula $\varphi$.</strong></p>
+
+    <h3>Unlocking the Secret of "Until"</h3>
+    <p>To do this, we rely on a clever mathematical trick regarding what $\varphi \mathcal{U} \psi$ actually means. It means either:</p>
+    <ol>
+        <li>We satisfy $\psi$ <strong>right now</strong>, OR</li>
+        <li>We defer it to later, meaning $\varphi$ is true now, AND the entire "$\varphi \mathcal{U} \psi$" condition is pushed to the <strong>Next</strong> moment in time ($\bigcirc(\varphi \mathcal{U} \psi)$).</li>
+    </ol>
+    <div class="highlight">
+        In symbols, this means that <strong>$\varphi \mathcal{U} \psi$</strong> is logically identical to:<br>
+        <strong>$\psi \lor (\varphi \land \bigcirc(\varphi \mathcal{U} \psi))$</strong>
+    </div>
+
+    <h3>Building "Types" (Snapshots of Time)</h3>
+    <p>Since a temporal model is just a sequence of valuations, we can view it deterministically as a sequence of <strong>sets of formulas</strong>. At every step in time, a specific set of relevant formulas will be true.</p>
+    <p>Any valid timeline must obey these core rules:</p>
+    <ul>
+        <li>Our main formula $\varphi$ must be satisfied at the <strong>first</strong> timepoint.</li>
+        <li>At the <strong>last</strong> timepoint, NO formula containing $\bigcirc\psi$ can be satisfied, because there is no "Next" step!</li>
+        <li>At any timepoint $n$, a formula $\psi$ is true if and only if its opposite ($\neg\psi$) is NOT true.</li>
+        <li>$\bigcirc\psi$ is true at timepoint $n$ if and only if $\psi$ actually turns out to be true at timepoint $n+1$.</li>
+        <li>"Until" formulas must obey the recursive trick we just learned above.</li>
+    </ul>
+    <p>We can succinctly describe all valid models using sequences of <strong>Types</strong>. A "Type" is simply a full, logically consistent bucket of relevant formulas representing a single snapshot in time.</p>
+
+    <h4>Step A: Subformulas and Closure</h4>
+    <p>To figure out what goes into a Type, we first break our main formula $\varphi$ down into all its smaller components, called the <strong>set of subformulas ($sub(\varphi)$)</strong>:</p>
+    <ul>
+        <li>$\varphi$ is a subformula of itself.</li>
+        <li>If $\psi_1 \land \psi_2$ is in the set, break it apart so both $\psi_1$ and $\psi_2$ are in the set.</li>
+        <li>If $\neg\psi$ is in the set, $\psi$ must be in the set.</li>
+        <li>If $\psi_1 \mathcal{U} \psi_2$ is in the set, break it apart so $\psi_1$ and $\psi_2$ are in the set.</li>
+        <li>If $\bigcirc\psi$ is in the set, $\psi$ is in the set.</li>
+    </ul>
+    <p>Next, we expand this into the <strong>Closure ($csub(\varphi)$)</strong>. This is the master list of all formulas we care about. We take all the subformulas, add their exact opposites (negations), and—crucially—we add the "Next" ($\bigcirc$) and "Not Next" ($\neg\bigcirc$) versions of any "Until" statements we found (because of the recursive trick).</p>
+
+    <h4>Step B: Defining a Type ($\tau$)</h4>
+    <p>A <strong>Type ($\tau$)</strong> is a subset of the Closure that is as packed full as possible without breaking the rules of logic (a <em>maximally consistent subset</em>).<br>
+    For every formula $\psi$ in our Closure, a Type must follow these strict rules:</p>
+    <ol>
+        <li><strong>Consistency:</strong> It cannot contain both $\psi$ and its opposite $\neg\psi$.</li>
+        <li><strong>Maximality:</strong> It <em>must</em> contain either $\psi$ or $\neg\psi$. It cannot be undecided.</li>
+        <li><strong>Conjunctive Consistency:</strong> If a Type claims "A AND B" is true, it must actually contain A and contain B.</li>
+        <li><strong>$\mathcal{U}$-Consistency:</strong> It must obey the "Until" recursive trick. If it claims $\psi_1 \mathcal{U} \psi_2$ is true, it must either contain $\psi_2$ (happening now), or it must contain both $\psi_1$ (happening now) AND $\bigcirc(\psi_1 \mathcal{U} \psi_2)$ (happening next).</li>
+    </ol>
+    <p><em>(The presentation provides an example showing how out of 16 possible combinations for a specific formula, only some are logically valid "Types" because the others break these consistency rules).</em></p>
+
+    <h3>From Types back to Variables</h3>
+    <p>Importantly, every Type ($\tau$) defines exactly <strong>one</strong> basic valuation ($\mathcal{V}_\tau$)—it tells us exactly which basic variables (like $x, y$) are true or false right now.<br>
+    However, the reverse is not true: Two different Types might have the exact same basic variables turned on, but contain different predictions about the <em>future</em> (e.g., one Type contains $\bigcirc x$ and another contains $\neg\bigcirc x$).</p>
+
+    <h2>7. The Type Graph (Automaton)</h2>
+    <p>Now, we connect our snapshots (Types) together to map out time. We create a directed graph $G_\varphi$ (often called an <strong>automaton</strong>):</p>
+    <ul>
+        <li><strong>The Nodes (Bubbles):</strong> These are all the valid Types we discovered.</li>
+        <li><strong>The Edges (Arrows):</strong> We can draw an arrow from Type 1 ($\tau_1$) to Type 2 ($\tau_2$) representing a jump forward in time <strong>IF AND ONLY IF</strong>: For every "Next" statement ($\bigcirc\psi$) inside Type 1, the formula $\psi$ actually exists inside Type 2.</li>
+    </ul>
+
+    <h3>Finding a Valid Path</h3>
+    <p>Paths through this graph describe valid behaviors in a temporal model. But for a path to perfectly satisfy our starting formula $\varphi$, it must meet two final conditions:</p>
+    <ol>
+        <li><strong>The Start:</strong> The path must begin at an <strong>Initial Type</strong> (a Type that contains our main formula $\varphi$).</li>
+        <li><strong>The End:</strong> The path must finish at a <strong>Final Type</strong> (a Type that contains NO formulas of the form $\bigcirc\psi$. It cannot expect anything else to happen "next", because the timeline ends here).</li>
+    </ol>
+    <p><em>(Note: A single Type can sometimes be both Initial and Final, or neither).</em></p>
+
+    <p><strong>The Golden Rule of Satisfiability:</strong><br>
+    There is a one-to-one perfect correspondence between valid temporal models and paths through this graph. Therefore:</p>
+    <div class="takeaway">
+        <strong>An $\text{LTL}_\text{f}$ formula $\varphi$ is satisfiable IF AND ONLY IF there is a valid path from an initial type to a final type in the graph $G_\varphi$.</strong>
+    </div>
+    <p><em>(Sidenote: This graph structure with start and end nodes is formally called an Automaton. Computer scientists have developed highly specialized techniques for reasoning with automata, though this course does not delve deeper into them here).</em></p>
+
+    <h2>8. Why do we care? Real-World Applications of $\text{LTL}_\text{f}$</h2>
+    <p>$\text{LTL}_\text{f}$ isn't just an abstract math exercise; it is heavily used to describe and verify real-world computer and mechanical <strong>processes</strong>.<br>
+    For example, we use it to represent:</p>
+    <ul>
+        <li>The protocols of an online store.</li>
+        <li>The switching of traffic lights.</li>
+        <li>The scheduler in an operating system.</li>
+    </ul>
+    <p>Using <strong>Satisfiability</strong>, we can formally <strong>verify</strong> that these systems behave safely. We can ask the logic:</p>
+    <ul>
+        <li>Are products shipped <em>only</em> after being paid?</li>
+        <li>May two intersecting roads ever have a green light at the same time?</li>
+        <li>Is every request to the server eventually granted?</li>
+    </ul>
+
+    <h3>Guarantees vs. Possibilities</h3>
+    <p>Let’s say formula $\varphi$ describes our system process, and formula $\psi$ is a property we want to check.</p>
+    <ul>
+        <li><strong>Guarantees (Safety):</strong> We say $\psi$ is <em>guaranteed</em> by $\varphi$ (written as $\varphi \Rightarrow \psi$) if and only if it is completely impossible for the system to run and the property to fail. In logic terms, we check if $\varphi \land \neg\psi$ is <strong>unsatisfiable</strong>.</li>
+        <li><strong>Possibilities (Capabilities):</strong> We say $\psi$ is <em>possible</em> under $\varphi$ if and only if $\varphi \land \psi$ is <strong>satisfiable</strong> (there is at least one valid timeline where it happens). This helps us verify if a specific execution log actually complies with our system rules.</li>
+    </ul>
+
+    <h2>9. Summary and Next Steps</h2>
+    <p>We have looked at $\text{LTL}_\text{f}$ as a simple, foundational example of temporal logic used for representing and reasoning about things that change over time. Many variants of this logic can be introduced depending on how you view the nature of time. The techniques shown here (like using closures and graph automata) are the basic prototypes for all temporal logic.</p>
+
+    <p><strong>Extending the Logic: $\mathcal{ALC}_{\text{LTL}_\text{f}}$</strong><br>
+    In advanced Knowledge Representation, we can combine Description Logics (like $\mathcal{ALC}$) with $\text{LTL}_\text{f}$. This creates a system with <strong>evolving interpretations</strong>: a timeline made up of a finite sequence of full Description Logic worlds!</p>
+    <ul>
+        <li>You can have a global <strong>TBox</strong> (absolute rules about concepts that must hold true at every single point in time).</li>
+        <li>You can have an <strong>ABox</strong> (facts about specific individuals) that utilizes temporal operators, and potentially timestamps.</li>
+    </ul>
+    <p>Naturally, mixing these two massive fields of logic introduces several technical complexities to consider in advanced study.</p>
+
+    <h1>Probabilistic Logics and Reasoning</h1>
+    <p style="text-align: center;"><strong>Based on the course by Rafael Peñaloza (Milano, 2025-2026)</strong></p>
+
+    <h2>1. Why Do We Need Probabilities in Logic?</h2>
+    <p>Standard Knowledge Representation (KR) languages are based on <strong>classical logic</strong>. Classical logic implicitly assumes that our knowledge is <strong>perfect</strong>: meaning it is precise, 100% certain, and always correct.</p>
+    <p>However, reality is rarely this clean. To deal with the real world, we need to adapt our logic to handle uncertainty.</p>
+    <p>Uncertainty can be handled in two ways:</p>
+    <ul>
+        <li><strong>Qualitative</strong>: Using logic to say things like "A is more likely than B" without exact numbers.</li>
+        <li><strong>Quantitative</strong>: Using numbers to measure exact uncertainty. We can do this using probability theory, possibility theory, or log-linear computations. This lesson focuses on <strong>probability theory</strong>.</li>
+    </ul>
+
+    <h2>2. A Quick Refresher on Probability Theory</h2>
+    <p>At its core, standard probability theory relies on:</p>
+    <ul>
+        <li>A set of all possible outcomes, denoted as <strong>$\Omega$</strong>.</li>
+        <li>A class of events, denoted as <strong>$\mathcal{E}$</strong> (which are just sets of outcomes).</li>
+    </ul>
+    
+    <p>A <strong>probability measure</strong> is a function $P$ that assigns a number between 0 and 1 to an event. It follows two golden rules:</p>
+    <ol>
+        <li><strong>$P(\Omega) = 1$</strong>: The probability of <em>any</em> possible outcome happening is 1 (or 100%).</li>
+        <li><strong>Additivity</strong>: If two events $E$ and $F$ cannot happen at the same time (their intersection is empty, $E \cap F = \emptyset$), then the probability of either of them happening is their sum: $P(E \cup F) = P(E) + P(F)$.</li>
+    </ol>
+
+    <p><strong>Useful derived properties:</strong></p>
+    <ul>
+        <li>$P(\emptyset) = 0$ (Impossible events have a 0% chance).</li>
+        <li>$P(\Omega \setminus E) = 1 - P(E)$ (The probability of an event <em>not</em> happening is 1 minus the probability of it happening).</li>
+        <li>$P(E \cup F) = P(E) + P(F) - P(E \cap F)$ (If two events can overlap, you add their probabilities, then subtract the overlap so you don't double-count it).</li>
+    </ul>
+
+    <h3>Applying this to Logic</h3>
+    <p>To create <strong>probabilistic logic</strong>, we adapt these set-based rules to logical formulas. In logic, a formula is basically a representation of a "set of valuations" (the different scenarios where the formula is true).</p>
+    <ul>
+        <li>$P(\top) = 1$ (The probability of an always-true statement is 1).</li>
+        <li>If formulas $\varphi$ and $\psi$ cannot both be true at the same time (they are unsatisfiable together), then $P(\varphi \lor \psi) = P(\varphi) + P(\psi)$.</li>
+    </ul>
+
+    <p><strong>Logical properties mirror standard probability:</strong></p>
+    <ul>
+        <li>$P(\bot) = 0$ (Probability of a contradiction is 0).</li>
+        <li>$P(\neg\varphi) = 1 - P(\varphi)$ (Probability of "NOT $\varphi$").</li>
+        <li>$P(\varphi \lor \psi) = P(\varphi) + P(\psi) - P(\varphi \land \psi)$.</li>
+    </ul>
+
+    <h2>3. The Big Challenge: "Truth-Functionality"</h2>
+    <p>One major issue makes probabilistic logic difficult: <strong>probabilities are NOT truth-functional</strong>.</p>
+    <p>In standard logic, if you know whether statement $A$ is true and whether statement $B$ is true, you can easily figure out if "$A \text{ AND } B$" is true.</p>
+    <p>In probability, <strong>knowing $P(A)$ and $P(B)$ is not enough</strong> to figure out the exact probability of $P(A \land B)$ or $P(A \lor B)$. Their joint probability depends on how the two statements influence each other. This is a massive headache for Knowledge Representation.</p>
+
+    <h2>4. Two Types of Uncertainty (Scope)</h2>
+    <p>When designing expressive logic systems, we must decide what <em>kind</em> of uncertainty we are dealing with:</p>
+    <ul>
+        <li><strong>Type I (Statistical Probabilities):</strong> This deals with objective statistics about a group. We assume there is only <strong>one real world/interpretation</strong>, but we are uncertain about the properties of specific elements inside it.<br>
+        <em>Example:</em> "75% of students are Italian." The world is fixed, we just don't know the nationality of a specific student drawn at random.</li>
+        <li><strong>Type II (Subjective Probabilities):</strong> This deals with our personal beliefs and lack of information. We don't know which reality is the true one, so we consider a <strong>set of multiple possible interpretations (worlds)</strong>.<br>
+        <em>Example:</em> "There is a 40% probability that Rafael has a daughter." Rafael either does or doesn't have a daughter; we just assign a subjective belief to which reality is true.</li>
+    </ul>
+
+    <h2>5. Building a Probabilistic Knowledge Base</h2>
+    <p>For this system, we will use <strong>Type II (Subjective)</strong> probabilities because it makes more sense for propositional rules.</p>
+    <p>We write a probabilistic clause like this: <strong>$p :: \gamma$</strong></p>
+    <ul>
+        <li>$p$ is a probability between 0 and 1.</li>
+        <li>$\gamma$ is a standard logical rule (a Horn clause).</li>
+        <li><em>What it means:</em> The probability that rule $\gamma$ is true is <em>at least</em> $p$.</li>
+    </ul>
+
+    <div class="highlight">
+        <p><strong>Examples:</strong></p>
+        <ul>
+            <li><code>0.4 :: x &larr;</code> (There is a 40% chance that fact $x$ is true).</li>
+            <li><code>0.8 :: x &larr; y1, y2</code> (There is an 80% chance that this rule functions correctly).</li>
+        </ul>
+    </div>
+
+    <p>A <strong>Probabilistic Knowledge Base (KB)</strong> is a collection of:</p>
+    <ol>
+        <li>Classical rules and facts (100% certain).</li>
+        <li>Probabilistic rules and facts.</li>
+    </ol>
+
+    <h2>6. Multiple-World Semantics (How it works)</h2>
+    <p>Because we are using subjective probability, a rule like <code>0.4 :: x &larr;</code> means there are <strong>two possible realities (worlds)</strong>:</p>
+    <ol>
+        <li>A world where $x$ is true (happens with probability 0.4).</li>
+        <li>A world where $x$ is false (happens with probability 0.6).</li>
+    </ol>
+    <p>When you have <strong>multiple</strong> probabilistic clauses, you end up with many more possible worlds. If your Knowledge Base has $n$ probabilistic clauses, it generates up to $2^n$ different classical (100% certain) worlds.</p>
+    <p><strong>To answer a logical query, we must check every single world to see if the query is true in that specific world.</strong></p>
+
+    <h3>The Joint Probability Problem</h3>
+    <p>How do we calculate the exact probability of these worlds? Because of the truth-functionality issue mentioned earlier, individual probabilities don't automatically give us the probability of a whole world.</p>
+    <p>Here is an example with two facts: <code>0.4 :: x &larr;</code> and <code>0.7 :: y &larr;</code>. There are four possible worlds: <code>{x, y}</code>, <code>{x}</code>, <code>{y}</code>, and <code>&empty;</code> (neither). What are their probabilities? We have three ways to solve this:</p>
+
+    <h4>Approach 1: Assume Independence (Easiest)</h4>
+    <p>We assume the clauses do not affect each other. We find the world probability by multiplying the probabilities of the facts.</p>
+    <ul>
+        <li>World <code>{x, y}</code>: $0.4 \times 0.7 = 0.28$</li>
+        <li>World <code>{x}</code> (x is true, y is false): $0.4 \times (1 - 0.7) = 0.12$</li>
+        <li>World <code>{y}</code> (x is false, y is true): $(1 - 0.4) \times 0.7 = 0.42$</li>
+        <li>World <code>&empty;</code> (both false): $(1 - 0.4) \times (1 - 0.7) = 0.18$</li>
+    </ul>
+
+    <h4>Approach 2: Maximum Entropy</h4>
+    <p>Entropy measures how "uninformative" or random a probability distribution is. The rule of maximum entropy is: <em>Make the weakest, least biased assumption possible.</em> We use a mathematical formula to find the distribution that maximizes entropy ($H(P) = -\sum P(\omega) \log P(\omega)$). While mathematically complex to calculate, it ensures we aren't accidentally injecting biases into our model.</p>
+
+    <h4>Approach 3: Joint Probability Expression</h4>
+    <p>The most robust approach is to force the user to explicitly write down the exact probability of every single world. The downside? If you have 20 rules, you have to write down over a million probabilities ($2^{20}$ values), which is usually impossible.</p>
+
+    <h2>7. Query Answering (The Black-Box Approach)</h2>
+    <p>Once we have calculated the probabilities for all possible worlds, how do we find the probability of a specific conclusion ($\alpha$)?</p>
+
+    <div class="highlight">
+        <p><strong>The Rule:</strong> The probability of consequence $\alpha$ is simply the <strong>sum of the probabilities of all the worlds where $\alpha$ is true.</strong></p>
+        <p>$P(\alpha) := \sum P(K_L)$ <em>(for all worlds $K_L$ that entail $\alpha$)</em></p>
+    </div>
+
+    <p>This leads to the <strong>Black-box approach</strong> for programming AI:</p>
+    <ol>
+        <li>Generate all the possible Knowledge Bases (worlds).</li>
+        <li>Feed each world into a standard, pre-existing classical logic reasoner (a "black box").</li>
+        <li>Ask the reasoner, "Is $\alpha$ true here?"</li>
+        <li>If yes, keep that world's probability. Finally, sum them all up.</li>
+    </ol>
+
+    <h2>8. Open-World Distributions & Extreme Semantics</h2>
+    <p>In standard Knowledge Representation, we use the <strong>Open-World Assumption (OWA)</strong>: if something isn't explicitly stated, we don't assume it's false; we just assume it's unknown.</p>
+    <p>We can apply this philosophy to probabilities! Instead of forcing the AI to pick <em>one</em> single probability distribution (like independence or max entropy), we let it reason over <strong>all coherent distributions</strong>. A distribution is "coherent" if it simply satisfies the basic mathematical rules given by the probabilities in your rules.</p>
+
+    <p><strong>Extreme Semantics:</strong></p>
+    <p>Because there are many valid (coherent) distributions, we cannot give a single definite number as the answer to a query. Instead, we give a guaranteed <strong>range</strong>:</p>
+    <ul>
+        <li><strong>$\underline{P}(\alpha)$</strong>: The absolute <em>minimum</em> probability across all valid distributions.</li>
+        <li><strong>$\overline{P}(\alpha)$</strong>: The absolute <em>maximum</em> probability across all valid distributions.</li>
+    </ul>
+    <p>We can guarantee that for any coherent distribution, the true probability of our query will fall exactly within this range.</p>
+
+    <h2>9. Going Beyond Basic Rules (Probabilistic $\mathcal{EL}$)</h2>
+    <p>This "multiple-world" concept isn't limited to basic logic; it can be applied to highly complex KR languages, like Description Logics (e.g., $\mathcal{EL}$).</p>
+
+    <div class="highlight">
+        <p><em>Example Scenario:</em></p>
+        <ul>
+            <li>We have a rule: A piece with a defective part is defective (Probability = 0.5).</li>
+            <li>Classical facts: Computers have processors as parts. Processors have cores as parts. All cores are defective.</li>
+            <li><em>Query:</em> What is the probability of a computer being defective?<br>
+            <em>(The system would generate the possible worlds based on the 0.5 probability and trace the rules to calculate the exact odds).</em></li>
+        </ul>
+    </div>
+
+    <h2>10. Dealing with Constraints (and Redistribution)</h2>
+    <p>What happens if our Knowledge Base includes <strong>constraints</strong>? A constraint is a rule that says two things <em>cannot</em> logically happen together.</p>
+    <p>If we generate random worlds, some of those worlds will inevitably violate these constraints (meaning the world is logically impossible/inconsistent).</p>
+    <ul>
+        <li><strong>Rule:</strong> An inconsistent world cannot exist, so its probability <strong>must be 0</strong>.</li>
+    </ul>
+
+    <p><strong>Redistribution:</strong></p>
+    <p>Because we had to force the impossible world's probability to 0, our remaining probabilities no longer add up to 1 (100%). We fix this by taking the lost probability and <strong>proportionally redistributing</strong> it among the worlds that survived.</p>
+
+    <div class="highlight">
+        <p><em>Redistribution Example:</em><br>
+        Let's return to our previous example where we assumed independence.<br>
+        The worlds were: <code>{x, y}</code> (0.28), <code>{x}</code> (0.12), <code>{y}</code> (0.42), and <code>&empty;</code> (0.18).</p>
+        <ul>
+            <li>Now, imagine a new constraint is added: <strong>x and y cannot both be true at the same time</strong>.</li>
+            <li>The world <code>{x, y}</code> becomes impossible. Its probability goes from 0.28 to <strong>0</strong>.</li>
+            <li>The remaining valid worlds originally summed up to $0.72$ ($0.12 + 0.42 + 0.18$).</li>
+            <li>We redistribute the math by dividing the old probabilities by the new total ($0.72$):
+                <ul>
+                    <li>New <code>{x}</code> probability: $0.12 \div 0.72 = \mathbf{1/6}$</li>
+                    <li>New <code>{y}</code> probability: $0.42 \div 0.72 = \mathbf{7/12}$</li>
+                    <li>New <code>&empty;</code> probability: $0.18 \div 0.72 = \mathbf{1/4}$</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="takeaway">
+        <p><em>Warning:</em> While mathematically sound, this redistribution can sometimes result in strange, counter-intuitive shifts in probability!</p>
+    </div>
+
+    <div class="takeaway">
+        <h2 style="margin-top: 0; border-bottom: 1px solid #f4d03f;">Summary / The Bottom Line</h2>
+        <p>When designing logic systems with uncertainty:</p>
+        <ol>
+            <li><strong>Always be careful about the semantics:</strong> Understand exactly <em>how</em> your mathematical model interprets uncertainty (Subjective vs. Statistical, Independence vs. Entropy, etc.).</li>
+            <li><strong>Be aware of the tradeoffs:</strong> There is always a balancing act between how expressive your logic language is, how simple it is to use, and how much computing power (computational complexity) it requires to calculate all those possible worlds!</li>
+        </ol>
+    </div>
+
+
 
 </body>
 </html>
