@@ -454,112 +454,501 @@
             <li><strong>Justification:</strong> YES, for the exact same reason. The premise "hairy monotreme" breaks the logical rules of our KB, generating a contradiction. From a contradiction, any conclusion—even being a whale—is logically entailed.</li>
         </ul>
     </div>
-  <h1>Knowledge Representation and Reasoning<br>Exercise Session 2</h1>
-    <h2 class="exercise-title">Exercise 1: Truth Table Generation</h2>
-<div class="question">
-    <p>Construct a complete truth table for the following Boolean logic function:</p>
-    <p>\( F(A, B, C) = (A \land \neg B) \lor (B \oplus C) \)</p>
-</div>
 
-<div class="solution">
-    <h3>Solution</h3>
-    <p>To build the truth table, we can break the expression down into its intermediate components: \( \neg B \), \( A \land \neg B \), and \( B \oplus C \) (where \(\oplus\) represents the XOR operation).</p>
     
-    <table>
-        <thead>
-            <tr>
-                <th>\(A\)</th>
-                <th>\(B\)</th>
-                <th>\(C\)</th>
-                <th>\(\neg B\)</th>
-                <th>\(A \land \neg B\)</th>
-                <th>\(B \oplus C\)</th>
-                <th>\(F\)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td>
-            </tr>
-            <tr>
-                <td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td>
-            </tr>
-            <tr>
-                <td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td>
-            </tr>
-            <tr>
-                <td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td>
-            </tr>
-            <tr>
-                <td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td><span class="ans-true">1</span></td>
-            </tr>
-            <tr>
-                <td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td><span class="ans-true">1</span></td>
-            </tr>
-            <tr>
-                <td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td>
-            </tr>
-            <tr>
-                <td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    <h1>Knowledge Representation and Reasoning<br>
+        <span style="font-size: 0.6em; font-weight: normal; color: #8b949e;">Exercise Session 2</span>
+    </h1>
 
-<h2 class="exercise-title">Exercise 2: Algebraic Simplification</h2>
-<div class="question">
-    <p>Using the theorems and postulates of Boolean algebra, simplify the following expression to its minimal Sum of Products (SOP) form:</p>
-    <p>\( Y = A\overline{B}C + A\overline{B}\overline{C} + \overline{A}\overline{B}C \)</p>
-</div>
+    <!-- Exercise 1 -->
+    <h2 class="exercise-title">Exercise 1. Knowledge Representation (*)</h2>
+    <div class="question">
+        <p>Assume that all facts in a knowledge base will have the forms:</p>
+        <p style="text-align: center;">
+            <code>child(a, b) &lt;-</code><br>
+            <code>female(a) &lt;-</code>
+        </p>
+        <p>meaning that “a is a child of b,” and “a is female,” respectively.</p>
+        <ol>
+            <li>Using predicate rules, create a knowledge base which describes family relations including <strong>at least</strong>: <code>niece</code>, <code>grandparent</code>, <code>sibling</code>, <code>cousin</code>, and <code>ancestor</code>.</li>
+            <br>
+            <li>If, in addition, facts of the form <code>married(a, b) &lt;-</code> are allowed, extend the knowledge base to allow legal family within the notions of <code>grandmother</code>, <code>uncle</code>, and <code>co-father-in-law</code>.</li>
+        </ol>
+    </div>
 
-<div class="solution">
-    <h3>Solution</h3>
-    <p>We can simplify the expression step-by-step by grouping terms and applying Boolean postulates:</p>
-    
-    <h4>Step 1: Factor out common variables</h4>
-    <p>Notice that the first two terms share \( A\overline{B} \). We can factor this out:</p>
-    <p>\( Y = A\overline{B}(C + \overline{C}) + \overline{A}\overline{B}C \)</p>
-    
-    <h4>Step 2: Apply the Complementarity Law</h4>
-    <p>According to the complementarity law, \( C + \overline{C} = 1 \). Substituting this in gives:</p>
-    <p>\( Y = A\overline{B}(1) + \overline{A}\overline{B}C \)</p>
-    <p>\( Y = A\overline{B} + \overline{A}\overline{B}C \)</p>
+    <div class="solution">
+        <h3>Solution</h3>
+        <h4>1. Family relations using predicate rules</h4>
+        <p>Variables in rules are denoted with uppercase letters. The fact <code>child(X, Y)</code> means "X is a child of Y", implying Y is the parent.</p>
+        <pre class="code-block"><code>parent(X, Y) &lt;- child(Y, X)
+sibling(X, Y) &lt;- child(X, Z), child(Y, Z)
+niece(X, Y) &lt;- female(X), child(X, Z), sibling(Z, Y)
+grandparent(X, Y) &lt;- child(Y, Z), child(Z, X)
+cousin(X, Y) &lt;- child(X, Z), child(Y, W), sibling(Z, W)
+ancestor(X, Y) &lt;- child(Y, X)
+ancestor(X, Y) &lt;- child(Y, Z), ancestor(X, Z)</code></pre>
 
-    <h4>Step 3: Factor again</h4>
-    <p>Now, both remaining terms share \( \overline{B} \). Let's factor it out:</p>
-    <p>\( Y = \overline{B}(A + \overline{A}C) \)</p>
+        <h4>2. Legal family additions</h4>
+        <p>We establish a symmetric spouse relation and define a <code>legal_parent</code> as either a biological parent or a step-parent (the spouse of a biological parent).</p>
+        <pre class="code-block"><code>spouse(X, Y) &lt;- married(X, Y)
+spouse(X, Y) &lt;- married(Y, X)
 
-    <h4>Step 4: Apply the Redundancy Law</h4>
-    <p>The redundancy law states that \( A + \overline{A}C = A + C \). Substituting this back yields our final simplified expression:</p>
-    <p>\( Y = \overline{B}(A + C) \)</p>
-    <p><em>In Sum of Products form: \( Y = A\overline{B} + \overline{B}C \)</em></p>
-</div>
+legal_parent(X, Y) &lt;- child(Y, X)
+legal_parent(X, Y) &lt;- child(Y, Z), spouse(X, Z)
+legal_sibling(X, Y) &lt;- legal_parent(Z, X), legal_parent(Z, Y)
 
-<h2 class="exercise-title">Exercise 3: De Morgan's Laws</h2>
-<div class="question">
-    <p>Apply De Morgan's Laws to find the complement of the following expression. Simplify the final result.</p>
-    <p>\( F = (A + B) \cdot (\overline{C} + D) \)</p>
-</div>
+grandmother(X, Y) &lt;- female(X), legal_parent(X, Z), legal_parent(Z, Y)
 
-<div class="solution">
-    <h3>Solution</h3>
-    <p>We need to find \( \overline{F} \), the complement of the entire expression. De Morgan's Laws state that \( \overline{X \cdot Y} = \overline{X} + \overline{Y} \) and \( \overline{X + Y} = \overline{X} \cdot \overline{Y} \).</p>
+uncle(X, Y) &lt;- legal_sibling(X, Z), legal_parent(Z, Y)
+uncle(X, Y) &lt;- spouse(X, W), legal_sibling(W, Z), legal_parent(Z, Y)
+
+co_father_in_law(X, Y) &lt;- legal_parent(X, Z), spouse(Z, W), legal_parent(Y, W)</code></pre>
+        <p><em>(Note: Since standard Datalog lacks a built-in <code>male</code> predicate and negation, gender is left implicit for <code>uncle</code> and <code>co_father_in_law</code> according to standard Logic Programming limitations).</em></p>
+    </div>
+
+
+    <!-- Exercise 2 -->
+    <h2 class="exercise-title">Exercise 2. Consistency (**)</h2>
+    <div class="question">
+        <p>We call a (predicate) knowledge base <em>positive</em> if it has no constraints. Tell whether the following statements are true or false, <strong>justifying your answer</strong>.</p>
+        <ol>
+            <li>Every KB is consistent</li>
+            <li>Every positive KB is consistent</li>
+            <li>Every positive KB has a model with one element; that is, with domain \(\Delta = \{\delta\}\)</li>
+            <li>Every consistent KB has a model with one element</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <ol>
+            <li><span class="ans-false">False.</span> A KB can contain constraints (like <code>&lt;- P(x), Q(x)</code>) that might be violated by the base facts, making the KB inconsistent.</li>
+            <br>
+            <li><span class="ans-true">True.</span> A positive KB (one with no constraints or negations) always has at least one model—for instance, the maximal Herbrand model where all predicates are true for all constants.</li>
+            <br>
+            <li><span class="ans-true">True.</span> Without constraints (like Unique Name Assumption or negative clauses) preventing it, you can safely map all constants to a single domain element \(\Delta = \{\delta\}\) and assign all relations to be true. No contradictions can occur.</li>
+            <br>
+            <li><span class="ans-false">False.</span> A consistent KB may contain structural constraints (e.g., <code>&lt;- P(x, y), P(y, x)</code> alongside facts <code>P(a,b)</code> and <code>P(b,c)</code>) forcing elements to be distinct. Mapping them to a single element would violate the constraints.</li>
+        </ol>
+    </div>
+
+
+    <!-- Exercise 3 -->
+    <h2 class="exercise-title">Exercise 3. Canonical Model (*)</h2>
+    <div class="question">
+        <ol>
+            <li>Add the following facts to the KB from Exercise 1 and build the <strong>canonical interpretation</strong>:</li>
+            <pre class="code-block" style="text-align: left;"><code>child(efraim, ana) &lt;-        child(ana, ingrid) &lt;-
+child(ingrid, denis) &lt;-      child(ana, claudio) &lt;-
+child(denis, hans) &lt;-        child(bob, claudio) &lt;-
+child(fiona, greta) &lt;-       child(jenny, fiona) &lt;-
+married(claudio, greta) &lt;-
+
+female(ana) &lt;-               female(fiona) &lt;-
+female(greta) &lt;-             female(ingrid) &lt;-</code></pre>
+            <br>
+            <li>Answer the following queries using this canonical interpretation:
+                <ul>
+                    <li><code>ancestor(denis, efraim)</code></li>
+                    <li><code>ancestor(greta, efraim)</code></li>
+                    <li><code>uncle(bob, fiona)</code></li>
+                    <li><code>niece(fiona, denis)</code></li>
+                    <li><code>cousin(denis, ana)</code></li>
+                    <li><code>grandmother(X, Y)</code></li>
+                    <li><code>co-father-in-law(X, Y)</code></li>
+                    <li><code>male(X)</code></li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <h4>1. Canonical Interpretation</h4>
+        <p>The Herbrand universe (domain elements) is: <code>{efraim, ana, ingrid, denis, hans, fiona, greta, claudio, bob, jenny}</code>.</p>
+        <p>The canonical interpretation is the minimal model containing the given base facts and all derived facts based on the rules. Notable derived structures are:</p>
+        <ul>
+            <li><strong>Biological parents:</strong> ana&rarr;efraim, ingrid&rarr;ana, denis&rarr;ingrid, hans&rarr;denis, claudio&rarr;ana, claudio&rarr;bob, greta&rarr;fiona, fiona&rarr;jenny.</li>
+            <li><strong>Spouses:</strong> claudio & greta.</li>
+            <li><strong>Step-parents (legal_parent):</strong> greta&rarr;ana, greta&rarr;bob, claudio&rarr;fiona.</li>
+        </ul>
+
+        <h4>2. Queries against the canonical interpretation</h4>
+        <ul>
+            <li><code>ancestor(denis, efraim)</code>: <span class="ans-true">True</span> (denis &rarr; ingrid &rarr; ana &rarr; efraim).</li>
+            <li><code>ancestor(greta, efraim)</code>: <span class="ans-false">False</span> (greta is a step-parent of ana, but <code>ancestor</code> strictly uses biological paths).</li>
+            <li><code>uncle(bob, fiona)</code>: <span class="ans-false">False</span> (bob and fiona share a legal parent [claudio/greta] making them legal siblings, not an uncle-niece pair).</li>
+            <li><code>niece(fiona, denis)</code>: <span class="ans-false">False</span> (denis has no siblings in the KB).</li>
+            <li><code>cousin(denis, ana)</code>: <span class="ans-false">False</span> (their respective parents, hans and ingrid/claudio, are not siblings).</li>
+            <li><code>grandmother(X, Y)</code>: <strong>{(greta, jenny), (greta, efraim), (ingrid, efraim)}</strong>.</li>
+            <li><code>co-father-in-law(X, Y)</code>: <strong>Empty set</strong> (Claudio and Greta are the only married couple, but the KB does not list parents for either of them).</li>
+            <li><code>male(X)</code>: <strong>Empty set</strong> (There are no base facts or positive deductive rules for <code>male</code>).</li>
+        </ul>
+    </div>
+
+
+    <!-- Exercise 4 -->
+    <h2 class="exercise-title">Exercise 4. Models (*)</h2>
+    <div class="question">
+        <ol>
+            <li>Build a model of the KB from the previous exercises, whose domain has only <strong>7</strong> elements.</li>
+            <li>Build a model of the KB from the previous exercises, whose domain has only <strong>4</strong> elements.</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Because standard Datalog doesn't enforce the Unique Name Assumption (UNA) explicitly unless constraints exist, constants can map to the same elements.</p>
+        
+        <h4>1. Model with 7 elements:</h4>
+        <p>Set \(\Delta = \{1, 2, 3, 4, 5, 6, 7\}\). Map the constants <code>{greta, claudio, bob, jenny}</code> to element \(7\), and map the remaining 6 constants to \(1 \dots 6\) respectively. Define the relation tables directly as the exact mappings of the original facts under these integers. No structural constraints are violated.</p>
+        
+        <h4>2. Model with 4 elements:</h4>
+        <p>Set \(\Delta = \{1, 2, 3, 4\}\). Map <code>{efraim, ana, ingrid}</code> to element \(1\), <code>{denis, hans}</code> to element \(2\), <code>{fiona, greta}</code> to element \(3\), and <code>{claudio, bob, jenny}</code> to element \(4\). Set relations as the corresponding mappings of the base facts. This interpretation safely satisfies all clauses and generates a valid 4-element model.</p>
+    </div>
+
+
+    <!-- Exercise 5 -->
+    <h2 class="exercise-title">Exercise 5. Constraints (**)</h2>
+    <div class="question">
+        <p>Add the fact <code>child(hans, ingrid)</code> to the KB of Exercise 3, and answer the following queries:</p>
+        <ol>
+            <li><code>ancestor(efraim, efraim)</code></li>
+            <li><code>ancestor(fiona, claudio)</code></li>
+        </ol>
+        <p>Analyse these results in the context of KR and, if needed, add constraints to remove unexpected consequences.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Adding <code>child(hans, ingrid)</code> means <em>ingrid is the parent of hans</em>, introducing a cycle: <code>ingrid &rarr; denis &rarr; hans &rarr; ingrid</code>.</p>
+        <ol>
+            <li><code>ancestor(efraim, efraim)</code>: <span class="ans-false">False</span> (efraim has no children, so he is not an ancestor of anyone).</li>
+            <li><code>ancestor(fiona, claudio)</code>: <span class="ans-false">False</span>.</li>
+        </ol>
+
+        <h4>KR Analysis & Constraint:</h4>
+        <p>While the specific queries returned False, the addition logically breaks the Knowledge Base because individuals involved in the cycle (like ingrid) become ancestors of themselves (e.g., <code>ancestor(ingrid, ingrid)</code> evaluates to True). This violates the biological/hierarchical nature of ancestry and causes infinite loops in top-down query engines (like Prolog).</p>
+        <p>To remove this unexpected consequence, we add the <strong>irreflexivity constraint</strong>:</p>
+        <pre class="code-block"><code>&lt;- ancestor(X, X)</code></pre>
+        <p>This will automatically render any model containing cyclic family sub-graphs logically inconsistent.</p>
+    </div>
+
+
+    <!-- Exercise 6 -->
+    <h2 class="exercise-title">Exercise 6. Query Expressivity (***)</h2>
+    <div class="question">
+        <p>Suppose that we are interested in deducing whether a rule <code>&lt;- Q(x)</code> is entailed by a KB \(K\); that is, whether every model of \(K\) also satisfies this rule.</p>
+        <p>Devise a reasoning method that can derive this consequence using the tools that we have seen in the lecture, or explain why it cannot be done.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Yes, it can be done. A rule with an empty head <code>&lt;- Q(x)</code> represents the constraint \(\forall x \neg Q(x)\). In logic programming, entailed constraints can be checked via <strong>Refutation / Consistency Checking</strong>.</p>
+        <h4>Reasoning Method:</h4>
+        <ul>
+            <li>Introduce a new, fresh Skolem constant (e.g., <code>sk</code>) that does not appear anywhere in \(K\).</li>
+            <li>Add the fact <code>Q(sk) &lt;-</code> to \(K\).</li>
+            <li>Evaluate whether the resulting KB (\(K \cup \{Q(sk)\}\)) is <strong>inconsistent</strong>.</li>
+            <li>If the new KB is inconsistent, it means adding \(Q\) for <em>any</em> element creates a contradiction. Therefore, \(K\) logically entails the rule <code>&lt;- Q(x)</code>. If it remains consistent, it does not entail it.</li>
+        </ul>
+    </div>
+
+
+    <!-- Exercise 7 -->
+    <h2 class="exercise-title">Exercise 7. Disjoint unions (**)</h2>
+    <div class="question">
+        <p>Consider two interpretations \(\mathcal{I} = (\Delta^\mathcal{I}, \cdot^\mathcal{I})\) and \(\mathcal{J} = (\Delta^\mathcal{J}, \cdot^\mathcal{J})\) such that \(\Delta^\mathcal{I} \cap \Delta^\mathcal{J} = \emptyset\).</p>
+        <p>The <em>disjoint union</em> of \(\mathcal{I}\) and \(\mathcal{J}\) is the interpretation \(\mathcal{I} \oplus \mathcal{J} = (\Delta^\mathcal{I} \cup \Delta^\mathcal{J}, \cdot^{\mathcal{I}\mathcal{J}})\) where for every predicate \(P\), \(P^{\mathcal{I}\mathcal{J}} = P^\mathcal{I} \cup P^\mathcal{J}\).</p>
+        <p>In other words, the disjoint union of \(\mathcal{I}\) and \(\mathcal{J}\) is the graph obtained by putting together the two graphs defined by \(\mathcal{I}\) and \(\mathcal{J}\).</p>
+        <p>Is it true that if \(\mathcal{I}\) and \(\mathcal{J}\) are both models of a predicate knowledge base \(K\), then \(\mathcal{I} \oplus \mathcal{J}\) is also a model of \(K\)? <strong>Justify.</strong></p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><span class="ans-false">False.</span> The disjoint union \(\mathcal{I} \oplus \mathcal{J}\) is not necessarily a model.</p>
+        
+        <h4>Justification (Counterexample):</h4>
+        <p>Consider a KB with a single rule containing unconnected body variables:</p>
+        <pre class="code-block"><code>H(x) &lt;- P(x), Q(y)</code></pre>
+        <ul>
+            <li>Let interpretation \(\mathcal{I}\) have domain \(\{1\}\) where \(Q(1)\) is True, but \(P(1)\) and \(H(1)\) are False. \(\mathcal{I}\) is a model because the rule's body is false.</li>
+            <li>Let interpretation \(\mathcal{J}\) have domain \(\{2\}\) where \(P(2)\) is True, but \(Q(2)\) and \(H(2)\) are False. \(\mathcal{J}\) is a model because the rule's body is false.</li>
+            <li>In \(\mathcal{I} \oplus \mathcal{J}\), the domain is \(\{1, 2\}\). Here, \(Q(1)\) is True, and \(P(2)\) is True.</li>
+        </ul>
+        <p>If we assign \(x=2\) and \(y=1\), the body <code>P(2), Q(1)</code> becomes completely True. However, \(H(2)\) remains False. Thus, the rule is violated, making \(\mathcal{I} \oplus \mathcal{J}\) <strong>not</strong> a valid model.</p>
+    </div>
+
+
+    <!-- Exercise 8 -->
+    <h2 class="exercise-title">Exercise 8. Model sizes with constraints (***)</h2>
+    <div class="question">
+        <ol>
+            <li>Build a knowledge base \(K\) such that all models have at least 3 elements or explain why it is not possible.</li>
+            <li>Build a knowledge base \(K\) such that all models have at most 5 elements or explain why it is not possible.</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <h4>1. KB where all models have at least 3 elements: Possible</h4>
+        <p>We use an irreflexive, asymmetric relation to force a minimal cycle size:</p>
+        <pre class="code-block"><code>E(a, b) &lt;-
+E(b, c) &lt;-
+&lt;- E(X, X)
+&lt;- E(X, Y), E(Y, X)</code></pre>
+        <p>If a model had only 1 or 2 elements, by the Pigeonhole Principle, at least two of the constants <code>{a, b, c}</code> must map to the same domain element. If \(a=b\), it violates <code>&lt;- E(X, X)</code>. If \(a=c\), <code>E(a,b)</code> and <code>E(b,c)</code> effectively become a 2-cycle <code>E(a,b)</code> and <code>E(b,a)</code>, which violates <code>&lt;- E(X, Y), E(Y, X)</code>. Therefore, any valid model must maintain at least 3 strictly distinct elements.</p>
+
+        <h4>2. KB where all models have at most 5 elements: Not possible</h4>
+        <p><strong>Reason:</strong> In relational First-Order Logic languages without an explicit, extensional equality/identity predicate (<code>=</code>), there is no capability to bound model sizes from above. For any consistent model \(M\), one can simply construct a larger model \(M'\) by duplicating an existing element \(d\) into \(d'\), copying over all exact relationships. Since there's no way to establish an "identity constraint" preventing duplicates, \(M'\) will remain a logically perfectly satisfying model. Thus, any consistent KB can scale infinitely.</p>
+    </div>
+
+
+
+    <h1>Knowledge Representation and Reasoning<br>Exercise Session 3</h1>
+
+    <!-- EXERCISE 1 -->
+    <h2 class="exercise-title">Exercise 1. Homomorphism (**)</h2>
+    <div class="question">
+        <p>Consider the predicate KB containing the rules</p>
+        <p>
+            \(Q(x, y) \leftarrow Q(x, z), Q(z, y)\) <span style="float:right;">\(\leftarrow Q(x, x)\)</span><br>
+            \(Q(a, b) \leftarrow\) <span style="float:right;">\(Q(b, c) \leftarrow\)</span>
+        </p>
+        <ol>
+            <li>Construct, if possible, (i) the canonical interpretation \(\mathcal{I}_{can}\), (ii) a <strong>model \(\mathcal{I}_1\)</strong> with four objects, and (iii) a model \(\mathcal{I}_2\) with two objects. If not possible, explain why.</li>
+            <li>Build the homomorphisms from \(\mathcal{I}_{can}\) to \(\mathcal{I}_1\) and \(\mathcal{I}_2\)</li>
+            <li>Find at least one fact that holds in \(\mathcal{I}_1\) but not in \(\mathcal{I}_{can}\), or explain why it is not possible</li>
+            <li>Find at least one fact that holds in \(\mathcal{I}_2\) but not in \(\mathcal{I}_{can}\), or explain why it is not possible</li>
+        </ol>
+    </div>
     
-    <h4>Step 1: Invert the overall expression</h4>
-    <p>\( \overline{F} = \overline{(A + B) \cdot (\overline{C} + D)} \)</p>
-    
-    <h4>Step 2: Break the main AND operator</h4>
-    <p>Apply De Morgan's Law to the central AND operator, changing it to an OR operator and splitting the bar:</p>
-    <p>\( \overline{F} = \overline{(A + B)} + \overline{(\overline{C} + D)} \)</p>
-    
-    <h4>Step 3: Break the internal OR operators</h4>
-    <p>Apply De Morgan's Law to the individual terms. The ORs become ANDs:</p>
-    <p>\( \overline{F} = (\overline{A} \cdot \overline{B}) + (\overline{\overline{C}} \cdot \overline{D}) \)</p>
-    
-    <h4>Step 4: Cancel double negations</h4>
-    <p>Since \( \overline{\overline{C}} = C \), the final simplified complement is:</p>
-    <p>\( \overline{F} = \overline{A}\overline{B} + C\overline{D} \)</p>
-</div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>KB Analysis:</strong></p>
+        <ul>
+            <li>Rules: \(Q(x, y) \leftarrow Q(x, z), Q(z, y)\) (Transitivity) and \(\leftarrow Q(x, x)\) (Irreflexivity).</li>
+            <li>Facts: \(Q(a, b)\) and \(Q(b, c)\).</li>
+        </ul>
+
+        <h4>1. Constructing Interpretations</h4>
+        <ul>
+            <li><strong>(i) Canonical Interpretation \(\mathcal{I}_{can}\):</strong><br>
+                Starting from the facts \(Q(a,b)\) and \(Q(b,c)\), applying transitivity yields \(Q(a,c)\). No self-loops are generated, so irreflexivity is satisfied.<br>
+                \(\Delta^{\mathcal{I}_{can}} = \{a, b, c\}\)<br>
+                \(Q^{\mathcal{I}_{can}} = \{(a, b), (b, c), (a, c)\}\)
+            </li>
+            <li><strong>(ii) A model \(\mathcal{I}_1\) with 4 objects:</strong><br>
+                We can add a new disconnected element \(d\) to \(\mathcal{I}_{can}\), or add an outgoing edge from \(c\) to \(d\). Let's define it as:<br>
+                \(\Delta^{\mathcal{I}_1} = \{a, b, c, d\}\)<br>
+                \(Q^{\mathcal{I}_1} = \{(a, b), (b, c), (a, c), (c, d), (b, d), (a, d)\}\) (This preserves both transitivity and irreflexivity).
+            </li>
+            <li><strong>(iii) A model \(\mathcal{I}_2\) with 2 objects:</strong><br>
+                <strong>Not possible.</strong> By the Pigeonhole Principle, mapping 3 constants \(\{a, b, c\}\) to a domain of 2 objects means at least two constants must map to the same object.
+                <ul>
+                    <li>If \(a=b\), \(Q(a,b) \implies Q(a,a)\) (violates \(\leftarrow Q(x,x)\)).</li>
+                    <li>If \(b=c\), \(Q(b,c) \implies Q(b,b)\) (violates \(\leftarrow Q(x,x)\)).</li>
+                    <li>If \(a=c\), \(Q(a,c) \implies Q(a,a)\) (violates \(\leftarrow Q(x,x)\)).</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h4>2. Homomorphisms</h4>
+        <ul>
+            <li>\(h_1: \mathcal{I}_{can} \to \mathcal{I}_1\) is the identity mapping: \(h_1(a)=a\), \(h_1(b)=b\), \(h_1(c)=c\).</li>
+            <li>\(h_2: \mathcal{I}_{can} \to \mathcal{I}_2\) is <strong>not possible</strong> to build, since the interpretation \(\mathcal{I}_2\) cannot exist.</li>
+        </ul>
+
+        <h4>3. Fact in \(\mathcal{I}_1\) but not in \(\mathcal{I}_{can}\)</h4>
+        <p>Using the \(\mathcal{I}_1\) defined above, the fact <strong>\(Q(c, d)\)</strong> holds in \(\mathcal{I}_1\) but not in \(\mathcal{I}_{can}\).<br>
+        <em>(Note: If strictly limited to the original signature \(\{a, b, c\}\), it is logically impossible to add any new positive ground fact. Adding any edge amongst \(a, b, c\) creates a cycle, which by transitivity would infer a self-loop, violating the irreflexivity constraint).</em></p>
+
+        <h4>4. Fact in \(\mathcal{I}_2\) but not in \(\mathcal{I}_{can}\)</h4>
+        <p><strong>Not possible.</strong> Since the model \(\mathcal{I}_2\) itself cannot exist, we cannot evaluate any facts on it.</p>
+    </div>
+
+    <!-- EXERCISE 2 -->
+    <h2 class="exercise-title">Exercise 2. Consistency (*)</h2>
+    <div class="question">
+        <p>Tell which of the following \(\mathcal{EL}^\perp\) concepts are satisfiable and which are unsatisfiable:</p>
+        <ol>
+            <li>\(\exists r.A \sqcap \exists r.C\)</li>
+            <li>\(\exists s.(A \sqcap \exists s.B)\)</li>
+            <li>\(A \sqcap \exists s.(\bot \sqcap \exists r.\top) \sqcap \exists r.B\)</li>
+            <li>\(C \sqcap D \sqcap \top \sqcap \exists r.(\top \sqcap B)\)</li>
+            <li>\(\exists s.\exists s.(\bot \sqcap B)\)</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><em>Recall that \(\exists r.\bot \equiv \bot\) and \(X \sqcap \bot \equiv \bot\).</em></p>
+        <ol>
+            <li>\(\exists r.A \sqcap \exists r.C\) &mdash; <span class="ans-true">Satisfiable</span>. (A node can have two distinct \(r\)-successors, one in \(A\) and one in \(C\)).</li>
+            <li>\(\exists s.(A \sqcap \exists s.B)\) &mdash; <span class="ans-true">Satisfiable</span>.</li>
+            <li>\(A \sqcap \exists s.(\bot \sqcap \exists r.\top) \sqcap \exists r.B\) &mdash; <span class="ans-false">Unsatisfiable</span>. (Contains \(\bot\) inside the \(\exists s\) restriction, collapsing the branch to \(\exists s.\bot \equiv \bot\)).</li>
+            <li>\(C \sqcap D \sqcap \top \sqcap \exists r.(\top \sqcap B)\) &mdash; <span class="ans-true">Satisfiable</span>.</li>
+            <li>\(\exists s.\exists s.(\bot \sqcap B)\) &mdash; <span class="ans-false">Unsatisfiable</span>. (Contains \(\bot\), propagating upwards to make the whole concept \(\bot\)).</li>
+        </ol>
+    </div>
+
+    <!-- EXERCISE 3 -->
+    <h2 class="exercise-title">Exercise 3. Subsumption (*)</h2>
+    <div class="question">
+        <p>Verify whether the following subsumption relations hold:</p>
+        <ol>
+            <li>\(A \sqcap C \sqcap \exists s.B \sqsubseteq C \sqcap \exists s.\top\)</li>
+            <li>\(\exists r.(A \sqcap \exists s.\top) \sqsubseteq \exists s.\exists r.B\)</li>
+            <li>\(\exists r.(B \sqcap \exists s.\top) \sqsubseteq \exists r.\exists s.\top\)</li>
+            <li>\(\exists r.(A \sqcap \exists r.\bot) \sqsubseteq \exists s.B\)</li>
+            <li>\(A \sqcap \exists r.B \sqsubseteq \exists r.(\bot \sqcap A)\)</li>
+            <li>\(\exists s.(B \sqcap \exists s.\bot) \sqsubseteq B \sqcap \exists r.\bot \sqcap \exists t.(A \sqcap B)\)</li>
+            <li>\(\exists r.(B \sqcap \exists s.A \sqcap \exists s.\top) \sqsubseteq \exists r.\exists s.A\)</li>
+            <li>\(B \sqcap \exists r.(A \sqcap C) \sqcap \exists r.(B \sqcap C) \sqsubseteq B \sqcap \exists r.A \sqcap \exists r.B \sqcap \exists r.C\)</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <ol>
+            <li>\(A \sqcap C \sqcap \exists s.B \sqsubseteq C \sqcap \exists s.\top\) &mdash; <span class="ans-true">True</span> (\(\exists s.B\) is trivially subsumed by \(\exists s.\top\)).</li>
+            <li>\(\exists r.(A \sqcap \exists s.\top) \sqsubseteq \exists s.\exists r.B\) &mdash; <span class="ans-false">False</span> (Roles and concepts are unrelated).</li>
+            <li>\(\exists r.(B \sqcap \exists s.\top) \sqsubseteq \exists r.\exists s.\top\) &mdash; <span class="ans-true">True</span>.</li>
+            <li>\(\exists r.(A \sqcap \exists r.\bot) \sqsubseteq \exists s.B\) &mdash; <span class="ans-true">True</span> (LHS collapses to \(\bot\), and \(\bot\) is subsumed by anything).</li>
+            <li>\(A \sqcap \exists r.B \sqsubseteq \exists r.(\bot \sqcap A)\) &mdash; <span class="ans-false">False</span> (RHS is \(\bot\), LHS is satisfiable).</li>
+            <li>\(\exists s.(B \sqcap \exists s.\bot) \sqsubseteq B \sqcap \exists r.\bot \sqcap \exists t.(A \sqcap B)\) &mdash; <span class="ans-true">True</span> (LHS collapses to \(\bot\)).</li>
+            <li>\(\exists r.(B \sqcap \exists s.A \sqcap \exists s.\top) \sqsubseteq \exists r.\exists s.A\) &mdash; <span class="ans-true">True</span>.</li>
+            <li>\(B \sqcap \exists r.(A \sqcap C) \sqcap \exists r.(B \sqcap C) \sqsubseteq B \sqcap \exists r.A \sqcap \exists r.B \sqcap \exists r.C\) &mdash; <span class="ans-true">True</span> (\(\exists r.(A \sqcap C)\) implies both \(\exists r.A\) and \(\exists r.C\)).</li>
+        </ol>
+    </div>
+
+    <!-- EXERCISE 4 -->
+    <h2 class="exercise-title">Exercise 4. Counter-Models (*)</h2>
+    <div class="question">
+        <p>For the following pairs of concepts \(C\), and \(D\), find <strong>two different</strong> interpretations \(\mathcal{I}\) such that \(C^\mathcal{I} \not\subseteq D^\mathcal{I}\)</p>
+        <ol>
+            <li>\(C = \exists s.B,\; D = \exists r.B\)</li>
+            <li>\(C = A \sqcap \exists r.B,\; D = \bot\)</li>
+            <li>\(C = B \sqcap A \sqcap \exists r.(A \sqcap B),\; D = B \sqcap \exists r.E\)</li>
+            <li>\(C = \exists r.A \sqcap \exists s.B,\; D = \exists s.(A \sqcap \bot)\)</li>
+            <li>\(C = \exists s.(A \sqcap B),\; D = \exists r.A \sqcap \exists s.B\)</li>
+            <li>\(C = A \sqcap B \sqcap \exists r.(A \sqcap B),\; D = \exists r.(A \sqcap \exists s.\bot)\)</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We need to construct models where an element \(x \in C^\mathcal{I}\) but \(x \notin D^\mathcal{I}\).</p>
+
+        <ol>
+            <li><strong>\(C = \exists s.B,\; D = \exists r.B\)</strong>
+                <ul>
+                    <li><strong>\(\mathcal{I}_1\)</strong>: \(\Delta=\{1, 2\}\), \(s=\{(1, 2)\}\), \(r=\emptyset\), \(B=\{2\}\). Here, \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                    <li><strong>\(\mathcal{I}_2\)</strong>: \(\Delta=\{a, b\}\), \(s=\{(a, b)\}\), \(r=\{(a, a)\}\), \(B=\{b\}\). Here, \(a \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                </ul>
+            </li>
+            <li><strong>\(C = A \sqcap \exists r.B,\; D = \bot\)</strong> <em>(Need \(C\) to simply be non-empty)</em>
+                <ul>
+                    <li><strong>\(\mathcal{I}_1\)</strong>: \(\Delta=\{1, 2\}\), \(A=\{1\}\), \(B=\{2\}\), \(r=\{(1, 2)\}\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                    <li><strong>\(\mathcal{I}_2\)</strong>: \(\Delta=\{1, 2, 3\}\), \(A=\{1\}\), \(B=\{2, 3\}\), \(r=\{(1, 3)\}\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                </ul>
+            </li>
+            <li><strong>\(C = B \sqcap A \sqcap \exists r.(A \sqcap B),\; D = B \sqcap \exists r.E\)</strong>
+                <ul>
+                    <li><strong>\(\mathcal{I}_1\)</strong>: \(\Delta=\{1, 2\}\), \(A=\{1, 2\}\), \(B=\{1, 2\}\), \(E=\emptyset\), \(r=\{(1, 2)\}\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                    <li><strong>\(\mathcal{I}_2\)</strong>: \(\Delta=\{1, 2, 3\}\), \(A=\{1, 2\}\), \(B=\{1, 2\}\), \(E=\{3\}\), \(r=\{(1, 2)\}\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                </ul>
+            </li>
+            <li><strong>\(C = \exists r.A \sqcap \exists s.B,\; D = \exists s.(A \sqcap \bot)\)</strong> <em>(\(D \equiv \bot\))</em>
+                <ul>
+                    <li><strong>\(\mathcal{I}_1\)</strong>: \(\Delta=\{1, 2, 3\}\), \(A=\{2\}\), \(B=\{3\}\), \(r=\{(1, 2)\}\), \(s=\{(1, 3)\}\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                    <li><strong>\(\mathcal{I}_2\)</strong>: \(\Delta=\{a, b\}\), \(A=\{b\}\), \(B=\{b\}\), \(r=\{(a, b)\}\), \(s=\{(a, b)\}\). \(a \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                </ul>
+            </li>
+            <li><strong>\(C = \exists s.(A \sqcap B),\; D = \exists r.A \sqcap \exists s.B\)</strong>
+                <ul>
+                    <li><strong>\(\mathcal{I}_1\)</strong>: \(\Delta=\{1, 2\}\), \(A=\{2\}\), \(B=\{2\}\), \(s=\{(1, 2)\}\), \(r=\emptyset\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                    <li><strong>\(\mathcal{I}_2\)</strong>: \(\Delta=\{1, 2\}\), \(A=\{2\}\), \(B=\{2\}\), \(s=\{(1, 2)\}\), \(r=\{(1, 1)\}\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                </ul>
+            </li>
+            <li><strong>\(C = A \sqcap B \sqcap \exists r.(A \sqcap B),\; D = \exists r.(A \sqcap \exists s.\bot)\)</strong> <em>(\(D \equiv \bot\))</em>
+                <ul>
+                    <li><strong>\(\mathcal{I}_1\)</strong>: \(\Delta=\{1\}\), \(A=\{1\}\), \(B=\{1\}\), \(r=\{(1, 1)\}\), \(s=\emptyset\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                    <li><strong>\(\mathcal{I}_2\)</strong>: \(\Delta=\{1, 2\}\), \(A=\{1, 2\}\), \(B=\{1, 2\}\), \(r=\{(1, 2)\}\), \(s=\emptyset\). \(1 \in C^\mathcal{I} \setminus D^\mathcal{I}\).</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <!-- EXERCISE 5 -->
+    <h2 class="exercise-title">Exercise 5. TBox Models (**)</h2>
+    <div class="question">
+        <p>Consider the TBox</p>
+        <p>\(\mathcal{T} = \{ \top \sqsubseteq \exists r.A,\;\; \exists r.A \sqsubseteq \exists r.B,\;\; A \sqcap C \sqsubseteq \bot,\;\; A \sqcap B \sqsubseteq \bot,\;\; \exists r.B \sqsubseteq \exists s.C \}\)</p>
+        <ol>
+            <li>Construct a model of \(\mathcal{T}\)</li>
+            <li>Construct a model of \(\mathcal{T}\) which has <strong>at least five elements</strong></li>
+            <li>Construct a model of \(\mathcal{T}\) which has <strong>at most three elements</strong></li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <h4>1. Construct a model of \(\mathcal{T}\):</h4>
+        <p>
+            \(\Delta = \{1, 2, 3\}\). Let \(A=\{1\}\), \(B=\{2\}\), \(C=\{3\}\).<br>
+            \(r = \{(1,1), (2,1), (3,1), (1,2), (2,2), (3,2)\}\)<br>
+            \(s = \{(1,3), (2,3), (3,3)\}\)<br>
+            <em>(Every node points to \(A\) via \(r\), to \(B\) via \(r\), and to \(C\) via \(s\). \(A, B, C\) satisfy mutual required disjointness constraints).</em>
+        </p>
+
+        <h4>2. Model of \(\mathcal{T}\) with at least 5 elements:</h4>
+        <p>
+            \(\Delta = \{1, 2, 3, 4, 5\}\). Let \(A=\{1\}\), \(B=\{2\}\), \(C=\{3, 4, 5\}\). <br>
+            \(r = \Delta \times \{1, 2\}\)<br>
+            \(s = \Delta \times \{3, 4, 5\}\)
+        </p>
+
+        <h4>3. Model of \(\mathcal{T}\) with at most 3 elements:</h4>
+        <p>We can collapse elements to create a size-2 model:</p>
+        <p>
+            \(\Delta = \{1, 2\}\). Let \(A=\{1\}\), \(B=\{2\}\), \(C=\{2\}\).<br>
+            \(r = \{(1,1), (1,2), (2,1), (2,2)\}\)<br>
+            \(s = \{(1,2), (2,2)\}\)<br>
+            <em>(Valid because \(A\) is disjoint from \(B\) and \(C\), but \(B\) and \(C\) are allowed to overlap).</em>
+        </p>
+    </div>
+
+    <!-- EXERCISE 6 -->
+    <h2 class="exercise-title">Exercise 6. Disjoint Unions (***)</h2>
+    <div class="question">
+        <p>Recall the notion of <strong>disjoint union</strong> of interpretations from the previous exercise session. Is the disjoint union of two models of an \(\mathcal{EL}^\perp\) TBox \(\mathcal{T}\) also a model of \(\mathcal{T}\)? <strong>Justify</strong></p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Yes</strong>, it is a model.</p>
+        <p><strong>Justification:</strong> The semantics of all \(\mathcal{EL}^\perp\) constructs (conjunctions \(\sqcap\) and existential restrictions \(\exists\)) strictly preserve their extensions under disjoint unions. <br><br>
+        For two interpretations \(\mathcal{I}_1, \mathcal{I}_2 \models \mathcal{T}\), construct \(\mathcal{I} = \mathcal{I}_1 \uplus \mathcal{I}_2\). <br>
+        By structural induction, for any concept \(C\), its extension evaluates cleanly isolated due to non-intersecting domains: \(C^{\mathcal{I}} = C^{\mathcal{I}_1} \uplus C^{\mathcal{I}_2}\). <br><br>
+        For any TBox axiom \(C \sqsubseteq D\), since \(\mathcal{I}_1 \models C \sqsubseteq D \implies C^{\mathcal{I}_1} \subseteq D^{\mathcal{I}_1}\), and identically for \(\mathcal{I}_2\), the set-theoretic union preserves the subset relation: \(C^{\mathcal{I}_1} \uplus C^{\mathcal{I}_2} \subseteq D^{\mathcal{I}_1} \uplus D^{\mathcal{I}_2} \implies C^{\mathcal{I}} \subseteq D^{\mathcal{I}}\). <br>
+        Thus, \(\mathcal{I} \models \mathcal{T}\).</p>
+    </div>
+
+    <!-- EXERCISE 7 -->
+    <h2 class="exercise-title">Exercise 7. Model Size (***)</h2>
+    <div class="question">
+        <p>Construct an \(\mathcal{EL}^\perp\) TBox that has only models with <strong>at most</strong> 4 elements, or argue why it cannot exist.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Argument why it cannot exist:</strong></p>
+        <p>A <strong>satisfiable</strong> \(\mathcal{EL}^\perp\) TBox limiting its models to <em>at most</em> 4 elements <strong>cannot exist</strong>.</p>
+        <p>By the exact principle proven in Exercise 6, the \(\mathcal{EL}^\perp\) logic fragment satisfies the <em>disjoint union property</em>. If a satisfiable TBox \(\mathcal{T}\) has a valid model \(\mathcal{I}\) (which by DL standard definitions must have a non-empty domain, so \(|\Delta^\mathcal{I}| \ge 1\)), we can repeatedly take disjoint unions of the model with itself to produce new models. </p>
+        <p>For instance, the disjoint union of 5 copies of \(\mathcal{I}\) (i.e. \(\mathcal{I} \uplus \mathcal{I} \uplus \mathcal{I} \uplus \mathcal{I} \uplus \mathcal{I}\)) guarantees a model mathematically identical logically but containing strictly \(\ge 5\) elements. Therefore, the logic inherently lacks the expressive power (like maximum cardinality constraints or nominals) to impose finite upper bounds on model sizes. </p>
+        <p><em>(Note: An unsatisfiable TBox like \(\mathcal{T} = \{\top \sqsubseteq \bot\}\) trivially has 0 models, which is technically "at most 4", but it's fundamentally incapable of producing valid bounded structures).</em></p>
+    </div>
 
 </body>
 </html>
