@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRR 1</title>
+
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        }
+      };
+    </script>
+
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    </script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            background-color: #000000;
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 40px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: #ffffff;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #333;
+            margin: 30px 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            background-color: #242424;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #3a3a3a;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #1a2f3a;
+            color: #aed6f1;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: #1a2f3a;
+            padding: 15px;
+            border-left: 4px solid #5dade2;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .takeaway {
+            background-color: #33290a;
+            padding: 15px;
+            border-left: 4px solid #f4d03f;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fcf3cf;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>A Beginner's Guide to Propositional Logic</h1>
+
+    <p>Imagine a type of math where you don’t use numbers like 2, 5, or 100. Instead, you only have two values: <strong>True</strong> (represented by <strong>1</strong>) and <strong>False</strong> (represented by <strong>0</strong>). Boolean Algebra and Propositional Logic are simply the rules for doing math with these two values.</p>
+
+    <p>We use this logic to take basic facts, combine them, and figure out if the overall conclusion is true or false.</p>
+
+    <h2>1. The Building Blocks: Atomic Propositions</h2>
+    <p>Before we do any logic, we need things to apply logic <em>to</em>. These are called <strong>Atomic Propositions</strong>.</p>
+    
+    <p>An atomic proposition is a basic statement that can be either True or False.</p>
+    <ul>
+        <li><em>Example:</em> "Cats are mammals." (True)</li>
+        <li><em>Example:</em> "Cars fly." (False)</li>
+    </ul>
+
+    <p>To make things easier, instead of writing out full sentences, we use variables like <strong>$x$, $y$,</strong> or <strong>$z$</strong> to represent them. At this stage, we don’t worry about whether $x$ is actually true or false; we just know it has the <em>potential</em> to be either.</p>
+
+    <h2>2. The Logical Operators (The "Math" Symbols)</h2>
+    <p>In regular math, we have plus, minus, and multiply. In Boolean logic, our primary tools are three operators: <strong>AND</strong>, <strong>OR</strong>, and <strong>NOT</strong>.</p>
+
+    <ul>
+        <li><strong>NOT ($\neg$)</strong>: This is a "flipper." It flips the truth value of whatever follows it.
+            <ul>
+                <li>If $x$ is True (1), then $\neg x$ is False (0).</li>
+                <li>If $x$ is False (0), then $\neg x$ is True (1).</li>
+            </ul>
+        </li>
+        <li><strong>AND ($\land$)</strong>: For an AND statement to be true, <strong>both</strong> parts must be true.
+            <ul>
+                <li>$1 \land 1 = 1$ (True AND True = True)</li>
+                <li>Any other combination (like True AND False) results in 0 (False).</li>
+            </ul>
+        </li>
+        <li><strong>OR ($\lor$)</strong>: For an OR statement to be true, <strong>at least one</strong> part must be true.
+            <ul>
+                <li>$1 \lor 0 = 1$ (True OR False = True)</li>
+                <li><em>Important:</em> This is an "inclusive OR". If <em>both</em> parts are true, the result is still true. It only results in 0 if <em>both</em> parts are false.</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2>3. Writing Formulas (Syntax)</h2>
+    <p>Just like you can combine numbers and math symbols into complex equations (like $2 + (3 \times 4)$), you can combine atomic propositions and logical operators into <strong>formulas</strong>.</p>
+
+    <div class="highlight">
+        <p><strong>Example formula:</strong> $\neg x \land (y \lor z)$</p>
+    </div>
+
+    <p><strong>Order of Operations:</strong> Just like multiplication comes before addition in regular math, logic has a priority order:</p>
+    <ol>
+        <li><strong>NOT ($\neg$)</strong> is calculated first.</li>
+        <li><strong>AND ($\land$)</strong> is calculated second.</li>
+        <li><strong>OR ($\lor$)</strong> is calculated last.</li>
+    </ol>
+    <p><em>(You can always use parentheses to change this order, just like in regular math).</em></p>
+
+    <h2>4. Finding the Truth (Semantics and Valuations)</h2>
+    <p>A formula by itself doesn't have a truth value until you assign True (1) or False (0) to its variables. The act of assigning these values is called a <strong>valuation</strong>.</p>
+
+    <p>Let's look at an example. Suppose our formula is: <strong>$\neg x \land y$</strong><br>
+    Now, let's do a valuation where <strong>$x = 1$</strong> (True) and <strong>$y = 1$</strong> (True).</p>
+    
+    <ol>
+        <li>First, plug the numbers in: $\neg 1 \land 1$</li>
+        <li>Apply the NOT rule: $\neg 1$ becomes $0$. Now we have $0 \land 1$.</li>
+        <li>Apply the AND rule: $0 \land 1$ is $0$.</li>
+    </ol>
+
+    <div class="takeaway">
+        <p><strong>Result:</strong> Under this valuation, the formula is False (0).</p>
+    </div>
+
+    <h2>5. The Three Types of Formulas</h2>
+    <p>If you test a formula against <em>every possible combination</em> of True and False for its variables, the formula will fall into one of three categories:</p>
+
+    <ol>
+        <li><strong>Tautology:</strong> A formula that is <strong>always True</strong>, no matter what. 
+            <br><em>Example:</em> $x \lor \neg x$ ("It is raining OR it is not raining." That statement is always true!).
+        </li>
+        <li><strong>Contradiction:</strong> A formula that is <strong>always False</strong>, no matter what.
+            <br><em>Example:</em> $x \land \neg x$ ("It is raining AND it is not raining." Impossible!).
+        </li>
+        <li><strong>Satisfiable (Non-tautological):</strong> A formula that is sometimes True and sometimes False, depending on the variables. Most formulas fall here.</li>
+    </ol>
+
+    <h2>6. The "Primary Colors" of Logic</h2>
+    <p>You might be wondering: what about other logical ideas, like "Exclusive OR" (XOR - meaning one or the other, but <em>not</em> both) or "If/Then" statements?</p>
+
+    <div class="highlight">
+        <p>The beautiful thing about Boolean logic is that <strong>AND, OR, and NOT are all you need</strong>. They are like the primary colors of logic. You can build <em>any</em> logical rule or truth table just by combining these three.</p>
+    </div>
+
+    <p>For instance, two formulas are considered <strong>equivalent</strong> if they yield the exact same results. You can use this to express complex concepts using only our basic operators:</p>
+    <ul>
+        <li><strong>XOR</strong> can be perfectly written as: $(x \lor y) \land \neg(x \land y)$ 
+            <br><em>(Translation: "One or the other is true, AND they aren't both true.")</em>
+        </li>
+        <li><strong>De Morgan’s Laws</strong> show how NOT interacts with AND/OR:
+            <ul>
+                <li>$\neg(x \land y)$ is the exact same as $\neg x \lor \neg y$</li>
+                <li>$\neg(x \lor y)$ is the exact same as $\neg x \land \neg y$</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h3>Turning a Truth Table into a Formula</h3>
+    <p>Because AND, OR, and NOT can build anything, you can invent a completely random truth table, and easily write a formula for it. How?</p>
+
+    <ol>
+        <li>Look at the truth table and find only the rows where the final output is <strong>True (1)</strong>.</li>
+        <li>For each of those rows, write an <strong>AND</strong> statement linking the exact conditions needed to get that row (e.g., if $x$ is 0 and $y$ is 1, you write $\neg x \land y$).</li>
+        <li>Link the statements for all the "True" rows together using <strong>OR</strong>s.</li>
+    </ol>
+
+    <hr>
+
+    <div class="takeaway">
+        <p><strong>Summary</strong><br>
+        Propositional Logic is just a highly structured way to determine truth. By breaking complex statements into variables ($x, y$), connecting them with simple rules (AND, OR, NOT), and systematically plugging in 1s and 0s, we can logically map out every possible scenario to see exactly when a statement is true and when it is false.</p>
+    </div>
+
+</body>
+</html>
