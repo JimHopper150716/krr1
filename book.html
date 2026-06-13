@@ -228,5 +228,99 @@
         Propositional Logic is just a highly structured way to determine truth. By breaking complex statements into variables ($x, y$), connecting them with simple rules (AND, OR, NOT), and systematically plugging in 1s and 0s, we can logically map out every possible scenario to see exactly when a statement is true and when it is false.</p>
     </div>
 
+    <h1>Propositional Knowledge Representation</h1>
+
+    <p>Here is a comprehensive and easy-to-understand breakdown of <strong>Propositional Knowledge Representation</strong>.</p>
+
+    <div class="highlight">
+        <p>Think of this topic as teaching a computer how to be a detective: how to take a set of clues, figure out if they make sense together, and logically deduce new facts from them.</p>
+    </div>
+
+    <hr>
+
+    <h2>1. The Basics: Situations and Clues</h2>
+    <p>In logic, a formula (like "It is raining" or "The road is wet") doesn't have a built-in truth value. It is only <strong>true or false depending on the situation</strong> (which logicians call a <strong>valuation</strong>).</p>
+    <ul>
+        <li>Think of a valuation as one specific parallel universe or "scenario."</li>
+        <li>A piece of knowledge is a formula we <em>know</em> is true.</li>
+    </ul>
+
+    <h3>The Knowledge Base (KB)</h3>
+    <p>A Knowledge Base is simply a collection of formulas (clues) that we know are true. Our goal is to use the KB to rule out impossible scenarios. If a scenario (valuation) makes every single formula in the KB true, we say that scenario <strong>satisfies</strong> the KB.</p>
+
+    <h3>Consistency: Does the story make sense?</h3>
+    <p>The very first thing we must ask about a Knowledge Base is: <em>Is this even possible?</em></p>
+    <p>If a KB contains contradictory clues (e.g., "It is raining" AND "It is not raining"), no scenario can satisfy it.</p>
+    <ul>
+        <li>If there is at least <em>one</em> scenario where all the formulas in the KB are true, the KB is <strong>consistent</strong>.</li>
+        <li>To check consistency, we <em>could</em> draw a giant truth table of every possible scenario. But if we have 100 variables, the computer would take over $10^{18}$ years to check them all! We need a smarter, faster method.</li>
+    </ul>
+
+    <h2>2. The Tableaux Algorithm: The Detective's Strategy</h2>
+    <p>To solve this speed problem, logicians use the <strong>Tableaux Algorithm</strong>. Instead of generating every possible universe, this algorithm breaks complex formulas down into their simplest parts to see if a valid scenario can be built.</p>
+
+    <h3>Setting the Stage (NNF)</h3>
+    <p>Before starting, we translate our formulas into <strong>Negation Normal Form (NNF)</strong>. This just means we push all the "NOTs" (negations) as deep into the formula as possible, so they only attach to basic variables.</p>
+    <ul>
+        <li><em>Example:</em> "NOT (A or B)" becomes "NOT A and NOT B".</li>
+        <li>The simplest pieces (like $x$ or $\neg x$) are called <strong>literals</strong>.</li>
+    </ul>
+
+    <h3>The Decomposition Rules</h3>
+    <p>The algorithm uses two simple rules to break down formulas:</p>
+    <ol>
+        <li><strong>The AND Rule ($\land$):</strong> If your KB says "A AND B", both must be true. The algorithm simply breaks this into two separate facts: "A is true", "B is true", and adds them both to your list of clues.</li>
+        <li><strong>The OR Rule ($\lor$):</strong> If your KB says "A OR B", we have a fork in the road. The algorithm creates <strong>branches</strong>—two alternate timelines. In one branch, we assume A is true. In the other, we assume B is true.</li>
+    </ol>
+    <p>You keep applying these rules until every complex formula is broken down into simple literals. Once no more rules can be applied, the tableau is considered <strong>saturated</strong>.</p>
+
+    <h2>3. Reading the Results: Open vs. Closed</h2>
+    <p>Once the algorithm has broken everything down, we look at the branches (the alternate timelines) to see what we are left with.</p>
+
+    <ul>
+        <li><strong>Closed Branches:</strong> If a branch contains an obvious contradiction (for example, it requires $x$ to be true AND $\neg x$ to be false at the same time), that timeline is impossible. We call this branch <strong>closed</strong>.</li>
+        <li><strong>Open Branches:</strong> If a branch contains no contradictions, it represents a perfectly valid scenario that satisfies all our clues. We call this branch <strong>open</strong>.</li>
+    </ul>
+
+    <div class="highlight">
+        <h3>The Final Verdict:</h3>
+        <ul>
+            <li>If <strong>all branches close</strong>, the KB is entirely impossible. It is <strong>inconsistent</strong>.</li>
+            <li>If <strong>at least one branch is open</strong>, the KB makes sense. It is <strong>consistent</strong>, and the open branch actually tells you <em>how</em> to make it true!</li>
+        </ul>
+    </div>
+
+    <h2>4. Guarantees of the Algorithm</h2>
+    <p>When relying on this algorithm, logicians need guarantees that it works perfectly. The Tableaux Algorithm is:</p>
+    <ul>
+        <li><strong>Sound:</strong> It doesn't give false positives. If it says a branch is open and consistent, it truly is.</li>
+        <li><strong>Complete:</strong> It doesn't give false negatives. If a valid scenario exists, the algorithm <em>will</em> find it.</li>
+        <li><strong>Terminating:</strong> It will never get stuck in an infinite loop. Because each step removes an "AND" or an "OR", the formulas get simpler every time, guaranteeing it will eventually finish.</li>
+    </ul>
+
+    <h2>5. Reasoning: Moving from "Possible" to "Guaranteed"</h2>
+    <p>Checking if a story makes sense (consistency) is great, but usually, we want to extract new, guaranteed facts from our knowledge. This is called <strong>Entailment</strong>.</p>
+
+    <ul>
+        <li><strong>Possibility</strong> just asks: <em>Could this formula be true given what we know?</em></li>
+        <li><strong>Entailment</strong> asks: <em>Is this formula GUARANTEED to be true given what we know?</em></li>
+    </ul>
+
+    <p>If our Knowledge Base entails a formula (written as $KB \models \phi$), it means that in <em>every single scenario</em> where the KB is true, this formula is also true.</p>
+
+    <h3>The Magic Trick for Entailment (Theorem 6)</h3>
+    <p>How do we test for entailment without checking every universe? We use a brilliant trick: <strong>Proof by Contradiction</strong>.</p>
+    <p>If we want to prove that our KB guarantees a fact ($\phi$), we:</p>
+    <ol>
+        <li>Assume the exact opposite of the fact ($\neg \phi$).</li>
+        <li>Toss that assumption into our Knowledge Base.</li>
+        <li>Run the Tableaux algorithm.</li>
+    </ol>
+    <p>If the algorithm says "This is impossible!" (inconsistent), it means the opposite of our fact completely breaks the universe. Therefore, <strong>our original fact must be absolutely true.</strong></p>
+
+    <div class="takeaway">
+        <p>In short: $KB$ entails $\phi$ if and only if $KB \cup \{\neg \phi\}$ is inconsistent.</p>
+    </div>
+
 </body>
 </html>
