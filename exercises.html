@@ -1188,5 +1188,342 @@
         </ul>
     </div>
 
+    <!-- Exercise 4.4 -->
+    <h2 class="exercise-title">Exercise 4.4. Subsumption II (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> For each subsumption in Exercise 4.3. that does not hold, find an interpretation that witnesses it.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>This exercise refers to the subsumptions in Exercise 4.3, which are not included in the provided image. Therefore, it cannot be solved without the missing text.</p>
+    </div>
+
+    <!-- Exercise 4.5 -->
+    <h2 class="exercise-title">Exercise 4.5. Equivalences (**)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Do the following equivalences hold? Justify</p>
+        <ul>
+            <li>\(\exists r.(A \sqcap B) \equiv \exists r.A \sqcap \exists r.B\)</li>
+            <li>\(\exists r.(A \sqcap \top) \equiv \exists r.\top \sqcap \exists r.A\)</li>
+            <li>\(\exists r.(C \sqcap \bot) \equiv \exists s.A \sqcap \exists r.\bot\)</li>
+        </ul>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        
+        <h4>1. \(\exists r.(A \sqcap B) \equiv \exists r.A \sqcap \exists r.B\)</h4>
+        <p><strong>Does it hold?</strong> <span class="ans-false">No</span>.</p>
+        <p><strong>Justification:</strong> The forward inclusion (\(\sqsubseteq\)) holds, but the backward direction does not. For a counterexample, consider an interpretation \(\mathcal{I}\) where the domain is \(\Delta^{\mathcal{I}} = \{x, y, z\}\). Let \(r^{\mathcal{I}} = \{(x, y), (x, z)\}\), \(A^{\mathcal{I}} = \{y\}\), and \(B^{\mathcal{I}} = \{z\}\).</p>
+        <ul>
+            <li>\(x\) has an \(r\)-successor in \(A\) (\(y\)) and an \(r\)-successor in \(B\) (\(z\)), so \(x \in (\exists r.A \sqcap \exists r.B)^{\mathcal{I}}\).</li>
+            <li>However, \(x\) does not have a single \(r\)-successor that is in <em>both</em> \(A\) and \(B\), so \(x \notin (\exists r.(A \sqcap B))^{\mathcal{I}}\).</li>
+        </ul>
+
+        <h4>2. \(\exists r.(A \sqcap \top) \equiv \exists r.\top \sqcap \exists r.A\)</h4>
+        <p><strong>Does it hold?</strong> <span class="ans-true">Yes</span>.</p>
+        <p><strong>Justification:</strong> Since \(A \sqcap \top \equiv A\), the left-hand side simplifies to \(\exists r.A\). For the right-hand side, since \(A \sqsubseteq \top\), it universally follows that \(\exists r.A \sqsubseteq \exists r.\top\). Therefore, the intersection of \(\exists r.\top\) and \(\exists r.A\) is simply \(\exists r.A\). Both sides reduce to \(\exists r.A\), making them equivalent.</p>
+
+        <h4>3. \(\exists r.(C \sqcap \bot) \equiv \exists s.A \sqcap \exists r.\bot\)</h4>
+        <p><strong>Does it hold?</strong> <span class="ans-true">Yes</span>.</p>
+        <p><strong>Justification:</strong> Anything intersected with \(\bot\) (bottom/empty set) is equivalent to \(\bot\). So, \(C \sqcap \bot \equiv \bot\). The left-hand side reduces to \(\exists r.\bot \equiv \bot\). On the right-hand side, \(\exists r.\bot \equiv \bot\), and intersecting anything (like \(\exists s.A\)) with \(\bot\) yields \(\bot\). Both sides evaluate to \(\bot\).</p>
+    </div>
+
+    <!-- Exercise 4.6 -->
+    <h2 class="exercise-title">Exercise 4.6. Normalization (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Transform the following TBox into normal form</p>
+        <p>\(\{ \exists r.(A \sqcap B) \sqsubseteq \exists s.A,\; A \sqcap \exists s.A \sqsubseteq \exists r.(A \sqcap B),\; A \sqcap B \sqsubseteq \exists r.A,\; \exists s.A \sqcap \exists r.A \sqsubseteq B \}\)</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>To convert an \(\mathcal{EL}\) TBox into normal form, we break complex axioms down by introducing new concept names (\(X_1, X_2\), etc.). The normal forms allowed are \(C \sqsubseteq D\), \(C_1 \sqcap C_2 \sqsubseteq D\), \(C \sqsubseteq \exists r.D\), and \(\exists r.C \sqsubseteq D\) (where \(C, C_1, C_2, D\) are atomic).</p>
+        
+        <h4>Axiom 1: \(\exists r.(A \sqcap B) \sqsubseteq \exists s.A\)</h4>
+        <ul>
+            <li>\(A \sqcap B \sqsubseteq X_1\)</li>
+            <li>\(\exists r.X_1 \sqsubseteq X_2\)</li>
+            <li>\(X_2 \sqsubseteq \exists s.A\)</li>
+        </ul>
+
+        <h4>Axiom 2: \(A \sqcap \exists s.A \sqsubseteq \exists r.(A \sqcap B)\)</h4>
+        <ul>
+            <li>\(\exists s.A \sqsubseteq X_3\)</li>
+            <li>\(A \sqcap X_3 \sqsubseteq X_4\)</li>
+            <li>\(X_4 \sqsubseteq \exists r.X_5\)</li>
+            <li>\(X_5 \sqsubseteq A\)</li>
+            <li>\(X_5 \sqsubseteq B\)</li>
+        </ul>
+
+        <h4>Axiom 3: \(A \sqcap B \sqsubseteq \exists r.A\)</h4>
+        <ul>
+            <li>\(A \sqcap B \sqsubseteq X_6\) <em>(Note: can also reuse \(X_1\) here)</em></li>
+            <li>\(X_6 \sqsubseteq \exists r.A\)</li>
+        </ul>
+
+        <h4>Axiom 4: \(\exists s.A \sqcap \exists r.A \sqsubseteq B\)</h4>
+        <ul>
+            <li>\(\exists s.A \sqsubseteq X_7\) <em>(Note: can also reuse \(X_3\) here)</em></li>
+            <li>\(\exists r.A \sqsubseteq X_8\)</li>
+            <li>\(X_7 \sqcap X_8 \sqsubseteq B\)</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4.7 -->
+    <h2 class="exercise-title">Exercise 4.7. Classification (*)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Compute all the atomic subsumptions that hold from the \(\mathcal{EL}\) TBox</p>
+        <p>\(\mathcal{T} = \{ A \sqsubseteq \exists r.B,\; B \sqsubseteq \exists s.C,\; \exists s.D \sqsubseteq D,\; B \sqcap D \sqsubseteq A,\; C \sqsubseteq D,\; \exists r.B \sqsubseteq B \}\)</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We use the \(\mathcal{EL}\) completion algorithm to compute all subsumptions. We initialize sets \(S(X) = \{X\}\) and process:</p>
+        <ol>
+            <li>\(C \sqsubseteq D \implies\) Add \(D\) to \(S(C)\).</li>
+            <li>\(A \sqsubseteq \exists r.B \implies\) Add \((A, B)\) to relation \(R(r)\).</li>
+            <li>\(B \sqsubseteq \exists s.C \implies\) Add \((B, C)\) to relation \(R(s)\).</li>
+            <li>\(\exists s.D \sqsubseteq D \implies\) Because \((B, C) \in R(s)\) and \(D \in S(C)\), add \(D\) to \(S(B)\).</li>
+            <li>\(B \sqcap D \sqsubseteq A \implies\) Because \(B, D \in S(B)\), add \(A\) to \(S(B)\).</li>
+            <li>\(A \sqsubseteq \exists r.B \implies\) Because \(A \in S(B)\), add \((B, B)\) to \(R(r)\).</li>
+            <li>\(\exists r.B \sqsubseteq B \implies\) Because \((A, B) \in R(r)\) and \(B \in S(B)\), add \(B\) to \(S(A)\).</li>
+            <li>\(B \sqsubseteq \exists s.C \implies\) Because \(B \in S(A)\), add \((A, C)\) to \(R(s)\).</li>
+            <li>\(\exists s.D \sqsubseteq D \implies\) Because \((A, C) \in R(s)\) and \(D \in S(C)\), add \(D\) to \(S(A)\).</li>
+        </ol>
+
+        <h4>Final Sets:</h4>
+        <ul>
+            <li>\(S(A) = \{A, B, D\}\)</li>
+            <li>\(S(B) = \{A, B, D\}\)</li>
+            <li>\(S(C) = \{C, D\}\)</li>
+            <li>\(S(D) = \{D\}\)</li>
+        </ul>
+
+        <h4>Atomic Subsumptions (\(X \sqsubseteq Y\) iff \(Y \in S(X)\)):</h4>
+        <ul>
+            <li>\(A \sqsubseteq A\), \(A \sqsubseteq B\), \(A \sqsubseteq D\)</li>
+            <li>\(B \sqsubseteq A\), \(B \sqsubseteq B\), \(B \sqsubseteq D\) (Note: \(A \equiv B\))</li>
+            <li>\(C \sqsubseteq C\), \(C \sqsubseteq D\)</li>
+            <li>\(D \sqsubseteq D\)</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4.8 -->
+    <h2 class="exercise-title">Exercise 4.8. Classification II (**)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> How does your answer to Exercise 4.7. change if the last axiom of \(\mathcal{T}\) is substituted by \(\exists r.B \sqsubseteq \bot\)?</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>If the last axiom is changed to \(\exists r.B \sqsubseteq \bot\), it triggers the unsatisfiability rule:</p>
+        <ul>
+            <li>Because \((A, B) \in R(r)\) and \(B \in S(B)\), the algorithm adds \(\bot\) to \(S(A)\).</li>
+            <li>Because \((B, B) \in R(r)\) and \(B \in S(B)\), the algorithm adds \(\bot\) to \(S(B)\).</li>
+        </ul>
+        <p>Because \(\bot \in S(A)\) and \(\bot \in S(B)\), <strong>\(A\) and \(B\) are now unsatisfiable</strong>. Unsatisfiable concepts are trivially subsumed by everything.</p>
+        
+        <h4>New Atomic Subsumptions:</h4>
+        <ul>
+            <li>\(A \sqsubseteq X\) and \(B \sqsubseteq X\) for all \(X \in \{A, B, C, D\}\).</li>
+            <li>\(C \sqsubseteq C\), \(C \sqsubseteq D\), \(D \sqsubseteq D\) remain unchanged.</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4.9 -->
+    <h2 class="exercise-title">Exercise 4.9. Classification III (**)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Construct the models of the TBoxes from Exercises 4.7. and 4.8. using the construction based on the completion algorithm.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>The canonical model \(\mathcal{I}\) is built from the completion algorithm's sets. The domain \(\Delta^{\mathcal{I}}\) consists of node representatives \(x_Y\) for concepts \(Y\) where \(\bot \notin S(Y)\).</p>
+        
+        <h4>Model for TBox from 4.7:</h4>
+        <ul>
+            <li><strong>Domain:</strong> \(\Delta^{\mathcal{I}} = \{x_A, x_B, x_C, x_D\}\)</li>
+            <li><strong>Concepts:</strong> \(A^{\mathcal{I}} = B^{\mathcal{I}} = \{x_A, x_B\}\), \(C^{\mathcal{I}} = \{x_C\}\), \(D^{\mathcal{I}} = \{x_A, x_B, x_C, x_D\}\)</li>
+            <li><strong>Relations:</strong> \(r^{\mathcal{I}} = \{(x_A, x_B), (x_B, x_B)\}\), \(s^{\mathcal{I}} = \{(x_A, x_C), (x_B, x_C)\}\)</li>
+        </ul>
+
+        <h4>Model for TBox from 4.8:</h4>
+        <p>(Since \(A\) and \(B\) are unsatisfiable, they are excluded from the domain).</p>
+        <ul>
+            <li><strong>Domain:</strong> \(\Delta^{\mathcal{I}} = \{x_C, x_D\}\)</li>
+            <li><strong>Concepts:</strong> \(A^{\mathcal{I}} = \emptyset\), \(B^{\mathcal{I}} = \emptyset\), \(C^{\mathcal{I}} = \{x_C\}\), \(D^{\mathcal{I}} = \{x_C, x_D\}\)</li>
+            <li><strong>Relations:</strong> \(r^{\mathcal{I}} = \emptyset\), \(s^{\mathcal{I}} = \emptyset\)</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4.10 -->
+    <h2 class="exercise-title">Exercise 4.10. Satisfiability (***)</h2>
+    <div class="question">
+        <p><strong>Question:</strong> Construct a consistent \(\mathcal{EL}^\perp\) TBox \(\mathcal{T}\) such that the concept name \(A\) is unsatisfiable w.r.t. \(\mathcal{T}\).</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We must construct a consistent \(\mathcal{EL}^{\perp}\) TBox \(\mathcal{T}\) where concept \(A\) is unsatisfiable.</p>
+        <p>Let \(\mathcal{T} = \{ A \sqsubseteq \bot \}\).</p>
+        <ul>
+            <li><strong>Why it's consistent:</strong> A TBox is consistent as long as it has at least one valid model with a non-empty domain. Let \(\mathcal{I}\) be an interpretation where \(\Delta^{\mathcal{I}} = \{x\}\) and \(A^{\mathcal{I}} = \emptyset\). Here \(\emptyset \subseteq \emptyset\) holds, satisfying the axiom without restricting the domain to be empty.</li>
+            <li><strong>Why \(A\) is unsatisfiable:</strong> The axiom enforces that any instance of \(A\) must belong to the empty set (\(\bot\)). Therefore, \(A\) can never have instances in any model of \(\mathcal{T}\).</li>
+        </ul>
+    </div>
+
+    <h1>\(\mathcal{ALC}\) Description Logic Exercises</h1>
+
+    <!-- Exercises 5.1 & 5.2 -->
+    <h2 class="exercise-title">Exercise 5.1 & 5.2. Satisfiability I & II</h2>
+    <div class="question">
+        <p><strong>Exercise 5.1. Satisfiability (*)</strong></p>
+        <p>Check which of the following \(\mathcal{ALC}\) concepts are satisfiable and which are not</p>
+        <ul>
+            <li>\(\exists r.(\forall s.A \sqcap B) \sqcup \exists s.\top\)</li>
+            <li>\(A \sqcap \neg C\)</li>
+            <li>\(\forall r.\bot \sqcap B\)</li>
+            <li>\(\exists r.\exists r.\exists s.A\)</li>
+            <li>\(\exists r.\forall r.\exists s.\bot\)</li>
+        </ul>
+        <p><br><strong>Exercise 5.2. Satisfiability II (*)</strong></p>
+        <p>For each of the satisfiable concepts in Exercise 5.1., find an interpretation that makes it non-empty.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><em>Goal: Check satisfiability of the given concepts and provide an interpretation that makes them non-empty.</em></p>
+        <p>All five concepts are <strong>satisfiable</strong>. Below is the proof via interpretations \(\mathcal{I} = (\Delta^\mathcal{I}, \cdot^\mathcal{I})\) for each concept \(C\), such that \(C^\mathcal{I} \neq \emptyset\).</p>
+
+        <h4>1. \(\exists r.(\forall s.A \sqcap B) \sqcup \exists s.\top\)</h4>
+        <ul>
+            <li><strong>Satisfiable:</strong> <span class="ans-true">Yes</span>.</li>
+            <li><strong>Interpretation:</strong> Let \(\Delta^\mathcal{I} = \{x, y\}\), \(s^\mathcal{I} = \{(x, y)\}\).<br>
+            Because \(x\) has an \(s\)-successor, \(x \in (\exists s.\top)^\mathcal{I}\). Since it satisfies the right side of the disjunction (\(\sqcup\)), the entire concept is satisfied. Thus, \(x \in C^\mathcal{I}\).</li>
+        </ul>
+
+        <h4>2. \(A \sqcap \neg C\)</h4>
+        <ul>
+            <li><strong>Satisfiable:</strong> <span class="ans-true">Yes</span>.</li>
+            <li><strong>Interpretation:</strong> Let \(\Delta^\mathcal{I} = \{x\}\), \(A^\mathcal{I} = \{x\}\), \(C^\mathcal{I} = \emptyset\).<br>
+            Since \(x\) is in \(A\) and not in \(C\), \(x \in (A \sqcap \neg C)^\mathcal{I}\).</li>
+        </ul>
+
+        <h4>3. \(\forall r.\bot \sqcap B\)</h4>
+        <ul>
+            <li><strong>Satisfiable:</strong> <span class="ans-true">Yes</span>. The concept \(\forall r.\bot\) simply means "has no outgoing \(r\)-edges".</li>
+            <li><strong>Interpretation:</strong> Let \(\Delta^\mathcal{I} = \{x\}\), \(B^\mathcal{I} = \{x\}\), \(r^\mathcal{I} = \emptyset\).<br>
+            Because \(x\) has no \(r\)-edges, \(x \in (\forall r.\bot)^\mathcal{I}\). Combined with \(x \in B^\mathcal{I}\), we get \(x \in (\forall r.\bot \sqcap B)^\mathcal{I}\).</li>
+        </ul>
+
+        <h4>4. \(\exists r.\exists r.\exists s.A\)</h4>
+        <ul>
+            <li><strong>Satisfiable:</strong> <span class="ans-true">Yes</span>.</li>
+            <li><strong>Interpretation:</strong> Let \(\Delta^\mathcal{I} = \{x, y, z, w\}\), \(r^\mathcal{I} = \{(x, y), (y, z)\}\), \(s^\mathcal{I} = \{(z, w)\}\), \(A^\mathcal{I} = \{w\}\).<br>
+            Following the chain backward, \(z \in (\exists s.A)^\mathcal{I}\), \(y \in (\exists r.\exists s.A)^\mathcal{I}\), and \(x \in (\exists r.\exists r.\exists s.A)^\mathcal{I}\).</li>
+        </ul>
+
+        <h4>5. \(\exists r.\forall r.\exists s.\bot\)</h4>
+        <ul>
+            <li><strong>Satisfiable:</strong> <span class="ans-true">Yes</span>. Note that \(\exists s.\bot\) means "has an \(s\)-successor in the empty set", which is impossible. Thus \(\exists s.\bot \equiv \bot\). The concept simplifies to \(\exists r.\forall r.\bot\) (an element with an \(r\)-successor that itself has no \(r\)-successors).</li>
+            <li><strong>Interpretation:</strong> Let \(\Delta^\mathcal{I} = \{x, y\}\), \(r^\mathcal{I} = \{(x, y)\}\), \(s^\mathcal{I} = \emptyset\).<br>
+            Node \(y\) has no outgoing \(r\)-edges, so \(y \in (\forall r.\bot)^\mathcal{I}\). Because \(x\) has an \(r\)-edge to \(y\), \(x \in (\exists r.\forall r.\bot)^\mathcal{I}\).</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 5.3 -->
+    <h2 class="exercise-title">Exercise 5.3. Consistency</h2>
+    <div class="question">
+        <p><strong>Exercise 5.3. Consistency (*)</strong></p>
+        <p>Verify whether the following TBox is consistent:</p>
+        <p style="text-align: center;">\(\{ A \sqsubseteq \exists r.B,\ B \sqsubseteq \exists r.(A \sqcup B),\ \neg A \sqsubseteq \exists r.A \}\)</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Answer: <span class="ans-true">Consistent</span></strong></p>
+        <p>To verify consistency, we construct a valid model (a non-empty domain where all inclusions hold).<br>
+        Let \(\Delta^\mathcal{I} = \{x\}\), \(A^\mathcal{I} = \{x\}\), \(B^\mathcal{I} = \{x\}\), and \(r^\mathcal{I} = \{(x, x)\}\).</p>
+        <ul>
+            <li>\(A \sqsubseteq \exists r.B\): \(x \in A^\mathcal{I}\) and has an \(r\)-successor (\(x\)) in \(B^\mathcal{I}\). <em>(Holds)</em></li>
+            <li>\(B \sqsubseteq \exists r.(A \sqcup B)\): \(x \in B^\mathcal{I}\) and has an \(r\)-successor in \((A \sqcup B)^\mathcal{I}\). <em>(Holds)</em></li>
+            <li>\(\neg A \sqsubseteq \exists r.A\): \((\neg A)^\mathcal{I} = \emptyset\), and the empty set is trivially a subset of any set. <em>(Holds)</em></li>
+        </ul>
+        <p>Since we found a valid model, the TBox is consistent.</p>
+    </div>
+
+    <!-- Exercise 5.4 -->
+    <h2 class="exercise-title">Exercise 5.4. Consistency II</h2>
+    <div class="question">
+        <p><strong>Exercise 5.4. Consistency II (*)</strong></p>
+        <p>Verify whether the following TBox is consistent:</p>
+        <p style="text-align: center;">\(\{ A \sqsubseteq \exists r.B \sqcap \forall r.\forall r.\bot,\ B \sqsubseteq \exists r.(A \sqcup B),\ \neg A \sqsubseteq \exists r.A \}\)</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Answer: <span class="ans-false">Inconsistent</span></strong></p>
+        <p><em>Proof by contradiction:</em> Assume there is a model \(\mathcal{I}\) with a non-empty domain \(\Delta^\mathcal{I}\). Let \(x \in \Delta^\mathcal{I}\).</p>
+        <ol>
+            <li>By the Law of Excluded Middle, either \(x \in A^\mathcal{I}\) or \(x \notin A^\mathcal{I}\). If \(x \notin A^\mathcal{I}\), then \(x \in (\neg A)^\mathcal{I}\). Axiom 3 (\(\neg A \sqsubseteq \exists r.A\)) requires \(x\) to have an \(r\)-successor in \(A^\mathcal{I}\). Thus, regardless of \(x\), \(A^\mathcal{I}\) must be non-empty.</li>
+            <li>Let \(a \in A^\mathcal{I}\). Axiom 1 states \(a \in (\exists r.B \sqcap \forall r.\forall r.\bot)^\mathcal{I}\).</li>
+            <li>Because \(a \in (\exists r.B)^\mathcal{I}\), there exists some \(b \in B^\mathcal{I}\) such that \((a, b) \in r^\mathcal{I}\).</li>
+            <li>Because \(a \in (\forall r.\forall r.\bot)^\mathcal{I}\), all of \(a\)'s \(r\)-successors must belong to \((\forall r.\bot)^\mathcal{I}\). This means \(b\) must have <strong>no outgoing \(r\)-edges</strong>.</li>
+            <li>However, \(b \in B^\mathcal{I}\). Axiom 2 (\(B \sqsubseteq \exists r.(A \sqcup B)\)) demands that \(b\) must have <strong>at least one outgoing \(r\)-edge</strong>.</li>
+        </ol>
+        <p>This is a direct contradiction. No valid model can exist.</p>
+    </div>
+
+    <!-- Exercise 5.5 -->
+    <h2 class="exercise-title">Exercise 5.5. Consistency III</h2>
+    <div class="question">
+        <p><strong>Exercise 5.5. Consistency III (***)</strong></p>
+        <p>Construct a consistent ABox such that, together with the TBox from Exercise 5.3., produces an inconsistent KB.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><em>Goal: Construct a consistent ABox that, together with TBox 5.3, produces an inconsistent KB.</em></p>
+        <p><strong>Consistent ABox \(\mathcal{A}\):</strong> \(\{ (\forall r.\bot)(a) \}\)</p>
+        <p><strong>Explanation:</strong><br>
+        On its own, this ABox is perfectly consistent (it just defines an individual \(a\) that has no outgoing \(r\)-edges). However, let's look at the logical constraints of the TBox from Ex 5.3:</p>
+        <ul>
+            <li>If \(a \in A^\mathcal{I}\), Axiom 1 (\(A \sqsubseteq \exists r.B\)) forces \(a\) to have an \(r\)-successor.</li>
+            <li>If \(a \notin A^\mathcal{I}\) (meaning \(a \in (\neg A)^\mathcal{I}\)), Axiom 3 (\(\neg A \sqsubseteq \exists r.A\)) forces \(a\) to have an \(r\)-successor.</li>
+        </ul>
+        <p>Therefore, the TBox inherently implies \(\top \sqsubseteq \exists r.\top\) (every single element in the domain <em>must</em> have an \(r\)-successor). This strictly contradicts our ABox assertion that \(a\) has no \(r\)-successors, rendering the Knowledge Base inconsistent.</p>
+    </div>
+
+    <!-- Exercise 5.6 -->
+    <h2 class="exercise-title">Exercise 5.6. Semantics</h2>
+    <div class="question">
+        <p><strong>Exercise 5.6. Semantics (**)</strong></p>
+        <p>Explain the difference between an interpretation and a model in the semantics of \(\mathcal{ALC}\)</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <ul>
+            <li><strong>Interpretation:</strong> An interpretation \(\mathcal{I} = (\Delta^\mathcal{I}, \cdot^\mathcal{I})\) is simply a mathematical structure. It consists of a non-empty domain \(\Delta^\mathcal{I}\) and an interpretation function \(\cdot^\mathcal{I}\) that maps concepts to subsets of the domain, and roles to binary relations over the domain. It dictates <em>how</em> to read the vocabulary, without strictly caring if axioms are true or false.</li>
+            <li><strong>Model:</strong> A model is an interpretation that <strong>satisfies a specific set of axioms</strong> (like a TBox and/or ABox). For example, \(\mathcal{I}\) is a model of a TBox \(\mathcal{T}\) if and only if for every inclusion axiom \(C \sqsubseteq D\) in \(\mathcal{T}\), it holds true that \(C^\mathcal{I} \subseteq D^\mathcal{I}\).</li>
+        </ul>
+        <p><em>In short:</em> Every model is an interpretation, but not every interpretation is a model. An interpretation only becomes a model relative to a Knowledge Base if it makes all the statements in that Knowledge Base true.</p>
+    </div>
+
+    <!-- Exercise 5.7 -->
+    <h2 class="exercise-title">Exercise 5.7. Tree Models</h2>
+    <div class="question">
+        <p><strong>Exercise 5.7. Tree Models (***)</strong></p>
+        <p>\(\mathcal{ALC}\) has the so-called tree model property; that is, whenever a TBox has a model, then it has a tree-shaped model. Argue why this is the case.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>\(\mathcal{ALC}\) has the tree model property because it lacks the expressive power to distinguish between a graph with cycles and its "unrolled" tree counterpart (it is invariant under bisimulation).</p>
+        <p>If a TBox has an arbitrary model \(\mathcal{I}\), we can always construct a tree-shaped model \(\mathcal{I}'\) via a technique called <strong>unraveling</strong>:</p>
+        <ol>
+            <li><strong>Paths as Nodes:</strong> Choose an arbitrary root element \(d_0 \in \Delta^\mathcal{I}\). We define the domain of our new model \(\Delta^{\mathcal{I}'}\) as the set of all valid finite paths starting from \(d_0\) (e.g., \(d_0 \xrightarrow{r_1} d_1 \xrightarrow{r_2} d_2 \dots\)).</li>
+            <li><strong>Roles:</strong> We create a role relationship between two paths in \(\mathcal{I}'\) only if one is a one-step extension of the other. This strictly creates a tree structure with no cycles and no merging branches.</li>
+            <li><strong>Concepts:</strong> We assign a path to a concept \(A^{\mathcal{I}'}\) if and only if its terminal node (the last node in the path) belongs to \(A^\mathcal{I}\) in the original model.</li>
+        </ol>
+        <p>Because \(\mathcal{ALC}\) evaluates everything locally (it cannot count incoming edges, has no nominals, and has no inverse roles), evaluating any concept on a path in the new tree model yields the exact same result as evaluating it on the terminal node in the original model. Thus, all axioms are preserved, proving that whenever a model exists, a tree-shaped model is guaranteed to exist.</p>
+    </div>
+
+
 </body>
 </html>
