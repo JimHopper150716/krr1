@@ -724,5 +724,469 @@
             </li>
         </ol>
     </div>
+
+    
+    <!-- Exercise 2.8 -->
+    <h2 class="exercise-title">Exercise 2.8. Reasoning (**)</h2>
+    <div class="question">
+        <p>Consider the propositional KB \(K\) formed by the following rules:</p>
+        
+        <table>
+            <tbody>
+                <tr>
+                    <td>\(w \leftarrow\)</td>
+                    <td>\(y \leftarrow x, z, w\)</td>
+                </tr>
+                <tr>
+                    <td>\(x \leftarrow\)</td>
+                    <td>\(z \leftarrow w, x, y\)</td>
+                </tr>
+                <tr>
+                    <td>\(v \leftarrow u, w\)</td>
+                    <td>\(y \leftarrow v\)</td>
+                </tr>
+                <tr>
+                    <td>\(t \leftarrow u, v\)</td>
+                    <td>\(\leftarrow y, z\)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ol>
+            <li>Find all the facts that are entailed by \(K\)</li>
+            <li>Decide which of the following rules are entailed by \(K\):
+                <ul>
+                    <li>\(s \leftarrow t\)</li>
+                    <li>\(u \leftarrow v\)</li>
+                    <li>\(z \leftarrow u\)</li>
+                    <li>\(t \leftarrow x, v\)</li>
+                    <li>\(t \leftarrow s\)</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        
+        <h4>1. Find all the facts that are entailed by \(K\)</h4>
+        <p>In propositional logic, evaluating a KB means finding its valid models (truth assignments that satisfy all rules). Let's interpret the rules as logical implications:</p>
+        <ol>
+            <li>\(w\) (Fact: \(w\) is True)</li>
+            <li>\(x\) (Fact: \(x\) is True)</li>
+            <li>\(u \land w \rightarrow v\)</li>
+            <li>\(u \land v \rightarrow t\)</li>
+            <li>\(x \land z \land w \rightarrow y\)</li>
+            <li>\(w \land x \land y \rightarrow z\)</li>
+            <li>\(v \rightarrow y\)</li>
+            <li>\(\neg (y \land z)\) <em>(The rule \(\leftarrow y, z\) is an integrity constraint meaning \(y \land z \rightarrow \text{False}\))</em></li>
+        </ol>
+
+        <p>Let's deduce the truth values:</p>
+        <ul>
+            <li>From (1) and (2), we know exactly that <strong>\(w = \text{True}\)</strong> and <strong>\(x = \text{True}\)</strong>.</li>
+            <li>Substituting \(w\) and \(x\) as True into (5) and (6) gives us \(z \rightarrow y\) and \(y \rightarrow z\). This means \(y \leftrightarrow z\) (they must have the exact same truth value).</li>
+            <li>From (8), \(y\) and \(z\) cannot be both True. Because they share the same truth value, they must both be <strong>False</strong> (\(y = \text{False}, z = \text{False}\)).</li>
+            <li>From (7), \(v \rightarrow y\). Since \(y\) is False, <strong>\(v\) must be False</strong>.</li>
+            <li>From (3), \(u \land w \rightarrow v\). Since \(w\) is True and \(v\) is False, <strong>\(u\) must be False</strong>.</li>
+            <li>For \(t\), rule (4) becomes \(\text{False} \rightarrow t\), which is mathematically True regardless of \(t\)'s value. The variable \(s\) is entirely unconstrained.</li>
+        </ul>
+        <p>Therefore, the only positive facts (atoms) strictly entailed by \(K\) are <strong>\(w\) and \(x\)</strong>. <em>(Note: if negative facts are considered, \(\neg y\), \(\neg z\), \(\neg v\), and \(\neg u\) are also entailed).</em></p>
+
+        <h4>2. Decide which of the following rules are entailed by \(K\)</h4>
+        <p>A rule \(\text{Head} \leftarrow \text{Body}\) is entailed if \(\text{Body} \rightarrow \text{Head}\) is True in all models of \(K\). Using our established truth values (\(v = \text{False}\) and \(u = \text{False}\)):</p>
+        <ul>
+            <li>\(s \leftarrow t \iff (t \rightarrow s)\): <strong><span class="ans-false">Not entailed</span></strong> (e.g., \(t = \text{True}\) and \(s = \text{False}\) is a valid model).</li>
+            <li>\(u \leftarrow v \iff (v \rightarrow u)\): <strong><span class="ans-true">Entailed</span></strong>. Because \(v = \text{False}\), the implication \(\text{False} \rightarrow u\) is always True.</li>
+            <li>\(z \leftarrow u \iff (u \rightarrow z)\): <strong><span class="ans-true">Entailed</span></strong>. Because \(u = \text{False}\), the implication \(\text{False} \rightarrow z\) is always True.</li>
+            <li>\(t \leftarrow x, v \iff (x \land v \rightarrow t)\): <strong><span class="ans-true">Entailed</span></strong>. Because \(v = \text{False}\), the premise \((x \land v)\) is False, making the implication always True.</li>
+            <li>\(t \leftarrow s \iff (s \rightarrow t)\): <strong><span class="ans-false">Not entailed</span></strong>.</li>
+        </ul>
+    </div>
+
+
+    <!-- Exercise 2.9 -->
+    <h2 class="exercise-title">Exercise 2.9. KE (*)</h2>
+    <div class="question">
+        <p>Construct a propositional KB expressing the following knowledge:</p>
+        <ul>
+            <li>trains, cars, and boats are vehicles</li>
+            <li>land vehicles have wheels</li>
+            <li>boats do not have wheels</li>
+            <li>cars travel on land</li>
+        </ul>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>To express this knowledge clearly, we map the concepts to standard propositional variables:</p>
+        <ul>
+            <li>\(Train\): "The object is a train"</li>
+            <li>\(Car\): "The object is a car"</li>
+            <li>\(Boat\): "The object is a boat"</li>
+            <li>\(Vehicle\): "The object is a vehicle"</li>
+            <li>\(LandVehicle\): "The object is a land vehicle"</li>
+            <li>\(HasWheels\): "The object has wheels"</li>
+            <li>\(TravelOnLand\): "The object travels on land"</li>
+        </ul>
+
+        <h4>Knowledge Base (KB):</h4>
+        <ol>
+            <li>\(Train \rightarrow Vehicle\) <em>(Trains are vehicles)</em></li>
+            <li>\(Car \rightarrow Vehicle\) <em>(Cars are vehicles)</em></li>
+            <li>\(Boat \rightarrow Vehicle\) <em>(Boats are vehicles)</em></li>
+            <li>\(LandVehicle \rightarrow HasWheels\) <em>(Land vehicles have wheels)</em></li>
+            <li>\(Boat \rightarrow \neg HasWheels\) <em>(Boats do not have wheels)</em></li>
+            <li>\(Car \rightarrow TravelOnLand\) <em>(Cars travel on land)</em></li>
+        </ol>
+
+        <p><em>Implicit Lexical Rule:</em> In order to functionally connect a vehicle that "travels on land" to the compound class "land vehicle", an implicit defining rule is typically required in Knowledge Engineering contexts:</p>
+        <ul>
+            <li style="list-style-type: none;">7. \(Vehicle \land TravelOnLand \rightarrow LandVehicle\)</li>
+        </ul>
+    </div>
+
+
+    <!-- Exercise 2.10 -->
+    <h2 class="exercise-title">Exercise 2.10. KE II (*)</h2>
+    <div class="question">
+        <p>Using the KB from Exercise 2.9., answer the following questions:</p>
+        <ol>
+            <li>are boats land vehicles?</li>
+            <li>are trains land vehicles?</li>
+            <li>do trains have wheels?</li>
+            <li>do cars have wheels?</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Using classical logical deduction from the KB we just built:</p>
+
+        <h4>1. Are boats land vehicles?</h4>
+        <p><span class="ans-false">No.</span> The KB states \(Boat \rightarrow \neg HasWheels\). By contraposition on rule 4 (\(LandVehicle \rightarrow HasWheels\)), we get \(\neg HasWheels \rightarrow \neg LandVehicle\). Thus, we logically deduce \(Boat \rightarrow \neg LandVehicle\).</p>
+
+        <h4>2. Are trains land vehicles?</h4>
+        <p><span class="ans-false">Unknown</span> <em>(or <strong>No</strong>, assuming a Closed-World Assumption)</em>. In classical logic, the KB only states \(Train \rightarrow Vehicle\). We have no premises connecting trains to traveling on land, so we cannot logically deduce whether they are land vehicles or not.</p>
+
+        <h4>3. Do trains have wheels?</h4>
+        <p><span class="ans-false">Unknown</span> <em>(or <strong>No</strong>, assuming a Closed-World Assumption)</em>. For the same reason as above, without knowing if they are land vehicles, there is no rule path to logically deduce \(HasWheels\).</p>
+
+        <h4>4. Do cars have wheels?</h4>
+        <p><span class="ans-true">Yes.</span> We know \(Car \rightarrow Vehicle\) (Rule 2) and \(Car \rightarrow TravelOnLand\) (Rule 6). Applying our bridging rule (Rule 7), this combination proves they are land vehicles (\(Car \rightarrow LandVehicle\)). Because all land vehicles have wheels (Rule 4), we deduce logically that \(Car \rightarrow HasWheels\).</p>
+    </div>
+
+    <h1>3 Predicate Knowledge Bases</h1>
+
+    <!-- Exercise 3.1 -->
+    <h2 class="exercise-title">Exercise 3.1. KE (*)</h2>
+    <div class="question">
+        <p>Build a small predicate KB that describes the notions of (at least) Teacher, Student, Course, teaches, and attends in the context of a university</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>To build a predicate Knowledge Base (KB), we first define the vocabulary (predicates) and then write First-Order Logic (FOL) axioms to describe the relationships between these concepts.</p>
+        
+        <h4>Predicates:</h4>
+        <ul>
+            <li><strong>Unary predicates:</strong> \(Teacher(x)\), \(Student(x)\), \(Course(x)\)</li>
+            <li><strong>Binary predicates:</strong> \(teaches(x, y)\), \(attends(x, y)\)</li>
+        </ul>
+        
+        <h4>Knowledge Base (Axioms):</h4>
+        <ol>
+            <li><strong>Only teachers teach courses, and what they teach are courses:</strong><br>
+                \(\forall x \forall y \ (teaches(x, y) \implies Teacher(x) \land Course(y))\)</li>
+            <li><strong>Only students attend courses, and what they attend are courses:</strong><br>
+                \(\forall x \forall y \ (attends(x, y) \implies Student(x) \land Course(y))\)</li>
+            <li><strong>Teachers and students are distinct roles (disjoint):</strong><br>
+                \(\forall x \ (Teacher(x) \implies \neg Student(x))\)</li>
+            <li><strong>Every student attends at least one course:</strong><br>
+                \(\forall x \ (Student(x) \implies \exists y \ (Course(y) \land attends(x, y)))\)</li>
+            <li><strong>Every course is taught by at least one teacher:</strong><br>
+                \(\forall x \ (Course(x) \implies \exists y \ (Teacher(y) \land teaches(y, x)))\)</li>
+        </ol>
+    </div>
+
+    <!-- Exercise 3.2 -->
+    <h2 class="exercise-title">Exercise 3.2. KE (**)</h2>
+    <div class="question">
+        <p>Construct a predicate KB expressing the following knowledge:</p>
+        <ul>
+            <li>echidnas and platypi are monotremata</li>
+            <li>echidnas are not venomous</li>
+            <li>platypi never attack each other</li>
+            <li>Plato attacks Echo</li>
+            <li>Plato and Echo are monotremata</li>
+        </ul>
+        <p style="margin-top: 15px;">Can you deduce whether Plato or Echo are echidnas or platypi?</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>First, let's translate the given English sentences into a formal predicate KB. <br>
+        Let \(E(x)\) = echidna, \(P(x)\) = platypus, \(M(x)\) = monotreme, \(V(x)\) = venomous, and \(A(x, y)\) = x attacks y.</p>
+        
+        <h4>Knowledge Base:</h4>
+        <ol>
+            <li><em>Echidnas and platypi are monotremata:</em><br>
+                \(\forall x \ (E(x) \implies M(x))\)<br>
+                \(\forall x \ (P(x) \implies M(x))\)</li>
+            <li><em>Echidnas are not venomous:</em><br>
+                \(\forall x \ (E(x) \implies \neg V(x))\)</li>
+            <li><em>Platypi never attack each other:</em><br>
+                \(\forall x \forall y \ (P(x) \land P(y) \implies \neg A(x, y))\)</li>
+            <li><em>Plato attacks Echo:</em><br>
+                \(A(\text{Plato}, \text{Echo})\)</li>
+            <li><em>Plato and Echo are monotremata:</em><br>
+                \(M(\text{Plato}) \land M(\text{Echo})\)</li>
+        </ol>
+
+        <h4>Deduction:</h4>
+        <p><em>Can you deduce whether Plato or Echo are echidnas or platypi?</em></p>
+        <p><strong>No, we cannot deduce their exact species.</strong> However, we can deduce one specific constraint: <strong>they cannot <em>both</em> be platypi</strong>.</p>
+        <p><em>Proof:</em> Axiom 3 states that if two animals are both platypi, they do not attack each other. Because we know as a fact that Plato attacks Echo (\(A(\text{Plato}, \text{Echo})\) is True), by Modus Tollens, the premise that they are both platypi must be False: \(\neg (P(\text{Plato}) \land P(\text{Echo}))\). <br><br>
+        They could be a mix (one platypus, one echidna), both echidnas, or even another undiscovered type of monotreme.</p>
+    </div>
+
+    <!-- Exercise 3.3 -->
+    <h2 class="exercise-title">Exercise 3.3. KE II (**)</h2>
+    <div class="question">
+        <p>Considering the KB from Exercise 3.2.,</p>
+        <ol>
+            <li>what information do you need to be able to deduce that Echo is not an echidna?</li>
+            <li>and to know that Echo is a platypus?</li>
+        </ol>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>Building on the KB from Exercise 3.2:</p>
+        
+        <h4>1. What information do you need to be able to deduce that Echo is not an echidna?</h4>
+        <p>You would need the information that <strong>Echo is venomous</strong> (\(V(\text{Echo})\)).</p>
+        <p><em>Reasoning:</em> We know from the KB that echidnas are not venomous (\(\forall x \ (E(x) \implies \neg V(x))\)). By the logical rule of contraposition, anything that <em>is</em> venomous cannot be an echidna (\(\forall x \ (V(x) \implies \neg E(x))\)). Therefore, if we learn \(V(\text{Echo})\), we can deduce \(\neg E(\text{Echo})\).</p>
+        
+        <h4>2. And to know that Echo is a platypus?</h4>
+        <p>In addition to the deduction above (\(\neg E(\text{Echo})\)), you would need the information that <strong>all monotremata are either echidnas or platypi</strong> (i.e., there are no other types of monotremata).</p>
+        <p><em>Reasoning:</em> The KB states that Plato and Echo are monotremata (\(M(\text{Echo})\)), but it currently lacks a rule restricting monotremata strictly to those two animals. If we add the rule \(\forall x \ (M(x) \implies E(x) \lor P(x))\), we can use the Disjunctive Syllogism. We know Echo is a monotreme, so she must be either an echidna or a platypus. Since we deduced in step 1 that she is <em>not</em> an echidna, it definitively leaves us with the deduction that Echo is a platypus (\(P(\text{Echo})\)).</p>
+    </div>
+
+    <!-- Exercise 3.4 -->
+    <h2 class="exercise-title">Exercise 3.4. Grounding (*)</h2>
+    
+    <div class="question">
+        <ol>
+            <li>
+                <p>Construct the grounding of the KB:</p>
+                <p>
+                    \(\mathcal{K} = \{ P(a) \leftarrow , \quad R(b) \leftarrow , \quad Q(b, a) \leftarrow , \)<br>
+                    \(\quad\quad\quad P(x) \leftarrow Q(x, a), \)<br>
+                    \(\quad\quad\quad Q(c, x) \leftarrow P(x) \}\)
+                </p>
+            </li>
+            <li>
+                <p>Use this grounding to verify whether the following rules are entailed by \(\mathcal{K}\):</p>
+                <ol type="a">
+                    <li>\(P(c)\)</li>
+                    <li>\(Q(a, b)\)</li>
+                    <li>\(Q(c, c)\)</li>
+                    <li>\(R(c)\)</li>
+                    <li>\(R(c) \leftarrow Q(a, c)\)</li>
+                    <li>\(Q(c, a) \leftarrow Q(a, c)\)</li>
+                </ol>
+            </li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+
+        <h4>1. Construct the grounding of the KB:</h4>
+        <p>First, we identify the set of constants appearing in the knowledge base (\(\mathcal{K}\)), which are \(a, b,\) and \(c\). Grounding the KB means substituting all variables (in this case, just \(x\)) in the rules with every possible constant from the domain.</p>
+        
+        <p>The original KB contains 3 facts (which are already grounded) and 2 rules with variables. Grounding produces the following:</p>
+
+        <p><em>Facts:</em></p>
+        <ul>
+            <li>\(P(a) \leftarrow\)</li>
+            <li>\(R(b) \leftarrow\)</li>
+            <li>\(Q(b, a) \leftarrow\)</li>
+        </ul>
+
+        <p><em>Grounding \(P(x) \leftarrow Q(x, a)\) for \(x \in \{a, b, c\}\):</em></p>
+        <ul>
+            <li>\(P(a) \leftarrow Q(a, a)\)</li>
+            <li>\(P(b) \leftarrow Q(b, a)\)</li>
+            <li>\(P(c) \leftarrow Q(c, a)\)</li>
+        </ul>
+
+        <p><em>Grounding \(Q(c, x) \leftarrow P(x)\) for \(x \in \{a, b, c\}\):</em></p>
+        <ul>
+            <li>\(Q(c, a) \leftarrow P(a)\)</li>
+            <li>\(Q(c, b) \leftarrow P(b)\)</li>
+            <li>\(Q(c, c) \leftarrow P(c)\)</li>
+        </ul>
+
+        <hr style="border-color: #30363d; margin: 30px 0;">
+
+        <h4>2. Use this grounding to verify whether the following rules are entailed by \(\mathcal{K}\):</h4>
+        <p>To verify entailment, we can compute the minimal model (Least Herbrand Model) of \(\mathcal{K}\) by applying the grounded rules starting from the initial facts to see all the facts that are guaranteed to be true:</p>
+        <ol>
+            <li><strong>Initial facts:</strong> \(\{P(a), R(b), Q(b, a)\}\)</li>
+            <li>Applying \(P(b) \leftarrow Q(b, a)\) adds <strong>\(P(b)\)</strong></li>
+            <li>Applying \(Q(c, a) \leftarrow P(a)\) adds <strong>\(Q(c, a)\)</strong></li>
+            <li>Applying \(P(c) \leftarrow Q(c, a)\) adds <strong>\(P(c)\)</strong></li>
+            <li>Applying \(Q(c, b) \leftarrow P(b)\) adds <strong>\(Q(c, b)\)</strong></li>
+            <li>Applying \(Q(c, c) \leftarrow P(c)\) adds <strong>\(Q(c, c)\)</strong></li>
+        </ol>
+        <p>The minimal model (\(\mathcal{M}\)) is: <strong>\(\{P(a), R(b), Q(b, a), P(b), Q(c, a), P(c), Q(c, b), Q(c, c)\}\)</strong>. A fact is entailed if it is contained in this minimal model.</p>
+
+        <ul>
+            <li><strong>a) \(P(c)\)</strong>: <span class="ans-true">Yes, it is entailed.</span> (\(P(c)\) is derived in step 4 and is in \(\mathcal{M}\)).</li>
+            <li><strong>b) \(Q(a, b)\)</strong>: <span class="ans-false">No, it is not entailed.</span> (\(Q(a, b)\) is not in \(\mathcal{M}\)).</li>
+            <li><strong>c) \(Q(c, c)\)</strong>: <span class="ans-true">Yes, it is entailed.</span> (\(Q(c, c)\) is derived in step 6 and is in \(\mathcal{M}\)).</li>
+            <li><strong>d) \(R(c)\)</strong>: <span class="ans-false">No, it is not entailed.</span> (\(R(c)\) is not in \(\mathcal{M}\)).</li>
+            <li><strong>e) \(R(c) \leftarrow Q(a, c)\)</strong>: <span class="ans-false">No, it is not entailed.</span><br>
+                To check if an implication rule \(H \leftarrow B\) is entailed, we add the premise \(B\) to our facts and see if \(H\) can be derived. If we add \(Q(a, c)\) to our minimal model \(\mathcal{M}\), no new rules are triggered because \(Q(a, c)\) does not match the body of any available rule (e.g., \(P(x) \leftarrow Q(x, a)\) specifically requires the second argument to be \(a\)). Since \(R(c)\) is still not derived, there is a valid model where \(Q(a, c)\) is true but \(R(c)\) is false.
+            </li>
+            <li><strong>f) \(Q(c, a) \leftarrow Q(a, c)\)</strong>: <span class="ans-true">Yes, it is entailed.</span><br>
+                \(Q(c, a)\) is already a proven fact in the minimal model \(\mathcal{M}\) (derived in step 3), meaning it is unconditionally true in every model of \(\mathcal{K}\). Therefore, the implication "\(Q(c, a)\) is true IF \(Q(a, c)\) is true" is trivially satisfied in all models.
+            </li>
+        </ul>
+    </div>
+
+    <!-- Exercise 3.5 -->
+    <h2 class="exercise-title">Exercise 3.5. Grounding (**)</h2>
+    
+    <div class="question">
+        <p>Consider a predicate KB that uses 5 different constants, and contains the rule</p>
+        <p style="text-align: center;">\(Q(x, y) \leftarrow R(x), Q(x, y), S(y, z), Q(z, x)\)</p>
+        <p>How many rules will its grounding produce? <strong>Explain how you got this number.</strong></p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+
+        <p><strong>Total generated rules:</strong> <span class="ans-true">125 rules.</span></p>
+
+        <h4>Explanation:</h4>
+        <p>To construct a full grounding of a rule, you must substitute every distinct variable in the rule with every possible combination of constants from the domain.</p>
+        <ul>
+            <li>The given rule contains <strong>3 distinct variables</strong>: \(x\), \(y\), and \(z\).</li>
+            <li>The problem states that the knowledge base uses <strong>5 different constants</strong>.</li>
+        </ul>
+        <p>Because the substitution choice for each variable is independent of the others, you use the multiplication principle to find the total combinations.</p>
+        <p>
+            Total ground rules = (Choices for \(x\)) \(\times\) (Choices for \(y\)) \(\times\) (Choices for \(z\))<br>
+            Total ground rules = \(5 \times 5 \times 5 = 5^3 = \mathbf{125}\).
+        </p>
+    </div>
+
+    
+    <h1>Description Logic (\(\mathcal{EL}\)) Exercises</h1>
+
+    <!-- Exercise 4.1 -->
+    <h2 class="exercise-title">Exercise 4.1. Satisfiability</h2>
+    <div class="question">
+        <p>Check which of the following \(\mathcal{EL}^\perp\) concepts are satisfiable and which are not:</p>
+        <ul>
+            <li>\(\exists r.(\exists s.A \sqcap B) \sqcap \exists s.\top\)</li>
+            <li>\(A \sqcap C\)</li>
+            <li>\(\exists r.\perp \sqcap B\)</li>
+            <li>\(\exists r.\exists r.\exists s.A\)</li>
+            <li>\(\exists r.\exists r.\exists s.\perp\)</li>
+        </ul>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>In \(\mathcal{EL}^\perp\), a concept is unsatisfiable if and only if it implies the bottom concept (\(\perp\)). Since there is no negation in \(\mathcal{EL}^\perp\), simply checking for the unavoidable presence of \(\perp\) is sufficient.</p>
+        <ul class="solution-list">
+            <li><strong>\(\exists r.(\exists s.A \sqcap B) \sqcap \exists s.\top\)</strong>: <span class="ans-true">Satisfiable</span><br>
+            <em>(No \(\perp\) is present or implied).</em></li>
+            <li><strong>\(A \sqcap C\)</strong>: <span class="ans-true">Satisfiable</span><br>
+            <em>(Standard conjunction of concept names; no contradictions).</em></li>
+            <li><strong>\(\exists r.\perp \sqcap B\)</strong>: <span class="ans-false">Unsatisfiable</span><br>
+            <em>(The term \(\exists r.\perp\) requires an \(r\)-successor to belong to the empty set \(\perp\), which is impossible. Thus \(\exists r.\perp \equiv \perp\), making the whole expression \(\perp\)).</em></li>
+            <li><strong>\(\exists r.\exists r.\exists s.A\)</strong>: <span class="ans-true">Satisfiable</span><br>
+            <em>(A simple chain of roles leading to \(A\); no \(\perp\) is present).</em></li>
+            <li><strong>\(\exists r.\exists r.\exists s.\perp\)</strong>: <span class="ans-false">Unsatisfiable</span><br>
+            <em>(\(\exists s.\perp \equiv \perp\), which propagates outwards making \(\exists r.\perp \equiv \perp\), and again making the entire concept equivalent to \(\perp\)).</em></li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4.2 -->
+    <h2 class="exercise-title">Exercise 4.2. Satisfiability II</h2>
+    <div class="question">
+        <p>For each of the satisfiable concepts in Exercise 4.1., find an interpretation that makes it non-empty.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We need to provide an interpretation \(\mathcal{I} = (\Delta^\mathcal{I}, \cdot^\mathcal{I})\) for each of the three satisfiable concepts from 4.1 such that the concept interpretation is non-empty (i.e., \(C^\mathcal{I} \neq \emptyset\)).</p>
+
+        <h4>1. \(C_1 = \exists r.(\exists s.A \sqcap B) \sqcap \exists s.\top\)</h4>
+        <ul>
+            <li><strong>Domain:</strong> \(\Delta^\mathcal{I} = \{1, 2, 3, 4\}\)</li>
+            <li><strong>Roles:</strong> \(r^\mathcal{I} = \{(1, 2)\}\), &nbsp; \(s^\mathcal{I} = \{(1, 3), (2, 4)\}\)</li>
+            <li><strong>Concepts:</strong> \(A^\mathcal{I} = \{4\}\), &nbsp; \(B^\mathcal{I} = \{2\}\)</li>
+            <li><em>Verification:</em> Element \(2\) is in \(B\) and has an \(s\)-successor (\(4\)) in \(A\), so \(2 \in (\exists s.A \sqcap B)^\mathcal{I}\). Element \(1\) has an \(r\)-successor (\(2\)) in this set, so \(1 \in (\exists r.(\exists s.A \sqcap B))^\mathcal{I}\). Element \(1\) also has an \(s\)-successor (\(3\)) in \(\top\), so \(1 \in C_1^\mathcal{I}\). The concept is non-empty.</li>
+        </ul>
+
+        <h4>2. \(C_2 = A \sqcap C\)</h4>
+        <ul>
+            <li><strong>Domain:</strong> \(\Delta^\mathcal{I} = \{1\}\)</li>
+            <li><strong>Roles:</strong> \(\emptyset\)</li>
+            <li><strong>Concepts:</strong> \(A^\mathcal{I} = \{1\}\), &nbsp; \(C^\mathcal{I} = \{1\}\)</li>
+            <li><em>Verification:</em> Element \(1 \in A^\mathcal{I}\) and \(1 \in C^\mathcal{I}\), thus \(1 \in (A \sqcap C)^\mathcal{I}\). The concept is non-empty.</li>
+        </ul>
+
+        <h4>3. \(C_3 = \exists r.\exists r.\exists s.A\)</h4>
+        <ul>
+            <li><strong>Domain:</strong> \(\Delta^\mathcal{I} = \{1, 2, 3, 4\}\)</li>
+            <li><strong>Roles:</strong> \(r^\mathcal{I} = \{(1, 2), (2, 3)\}\), &nbsp; \(s^\mathcal{I} = \{(3, 4)\}\)</li>
+            <li><strong>Concepts:</strong> \(A^\mathcal{I} = \{4\}\)</li>
+            <li><em>Verification:</em> Element \(3\) has an \(s\)-successor in \(A\) (\(4\)). Element \(2\) has an \(r\)-successor in \(\exists s.A\) (\(3\)). Element \(1\) has an \(r\)-successor in \(\exists r.\exists s.A\) (\(2\)). Thus \(1 \in C_3^\mathcal{I}\). The concept is non-empty.</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4.3 -->
+    <h2 class="exercise-title">Exercise 4.3. Subsumption</h2>
+    <div class="question">
+        <p>Check whether the following subsumptions hold:</p>
+        <ul>
+            <li>\(\exists r.(A \sqcap B) \sqsubseteq \exists r.A \sqcap \exists s.B\)</li>
+            <li>\(A \sqcap B \sqcap \exists s.A \sqsubseteq \exists s.(B \sqcap A)\)</li>
+            <li>\(\exists s.(A \sqcap B) \sqsubseteq \exists s.A \sqcap \exists s.B\)</li>
+            <li>\(\exists r.(A \sqcap \perp) \sqsubseteq \exists r.A \sqcap \exists s.B\)</li>
+            <li>\(\exists r.(\exists s.A \sqcap B) \sqsubseteq \exists r.B \sqcap \exists r.\exists s.A\)</li>
+            <li>\(\exists r.(A \sqcap \exists r.(B \sqcap \exists s.A)) \sqsubseteq \exists r.A \sqcap \exists r.\exists r.B\)</li>
+            <li>\(A \sqcap B \sqcap \exists s.A \sqsubseteq \exists s.(B \sqcap \perp)\)</li>
+        </ul>
+    </div>
+    <div class="solution">
+        <h3>Solution</h3>
+        <p>We evaluate whether \(C \sqsubseteq D\) holds (meaning \(C^\mathcal{I} \subseteq D^\mathcal{I}\) for all interpretations \(\mathcal{I}\)).</p>
+        <ul class="solution-list">
+            <li><strong>\(\exists r.(A \sqcap B) \sqsubseteq \exists r.A \sqcap \exists s.B\)</strong> &rarr; <span class="ans-false">Does NOT hold (False)</span><br>
+            <em>Reason:</em> The left side guarantees an \(r\)-successor that is in both \(A\) and \(B\). The right side demands an \(r\)-successor in \(A\) <em>and</em> an <strong>\(s\)-successor</strong> in \(B\). The left side provides no guarantee that an \(s\)-successor exists at all.</li>
+            
+            <li><strong>\(A \sqcap B \sqcap \exists s.A \sqsubseteq \exists s.(B \sqcap A)\)</strong> &rarr; <span class="ans-false">Does NOT hold (False)</span><br>
+            <em>Reason:</em> The left side says the <em>current</em> node is in \(B\), and it has an \(s\)-successor in \(A\). The right side requires an \(s\)-successor that is in <em>both</em> \(B\) and \(A\). The \(s\)-successor is only guaranteed to be in \(A\), not necessarily in \(B\).</li>
+            
+            <li><strong>\(\exists s.(A \sqcap B) \sqsubseteq \exists s.A \sqcap \exists s.B\)</strong> &rarr; <span class="ans-true">Holds (True)</span><br>
+            <em>Reason:</em> If a node has an \(s\)-successor that is in both \(A\) and \(B\), then that exact same successor serves as an \(s\)-successor in \(A\) and an \(s\)-successor in \(B\).</li>
+            
+            <li><strong>\(\exists r.(A \sqcap \perp) \sqsubseteq \exists r.A \sqcap \exists s.B\)</strong> &rarr; <span class="ans-true">Holds (True)</span><br>
+            <em>Reason:</em> The concept \(A \sqcap \perp\) is equivalent to \(\perp\). Thus, the left-hand side is \(\exists r.\perp \equiv \perp\). Because the bottom concept (\(\perp\)) is empty in every interpretation, it is a subset of every concept. Ex Falso Quodlibet.</li>
+            
+            <li><strong>\(\exists r.(\exists s.A \sqcap B) \sqsubseteq \exists r.B \sqcap \exists r.\exists s.A\)</strong> &rarr; <span class="ans-true">Holds (True)</span><br>
+            <em>Reason:</em> If a node has an \(r\)-successor that belongs to both \(B\) and \(\exists s.A\), then that single successor fulfills the condition for having an \(r\)-successor in \(B\) and an \(r\)-successor in \(\exists s.A\).</li>
+            
+            <li><strong>\(\exists r.(A \sqcap \exists r.(B \sqcap \exists s.A)) \sqsubseteq \exists r.A \sqcap \exists r.\exists r.B\)</strong> &rarr; <span class="ans-true">Holds (True)</span><br>
+            <em>Reason:</em> The left side indicates the node has an \(r\)-successor (let's call it \(y\)) such that \(y \in A\) and \(y \in \exists r.(B \sqcap \exists s.A)\). Because \(y \in A\), the original node is in \(\exists r.A\). Because \(y\) has an \(r\)-successor (let's call it \(z\)) in \(B\), \(y \in \exists r.B\), which makes the original node an element of \(\exists r.\exists r.B\). Both conditions of the right side are met.</li>
+            
+            <li><strong>\(A \sqcap B \sqcap \exists s.A \sqsubseteq \exists s.(B \sqcap \perp)\)</strong> &rarr; <span class="ans-false">Does NOT hold (False)</span><br>
+            <em>Reason:</em> The right side contains \(B \sqcap \perp \equiv \perp\), so the entire right side evaluates to \(\exists s.\perp \equiv \perp\). The left side does not contain any contradictions and is satisfiable (can be non-empty), so it cannot be subsumed by the empty set (\(\perp\)).</li>
+        </ul>
+    </div>
+
 </body>
 </html>
