@@ -1210,6 +1210,181 @@ E(b, c) &lt;-
             <li><strong>\(\exists s.B \sqsubseteq \exists r.\neg B\)</strong>: <span class="ans-false">NO</span>. A node can have an \(s\)-successor in \(B\) but have zero \(r\)-successors.</li>
         </ol>
     </div>
+    <h1>Knowledge Representation and Reasoning<br><span style="font-size: 0.7em; color: #8b949e;">Exercise Session 5</span></h1>
+
+    <!-- EXERCISE 1 -->
+    <h2 class="exercise-title">Exercise 1. Temporal Representation</h2>
+    
+    <div class="question">
+        <p>Consider two propositional variables <code>takeoff</code> and <code>land</code> expressing, respectively, that an aircraft has taken off and that it has landed.</p>
+        <ol>
+            <li>Construct an LTL<sub>f</sub> formula \(\varphi\) expressing the property: <em>after takeoff, an aircraft cannot take off again before landing</em></li>
+            <li>Construct a temporal model that satisfies \(\varphi\)</li>
+            <li>Construct a temporal model that violates \(\varphi\)</li>
+            <li>Repeat the same tasks with the property: <em>an aircraft cannot land until it has taken off</em></li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solutions</h3>
+        
+        <h4>1. Formula for "after takeoff, an aircraft cannot take off again before landing"</h4>
+        <p><strong>Solution:</strong> \(\Box (\text{takeoff} \to \bigcirc(\neg \text{takeoff} \ \mathcal{U} \ \text{land}))\)</p>
+        <p class="explanation"><strong>Explanation:</strong> The "Globally" operator (\(\Box\)) ensures this rule applies at all times. It states that if a <code>takeoff</code> occurs, then from the <em>next</em> state (\(\bigcirc\)), the aircraft must <em>not</em> <code>takeoff</code> until (\(\mathcal{U}\)) it has <code>land</code>ed.</p>
+
+        <h4>2. A temporal model that satisfies \(\varphi\)</h4>
+        <p><strong>Solution:</strong> A timeline where an aircraft takes off, then eventually lands, without taking off twice in a row.</p>
+        <ul>
+            <li><strong>State 0:</strong> (nothing)</li>
+            <li><strong>State 1:</strong> <code>takeoff</code></li>
+            <li><strong>State 2:</strong> (nothing)</li>
+            <li><strong>State 3:</strong> (nothing)</li>
+            <li><strong>State 4:</strong> <code>land</code></li>
+            <li><strong>State 5:</strong> (nothing)</li>
+        </ul>
+
+        <h4>3. A temporal model that violates \(\varphi\)</h4>
+        <p><strong>Solution:</strong> A timeline where an aircraft takes off twice before landing.</p>
+        <ul>
+            <li><strong>State 0:</strong> (nothing)</li>
+            <li><strong>State 1:</strong> <code>takeoff</code></li>
+            <li><strong>State 2:</strong> (nothing)</li>
+            <li><strong>State 3:</strong> <code>takeoff</code> <em>(Violation occurs here!)</em></li>
+            <li><strong>State 4:</strong> <code>land</code></li>
+            <li><strong>State 5:</strong> (nothing)</li>
+        </ul>
+
+        <h4>4. Repeat the same tasks with the property: "an aircraft cannot land until it has taken off"</h4>
+        <p><strong>Formula:</strong> \(\neg \text{land} \ \mathcal{U} \ \text{takeoff}\) <br>
+        <span class="explanation">(Meaning: No landing happens until a takeoff happens).</span></p>
+        
+        <p><strong>Satisfying model:</strong></p>
+        <ul>
+            <li><strong>State 0:</strong> (nothing)</li>
+            <li><strong>State 1:</strong> <code>takeoff</code></li>
+            <li><strong>State 2:</strong> (nothing)</li>
+            <li><strong>State 3:</strong> <code>land</code></li>
+        </ul>
+
+        <p><strong>Violating model:</strong></p>
+        <ul>
+            <li><strong>State 0:</strong> (nothing)</li>
+            <li><strong>State 1:</strong> (nothing)</li>
+            <li><strong>State 2:</strong> (nothing)</li>
+            <li><strong>State 3:</strong> <code>land</code> <em>(Violation! Landed without ever taking off).</em></li>
+        </ul>
+    </div>
+
+    <!-- EXERCISE 2 -->
+    <h2 class="exercise-title">Exercise 2. Types</h2>
+    
+    <div class="question">
+        <p>Let \(\varphi := a \land (\neg b \ \mathcal{U} \ \bigcirc a)\).</p>
+        <ol>
+            <li>Compute \(\text{csub}(\varphi)\)</li>
+            <li>Compute an <em>initial</em> type \(\tau_1\) for \(\varphi\)</li>
+            <li>Compute a <em>final</em> type \(\tau_2\) for \(\varphi\)</li>
+            <li>Are \(\tau_1\) and \(\tau_2\) connected through an edge?</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solutions</h3>
+
+        <h4>1. Compute \(\text{csub}(\varphi)\) (Closure subset)</h4>
+        <p><strong>Solution:</strong> The set of all subformulas and their negations (along with the "next" operator expansions for the \(\mathcal{U}\) operator).</p>
+        <p>\(\text{csub}(\varphi) = \{ \varphi, \ a, \ \neg b \ \mathcal{U} \ \bigcirc a, \ b, \ \bigcirc a, \ \neg\varphi, \ \neg a, \ \neg(\neg b \ \mathcal{U} \ \bigcirc a), \ \neg b, \ \neg\bigcirc a, \ \bigcirc(\neg b \ \mathcal{U} \ \bigcirc a), \ \neg\bigcirc(\neg b \ \mathcal{U} \ \bigcirc a) \}\)</p>
+
+        <h4>2. Compute an <em>initial</em> type \(\tau_1\) for \(\varphi\)</h4>
+        <p><strong>Solution:</strong> An initial type must contain the main formula \(\varphi\). Consequently, it must logically satisfy its components.</p>
+        <p>\(\tau_1 = \{ \varphi, \ a, \ \neg b \ \mathcal{U} \ \bigcirc a, \ \neg b, \ \bigcirc a, \ \neg\bigcirc(\neg b \ \mathcal{U} \ \bigcirc a) \}\)<br>
+        <em>*Note: A valid alternative could contain \(b\), but if we follow the strictest derivation where \(\bigcirc a\) satisfies the \(\mathcal{U}\) directly without deferring, \(\neg b\) is common, or if we defer, \(b\) can be chosen if we adjust. Based on the notes, let's use the professor's exact derivation:</em></p>
+        <p>\(\tau_1 = \{ \varphi, \ a, \ \neg b \ \mathcal{U} \ \bigcirc a, \ b, \ \bigcirc a, \ \neg\bigcirc(\neg b \ \mathcal{U} \ \bigcirc a) \}\)</p>
+        <p class="explanation"><strong>Explanation:</strong> Because \(\varphi\) is true, both \(a\) and \(\neg b \ \mathcal{U} \ \bigcirc a\) must be in the set. If we choose \(b\) to be true, then \(\neg b\) is false. For \(\neg b \ \mathcal{U} \ \bigcirc a\) to still hold true, its right-hand side (\(\bigcirc a\)) MUST be true immediately to satisfy the Until.</p>
+
+        <h4>3. Compute a <em>final</em> type \(\tau_2\) for \(\varphi\)</h4>
+        <p><strong>Solution:</strong> A final type represents the last state of a finite trace, meaning there is no "next" state. Therefore, <strong>all</strong> formulas starting with \(\bigcirc\) must be negated.</p>
+        <p>\(\tau_2 = \{ \neg\varphi, \ a, \ \neg(\neg b \ \mathcal{U} \ \bigcirc a), \ \neg b, \ \neg\bigcirc a, \ \neg\bigcirc(\neg b \ \mathcal{U} \ \bigcirc a) \}\)</p>
+
+        <h4>4. Are \(\tau_1\) and \(\tau_2\) connected through an edge?</h4>
+        <p><strong>Solution:</strong> <span class="ans-true">Yes.</span></p>
+        <p class="explanation"><strong>Explanation:</strong> For an edge to exist from \(\tau_1\) to \(\tau_2\), whatever \(\tau_1\) predicts for the "next" state must be present in \(\tau_2\). <br>
+        • \(\tau_1\) contains \(\bigcirc a \implies \tau_2\) must contain \(a\) (It does).<br>
+        • \(\tau_1\) contains \(\neg\bigcirc(\neg b \ \mathcal{U} \ \bigcirc a) \implies \tau_2\) must contain \(\neg(\neg b \ \mathcal{U} \ \bigcirc a)\) (It does).</p>
+    </div>
+
+    <!-- EXERCISE 3 -->
+    <h2 class="exercise-title">Exercise 3. Temporal Satisfiability</h2>
+    
+    <div class="question">
+        <p>Consider the LTL<sub>f</sub> formula \(\varphi\) whose type graph \(G_\varphi\) has nodes \(\tau_1, \tau_2, \tau_3, \tau_4\), where \(\tau_4\) is the initial state (incoming arrow), and \(\tau_2\) is the final state (double circle). <em>(Refer to the diagram in the original document)</em>.</p>
+        <ol>
+            <li>Is \(\varphi\) satisfiable?</li>
+            <li>Does \(\varphi\) have a satisfying temporal model of length 5?</li>
+            <li>Is \(\neg\varphi\) satisfiable?</li>
+            <li>Does \(\neg\varphi\) have a satisfying temporal model of length 4?</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solutions</h3>
+
+        <h4>1. Is \(\varphi\) satisfiable?</h4>
+        <p><strong>Solution:</strong> <span class="ans-true">Yes.</span></p>
+        <p class="explanation">There is a valid path from the initial state \(\tau_4\) to the final state \(\tau_2\) (e.g., \(\tau_4 \to \tau_2\)).</p>
+
+        <h4>2. Does \(\varphi\) have a satisfying temporal model of length 5?</h4>
+        <p><strong>Solution:</strong> <span class="ans-false">No.</span></p>
+        <p class="explanation"><strong>Explanation:</strong> Any valid model must start at \(\tau_4\) and end at \(\tau_2\). Looking at the graph, the possible paths are:<br>
+        • \(\tau_4 \to \tau_2\) (Length 2)<br>
+        • \(\tau_4 \to \tau_3 \to \tau_4 \to \tau_2\) (Length 4)<br>
+        • \(\tau_4 \to \tau_3 \to \tau_4 \to \tau_3 \to \tau_4 \to \tau_2\) (Length 6)<br>
+        All valid paths for \(\varphi\) have an <em>even</em> number of states. Length 5 is impossible.</p>
+
+        <h4>3. Is \(\neg\varphi\) satisfiable?</h4>
+        <p><strong>Solution:</strong> <span class="ans-true">Yes.</span></p>
+        <p class="explanation">Initial types for \(\neg\varphi\) are any types not marked as initial for \(\varphi\) (i.e., \(\tau_1, \tau_2, \tau_3\)). Paths to a final state (\(\tau_2\)) clearly exist from these nodes.</p>
+
+        <h4>4. Does \(\neg\varphi\) have a satisfying temporal model of length 4?</h4>
+        <p><strong>Solution:</strong> <span class="ans-true">Yes.</span></p>
+        <p class="explanation"><strong>Explanation:</strong> Starting from \(\tau_1\) (which is a valid initial state for \(\neg\varphi\)), we can loop on \(\tau_1\) and then jump to \(\tau_2\). The path \(\tau_1 \to \tau_1 \to \tau_1 \to \tau_2\) consists of 4 states and ends in a final type.</p>
+    </div>
+
+    <!-- EXERCISE 4 -->
+    <h2 class="exercise-title">Exercise 4. Properties of Types</h2>
+    
+    <div class="question">
+        <p>A part of a type graph constructed from a formula has the following shape (where no other connections between these types exist):</p>
+        <p style="text-align:center;">\(\tau_1 \to \tau_2 \to \tau_3\)</p>
+        <p><em>Note: \(\tau_2\) is a final type (double circle).</em></p>
+        <p>Each type \(\tau_1, \tau_2\), and \(\tau_3\) corresponds to <strong>exactly one</strong> of the following sets. Identify which, justifying your answer.</p>
+        <ol>
+            <li>\(\{ \bigcirc b, \ \neg\bigcirc a, \ \neg b, \ \neg a \}\)</li>
+            <li>\(\{ \neg\bigcirc b, \ \bigcirc a, \ b, \ a \}\)</li>
+            <li>\(\{ \bigcirc b, \ \neg\bigcirc a, \ \neg b, \ a \}\)</li>
+            <li>\(\{ \neg\bigcirc b, \ \neg\bigcirc a, \ \neg b, \ a \}\)</li>
+            <li>\(\{ \neg\bigcirc b, \ \bigcirc a, \ \neg a, \ a \}\)</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solutions</h3>
+
+        <h4>Step 1: Identify \(\tau_2\)</h4>
+        <p class="explanation"><strong>Rule:</strong> \(\tau_2\) is a final type, so it cannot contain any positive "next" (\(\bigcirc\)) formulas. It must contain \(\neg\bigcirc a\) and \(\neg\bigcirc b\).</p>
+        <p class="explanation"><strong>Observation:</strong> Set 4 is the only valid set matching this condition. (Note: Set 5 also contains a \(\neg\bigcirc\) but it is logically inconsistent because it has both \(a\) and \(\neg a\)).</p>
+        <p><strong>Result:</strong> \(\tau_2 = \textbf{Set 4: } \{ \neg\bigcirc b, \ \neg\bigcirc a, \ \neg b, \ a \}\)</p>
+
+        <h4>Step 2: Identify \(\tau_3\)</h4>
+        <p class="explanation"><strong>Rule:</strong> \(\tau_3\) is the successor of \(\tau_2\). Whatever \(\tau_2\) predicts for the next state must appear in \(\tau_3\). Since \(\tau_2\) has \(\neg\bigcirc b\) and \(\neg\bigcirc a\), \(\tau_3\) must contain \(\neg b\) and \(\neg a\).</p>
+        <p class="explanation"><strong>Observation:</strong> Only Set 1 contains both \(\neg b\) and \(\neg a\).</p>
+        <p><strong>Result:</strong> \(\tau_3 = \textbf{Set 1: } \{ \bigcirc b, \ \neg\bigcirc a, \ \neg b, \ \neg a \}\)</p>
+
+        <h4>Step 3: Identify \(\tau_1\)</h4>
+        <p class="explanation"><strong>Rule:</strong> \(\tau_2\) is the successor of \(\tau_1\). Since \(\tau_2\) contains \(\neg b\) and \(a\), its predecessor \(\tau_1\) <em>must</em> contain \(\neg\bigcirc b\) and \(\bigcirc a\).</p>
+        <p class="explanation"><strong>Observation:</strong> Both Set 2 and Set 5 have \(\{ \neg\bigcirc b, \bigcirc a \}\). However, as established, Set 5 is not a valid type (it contradicts itself with \(a, \neg a\)). That leaves Set 2.</p>
+        <p><strong>Result:</strong> \(\tau_1 = \textbf{Set 2: } \{ \neg\bigcirc b, \ \bigcirc a, \ b, \ a \}\)</p>
+    </div>
 
 </body>
 </html>
