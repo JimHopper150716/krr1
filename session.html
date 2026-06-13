@@ -950,5 +950,266 @@ E(b, c) &lt;-
         <p><em>(Note: An unsatisfiable TBox like \(\mathcal{T} = \{\top \sqsubseteq \bot\}\) trivially has 0 models, which is technically "at most 4", but it's fundamentally incapable of producing valid bounded structures).</em></p>
     </div>
 
+    <h1>Knowledge Representation and Reasoning<br><span style="font-size: 0.6em; color: #8b949e;">Exercise Session 4</span></h1>
+
+    <!-- Exercise 1 -->
+    <h2 class="exercise-title">Exercise 1. Normalisation</h2>
+    <div class="question">
+        <p>Transform the following \(\mathcal{EL}^\perp\) TBox \(\mathcal{T}\) into normal form and apply the completion algorithm until saturation.</p>
+        <p>
+            \(\mathcal{T} = \{\)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;\(C \sqsubseteq \exists r.A,\)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;\(\exists r.\top \sqsubseteq B \sqcap \exists r.B,\)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;\(B \sqcap C \sqsubseteq \bot,\)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;\(\exists r.B \sqsubseteq \exists s.C,\)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;\(B \sqsubseteq \exists s.(B \sqcap D),\)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;\(A \sqsubseteq \exists r.B\)<br>
+            \(\}\)
+        </p>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <h4>1. Normalisation Step</h4>
+        <p>In \(\mathcal{EL}\), normal form requires axioms to be shaped like: \(A_1 \sqcap A_2 \sqsubseteq B\), \(A \sqsubseteq \exists r.B\), or \(\exists r.A \sqsubseteq B\) (where \(A, B\) are concept names or \(\top\)). We introduce new variables (\(X_1, X_2, X_3\)) to split complex axioms.</p>
+        <ul>
+            <li>\(C \sqsubseteq \exists r.A \rightarrow\) <em>(Already in normal form)</em></li>
+            <li>\(\exists r.\top \sqsubseteq B \sqcap \exists r.B \rightarrow\) Splits into:
+                <ul>
+                    <li>\(\exists r.\top \sqsubseteq B\)</li>
+                    <li>\(\exists r.\top \sqsubseteq X_1\)</li>
+                    <li>\(X_1 \sqsubseteq \exists r.B\)</li>
+                </ul>
+            </li>
+            <li>\(B \sqcap C \sqsubseteq \bot \rightarrow\) <em>(Already in normal form)</em></li>
+            <li>\(\exists r.B \sqsubseteq \exists s.C \rightarrow\) Splits into:
+                <ul>
+                    <li>\(\exists r.B \sqsubseteq X_2\)</li>
+                    <li>\(X_2 \sqsubseteq \exists s.C\)</li>
+                </ul>
+            </li>
+            <li>\(B \sqsubseteq \exists s.(B \sqcap D) \rightarrow\) Splits into:
+                <ul>
+                    <li>\(B \sqsubseteq \exists s.X_3\)</li>
+                    <li>\(X_3 \sqsubseteq B\)</li>
+                    <li>\(X_3 \sqsubseteq D\)</li>
+                </ul>
+            </li>
+            <li>\(A \sqsubseteq \exists r.B \rightarrow\) <em>(Already in normal form)</em></li>
+        </ul>
+
+        <h4>2. Completion Algorithm (Saturation)</h4>
+        <p>Applying the saturation rules reveals logical consequences (unsatisfiabilities). Following the chain of inferences:</p>
+        <ol>
+            <li>From \(C \sqsubseteq \exists r.A\), any instance of \(C\) has an \(r\)-successor.</li>
+            <li>Because \(A \sqsubseteq \exists r.\top\) is trivially true for instances of \(A\), and the TBox says \(\exists r.\top \sqsubseteq B\), it follows that \(A \sqsubseteq B\).</li>
+            <li>Similarly, from \(C \sqsubseteq \exists r.A\), we get \(C \sqsubseteq \exists r.\top\), which implies \(C \sqsubseteq B\).</li>
+            <li>Since \(C \sqsubseteq B\), the intersection \(B \sqcap C\) is simply \(C\). The TBox states \(B \sqcap C \sqsubseteq \bot\), which means \(C \sqsubseteq \bot\). <strong>(\(C\) is unsatisfiable)</strong>.</li>
+            <li>If \(C\) is unsatisfiable, then \(\exists s.C\) is unsatisfiable (\(\bot\)).</li>
+            <li>Tracing backward: \(X_2 \sqsubseteq \exists s.C \implies X_2 \sqsubseteq \bot\).</li>
+            <li>\(\exists r.B \sqsubseteq X_2 \implies \exists r.B \sqsubseteq \bot\).</li>
+            <li>\(X_1 \sqsubseteq \exists r.B \implies X_1 \sqsubseteq \bot\).</li>
+            <li>\(A \sqsubseteq \exists r.B \implies A \sqsubseteq \bot\). <strong>(\(A\) is unsatisfiable)</strong>.</li>
+        </ol>
+    </div>
+
+    <!-- Exercise 2 -->
+    <h2 class="exercise-title">Exercise 2. Reasoning</h2>
+    <div class="question">
+        <p>1. Use the result from the previous exercise to check whether the following consequences hold:</p>
+        <ol type="a">
+            <li>\(A \sqsubseteq C\)</li>
+            <li>\(C \sqsubseteq D\)</li>
+            <li>\(C \sqsubseteq \exists s.C\)</li>
+            <li>\(\exists s.\exists r.(D \sqcap B) \sqsubseteq C \sqcap \exists r.C\)</li>
+            <li>\(\exists r.B \sqsubseteq \exists s.B\)</li>
+            <li>\(B \sqcap \exists s.D \sqsubseteq B \sqcap \exists r.A\)</li>
+            <li>\(\exists r.A \sqsubseteq \exists r.(A \sqcap \exists s.A)\)</li>
+        </ol>
+        <p>2. Construct countermodels for the subsumptions that do not hold.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <p>Using the results from Exercise 1, we evaluate subsumptions. Note that \(\bot \sqsubseteq X\) is always <strong>True</strong> (vacuously).</p>
+        <ul>
+            <li><strong>a) \(A \sqsubseteq C\)</strong>: <span class="ans-true">YES</span>. \(A\) is unsatisfiable (\(A \equiv \bot\)), so it is subsumed by anything.</li>
+            <li><strong>b) \(C \sqsubseteq D\)</strong>: <span class="ans-true">YES</span>. \(C\) is unsatisfiable (\(C \equiv \bot\)).</li>
+            <li><strong>c) \(C \sqsubseteq \exists s.C\)</strong>: <span class="ans-true">YES</span>. \(C\) is unsatisfiable.</li>
+            <li><strong>d) \(\exists s.\exists r.(D \sqcap B) \sqsubseteq C \sqcap \exists r.C\)</strong>: <span class="ans-false">NO</span>. The RHS is \(\bot\) (because \(C \equiv \bot\)), but the LHS is satisfiable (\(B \sqcap D\) can exist as \(X_3\)).</li>
+            <li><strong>e) \(\exists r.B \sqsubseteq \exists s.B\)</strong>: <span class="ans-true">YES</span>. We found in Ex 1 that \(\exists r.B \sqsubseteq \bot\), so LHS is \(\bot\).</li>
+            <li><strong>f) \(B \sqcap \exists s.D \sqsubseteq B \sqcap \exists r.A\)</strong>: <span class="ans-false">NO</span>. The RHS is \(\bot\) (since \(A \equiv \bot\)), but the LHS is satisfiable. 
+                <br><em>Countermodel:</em> A node satisfying \(B\) pointing via \(s\) to a node satisfying \(B, D\).</li>
+            <li><strong>g) \(\exists r.A \sqsubseteq \exists r.(A \sqcap \exists s.A)\)</strong>: <span class="ans-true">YES</span>. \(A \equiv \bot\), so LHS is \(\bot\).</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 3 -->
+    <h2 class="exercise-title">Exercise 3. Inverse Roles</h2>
+    <div class="question">
+        <p>Using inverse roles build a TBox that expresses the knowledge that carnivores only eat meat.</p>
+        <p>Is this expressible in \(\mathcal{EL}\)?</p>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <ul>
+            <li><strong>Translation:</strong> \(\exists \text{eats}^-. \text{Carnivore} \sqsubseteq \text{Meat}\)
+                <br><em>Explanation:</em> If an entity is eaten by a Carnivore (i.e., it has an incoming \(eats\) edge from a Carnivore, represented by the inverse role \(\exists \text{eats}^-\)), then that entity must be Meat.</li>
+            <li><strong>Expressible in \(\mathcal{EL}\)?</strong> <span class="ans-false">No</span>. \(\mathcal{EL}\) does not support inverse roles. This requires the extension <strong>\(\mathcal{ELI}\)</strong>.</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 4 -->
+    <h2 class="exercise-title">Exercise 4. ALC Satisfiability</h2>
+    <div class="question">
+        <p>Decide whether the following \(\mathcal{ALC}\) concepts are satisfiable or not. If they are, provide a satisfying interpretation.</p>
+        <ol>
+            <li>\(\neg B \sqcup \exists s.\bot\)</li>
+            <li>\(D \sqcap \neg \forall s.(B \sqcup C) \sqcap \neg \exists s.\neg C\)</li>
+            <li>\(B \sqcap (\neg B \sqcap \exists s.\bot) \sqcup \forall r.\bot\)</li>
+            <li>\(\forall r.(A \sqcup B) \sqcap \neg(\forall r.A) \sqcap \exists s.\neg B\)</li>
+            <li>\(\exists r.\exists s.\forall s.\bot\)</li>
+            <li>\(\exists r.\forall s.\exists r.\top\)</li>
+            <li>\(\forall r.\exists r.\exists s.\bot\)</li>
+        </ol>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <p>Satisfiability checks whether a concept can have at least one instance without creating logical contradictions.</p>
+        <ol>
+            <li><strong>\(\neg B \sqcup \exists s.\bot\)</strong>: <span class="ans-true">Satisfiable</span>. Equivalent to \(\neg B\). <em>Model:</em> A single node not in \(B\).</li>
+            <li><strong>\(D \sqcap \neg \forall s.(B \sqcup C) \sqcap \neg \exists s.\neg C\)</strong>: <span class="ans-false">Unsatisfiable</span>. Equivalent to \(D \sqcap \exists s.(\neg B \sqcap \neg C) \sqcap \forall s.C\). It requires an \(s\)-successor to be \(\neg C\), but also requires <em>all</em> \(s\)-successors to be \(C\). Contradiction.</li>
+            <li><strong>\(B \sqcap (\neg B \sqcap \exists s.\bot) \sqcup \forall r.\bot\)</strong>: <span class="ans-true">Satisfiable</span>. The first part is \(\bot\) (since \(B \sqcap \neg B\)), leaving \(\forall r.\bot\). <em>Model:</em> A single node with no \(r\)-successors.</li>
+            <li><strong>\(\forall r.(A \sqcup B) \sqcap \neg(\forall r.A) \sqcap \exists s.\neg B\)</strong>: <span class="ans-true">Satisfiable</span>. <em>Model:</em> Node 1 has an \(r\)-successor (Node 2) that is \(B, \neg A\), and an \(s\)-successor (Node 3) that is \(A, \neg B\).</li>
+            <li><strong>\(\exists r.\exists s.\forall s.\bot\)</strong>: <span class="ans-true">Satisfiable</span>. <em>Model:</em> Node 1 \(\xrightarrow{r}\) Node 2 \(\xrightarrow{s}\) Node 3. Node 3 has no outgoing \(s\)-edges.</li>
+            <li><strong>\(\exists r.\forall s.\exists r.\top\)</strong>: <span class="ans-true">Satisfiable</span>. <em>Model:</em> Node 1 \(\xrightarrow{r}\) Node 2 \(\xrightarrow{s}\) Node 3 \(\xrightarrow{r}\) Node 4.</li>
+            <li><strong>\(\forall r.\exists r.\exists s.\bot\)</strong>: <span class="ans-true">Satisfiable</span>. Because \(\exists s.\bot \equiv \bot\), this reduces to \(\forall r.\bot\). <em>Model:</em> A single node with no outgoing \(r\)-edges.</li>
+        </ol>
+    </div>
+
+    <!-- Exercise 5 -->
+    <h2 class="exercise-title">Exercise 5. KE</h2>
+    <div class="question">
+        <p>Starting from only the concept names Animal and Plant and the role name eats, construct a TBox that defines the following notions:</p>
+        <ol>
+            <li>Herbivore animal</li>
+            <li>Omnivorous being</li>
+            <li>Plants who only eat animals</li>
+            <li>Animals who eat neither plants nor animals</li>
+        </ol>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <p>Translating English to DL axioms using concepts <code>Animal</code>, <code>Plant</code> and role <code>eats</code>:</p>
+        <ol>
+            <li><strong>Herbivore animal</strong>: \(HA \equiv \text{Animal} \sqcap \forall \text{eats}.\text{Plant}\)</li>
+            <li><strong>Omnivorous being</strong>: \(OB \equiv \exists \text{eats}.\text{Plant} \sqcap \exists \text{eats}.\text{Animal}\)</li>
+            <li><strong>Plants who only eat animals</strong>: \(POEA \equiv \text{Plant} \sqcap \forall \text{eats}.\text{Animal}\)</li>
+            <li><strong>Animals who eat neither plants nor animals</strong>: \(ANPNA \equiv \text{Animal} \sqcap \neg \exists \text{eats}.\text{Plant} \sqcap \neg \exists \text{eats}.\text{Animal}\)</li>
+        </ol>
+    </div>
+
+    <!-- Exercise 6 -->
+    <h2 class="exercise-title">Exercise 6. Domain size</h2>
+    <div class="question">
+        <p>If possible, construct concepts \(C, D\) and \(E\) (or explain why it is not possible) such that for every interpretation \(\mathcal{I}\) it holds that:</p>
+        <ol>
+            <li>if \(C^\mathcal{I} \neq \emptyset\), then \(\Delta^\mathcal{I}\) must have at least two elements</li>
+            <li>if \(D^\mathcal{I} \neq \emptyset\), then \(\Delta^\mathcal{I}\) must have at most 6 elements</li>
+            <li>\(C \sqcap E\) is satisfiable</li>
+            <li>\(D \sqcup E\) is unsatisfiable</li>
+        </ol>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <p><strong>Result</strong>: It is <span class="ans-false">Impossible</span> to construct such concepts.</p>
+        <p><strong>Explanation</strong>:</p>
+        <ul>
+            <li>Rule 4 states \(D \sqcup E\) is unsatisfiable. This rigidly forces <em>both</em> \(D \equiv \bot\) and \(E \equiv \bot\).</li>
+            <li>Because \(E \equiv \bot\), any intersection with it is also \(\bot\). Therefore, \(C \sqcap E \equiv \bot\).</li>
+            <li>This directly violates Rule 3 (which requires \(C \sqcap E\) to be satisfiable). Thus, no such concepts exist.</li>
+            <li><em>(Note for rules 1 & 2: By setting concepts to \(\bot\), the premise of the implications (\(C^\mathcal{I} \neq \emptyset\)) becomes False, making the implications vacuously True).</em></li>
+        </ul>
+    </div>
+
+    <!-- Exercise 7 -->
+    <h2 class="exercise-title">Exercise 7. TBox Consistency</h2>
+    <div class="question">
+        <p>Check whether the following TBoxes are consistent. If they are, provide a model.</p>
+        <ol>
+            <li>\(\mathcal{T}_1 = \{B \sqsubseteq \exists r.A,\ \exists r.\top \sqsubseteq \neg B\}\)</li>
+            <li>\(\mathcal{T}_2 = \{A \sqsubseteq \exists s.B,\ \forall s.\neg B \sqsubseteq A,\ \exists r.B \sqsubseteq \forall r.\neg B\}\)</li>
+            <li>\(\mathcal{T}_3 = \{A \sqsubseteq \exists r.\neg A,\ \forall s.\neg A \sqsubseteq A,\ \top \sqsubseteq \forall r.\forall s.A\}\)</li>
+            <li>\(\mathcal{T}_4 = \{A \sqsubseteq \exists r.\neg A,\ \forall r.\top \sqsubseteq A\}\)</li>
+        </ol>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <p>A TBox is consistent if there exists at least one valid model (even an empty one, as long as no global contradictions are enforced on all nodes).</p>
+        <ol>
+            <li><strong>\(\mathcal{T}_1\)</strong>: <span class="ans-true">Consistent</span>. While \(B\) is unsatisfiable here, the TBox itself is fine. <em>Model:</em> Just a node in \(A\) with no edges.</li>
+            <li><strong>\(\mathcal{T}_2\)</strong>: <span class="ans-true">Consistent</span>. <em>Model:</em> Node 1 (\(A\)) points via \(s\) to Node 2 (\(B\)). Node 2 loops to itself via \(s\) to avoid triggering the \(\forall s.\neg B \sqsubseteq A\) rule.</li>
+            <li><strong>\(\mathcal{T}_3\)</strong>: <span class="ans-true">Consistent</span>. <em>Model:</em> Node 2 (\(A\)) points via \(r\) to Node 1 (\(\neg A\)). Node 1 points via \(s\) to Node 2 (\(A\)).</li>
+            <li><strong>\(\mathcal{T}_4\)</strong>: <span class="ans-false">Inconsistent</span>. \(\forall r.\top \sqsubseteq A\) forces <em>nodes with no \(r\)-successors</em> to be in \(A\). But if they are in \(A\), they <em>must</em> have an \(r\)-successor (due to \(A \sqsubseteq \exists r.\neg A\)). This causes an inescapable logical loop, breaking any potential model.</li>
+        </ol>
+    </div>
+
+    <!-- Exercise 8 -->
+    <h2 class="exercise-title">Exercise 8. Satisfiability</h2>
+    <div class="question">
+        <p>Decide whether the following concepts are satisfiable w.r.t. the TBox \(\mathcal{T}_1\) from Exercise 7.</p>
+        <ol>
+            <li>\(B \sqcup \forall r.B\)</li>
+            <li>\(\neg B \sqcap \exists r.\bot\)</li>
+            <li>\(\exists r.\exists r.B\)</li>
+        </ol>
+        <p>Decide whether \(\forall s.\bot\) is satisfiable w.r.t. the TBox \(\mathcal{T}_2\) from Exercise 7.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <h4>Part 1 w.r.t. \(\mathcal{T}_1\)</h4>
+        <p><em>(Recall: In \(\mathcal{T}_1\), \(B \equiv \bot\))</em></p>
+        <ol>
+            <li><strong>\(B \sqcup \forall r.B \equiv \bot \sqcup \forall r.\bot \equiv \forall r.\bot\)</strong>: <span class="ans-true">Satisfiable</span> (by a node with no \(r\)-successors).</li>
+            <li><strong>\(\neg B \sqcap \exists r.\bot \equiv \neg B \sqcap \bot \equiv \bot\)</strong>: <span class="ans-false">Unsatisfiable</span>.</li>
+            <li><strong>\(\exists r.\exists r.B \equiv \exists r.\bot \equiv \bot\)</strong>: <span class="ans-false">Unsatisfiable</span>.</li>
+        </ol>
+
+        <h4>Part 2 w.r.t. \(\mathcal{T}_2\)</h4>
+        <p>Decide if \(\forall s.\bot\) is satisfiable.</p>
+        <ul>
+            <li><strong>Result</strong>: <span class="ans-false">Unsatisfiable</span>.</li>
+            <li><strong>Proof</strong>: Assume node \(x \in \forall s.\bot\). This means \(x\) has NO \(s\)-successors. Because it has no \(s\)-successors, \(\forall s.\neg B\) is vacuously True for \(x\). By the rule \(\forall s.\neg B \sqsubseteq A\), node \(x\) must be in \(A\). However, the rule \(A \sqsubseteq \exists s.B\) states anything in \(A\) <em>must</em> have an \(s\)-successor. A node cannot simultaneously have zero \(s\)-successors and at least one \(s\)-successor.</li>
+        </ul>
+    </div>
+
+    <!-- Exercise 9 -->
+    <h2 class="exercise-title">Exercise 9. Subsumption</h2>
+    <div class="question">
+        <p>Check whether the following subsumption relations hold w.r.t. the TBox \(\mathcal{T}_1\) from Exercise 7.</p>
+        <ol>
+            <li>\(\exists r.(A \sqcap B) \sqsubseteq \forall r.A\)</li>
+            <li>\(A \sqcup B \sqsubseteq \forall r.B\)</li>
+            <li>\(\exists s.B \sqsubseteq \exists r.\neg B\)</li>
+        </ol>
+        <p>Repeat the exercise now using the TBox \(\mathcal{T}_2\) from Exercise 7.</p>
+    </div>
+    <div class="solution">
+        <h3>Solution Breakdown</h3>
+        <h4>Part 1 w.r.t. \(\mathcal{T}_1\)</h4>
+        <p><em>(Recall: \(B \equiv \bot\))</em></p>
+        <ol>
+            <li><strong>\(\exists r.(A \sqcap B) \sqsubseteq \forall r.A\)</strong>: <span class="ans-true">YES</span>. LHS contains \(B\), so LHS is \(\bot\). \(\bot\) is subsumed by anything.</li>
+            <li><strong>\(A \sqcup B \sqsubseteq \forall r.B\)</strong>: <span class="ans-false">NO</span>. \(A \sqcup B\) simplifies to \(A\). \(A\) is not forced to only have \(r\)-successors in \(B\) (which is \(\bot\)).</li>
+            <li><strong>\(\exists s.B \sqsubseteq \exists r.\neg B\)</strong>: <span class="ans-true">YES</span>. LHS is \(\bot\).</li>
+        </ol>
+
+        <h4>Part 2 w.r.t. \(\mathcal{T}_2\)</h4>
+        <p><em>(In \(\mathcal{T}_2\), \(\exists r.B \sqsubseteq \forall r.\neg B\) forces \(\exists r.B\) to be \(\bot\). A node cannot have an \(r\)-successor in \(B\) while simultaneously demanding all its \(r\)-successors be \(\neg B\)).</em></p>
+        <ol>
+            <li><strong>\(\exists r.(A \sqcap B) \sqsubseteq \forall r.A\)</strong>: <span class="ans-true">YES</span>. LHS is \(\bot\).</li>
+            <li><strong>\(A \sqcup B \sqsubseteq \forall r.B\)</strong>: <span class="ans-false">NO</span>. Instances of \(A\) can have \(r\)-successors as long as they are not \(B\).</li>
+            <li><strong>\(\exists s.B \sqsubseteq \exists r.\neg B\)</strong>: <span class="ans-false">NO</span>. A node can have an \(s\)-successor in \(B\) but have zero \(r\)-successors.</li>
+        </ol>
+    </div>
+
 </body>
 </html>
