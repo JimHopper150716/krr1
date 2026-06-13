@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boolean Algebra Exercises</title>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            background-color: #0d0d0d;
+            color: #c9d1d9;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 750px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #ffffff;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        h2.exercise-title {
+            color: #58a6ff;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 10px;
+            margin-top: 50px;
+        }
+        .question {
+            background-color: #21262d;
+            border-left: 4px solid #d29922;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+            color: #e6edf3;
+        }
+        .question p {
+            margin-top: 0;
+        }
+        .question ol {
+            margin-bottom: 0;
+        }
+        .solution {
+            background-color: #0d1117;
+            border-left: 4px solid #2ea043;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 0 6px 6px 0;
+        }
+        .solution h3 {
+            margin-top: 0;
+            color: #2ea043;
+            font-size: 1.2em;
+        }
+        .solution h4 {
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0 30px 0;
+            font-size: 15px;
+            background-color: #161b22;
+        }
+        table, th, td {
+            border: 1px solid #30363d;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #21262d;
+            color: #c9d1d9;
+        }
+        tr:nth-child(even) {
+            background-color: #1c2128;
+        }
+        .ans-true {
+            color: #3fb950;
+            font-weight: bold;
+        }
+        .ans-false {
+            color: #f85149;
+            font-weight: bold;
+        }
+        em {
+            color: #8b949e;
+        }
+        code {
+            background-color: #30363d;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Knowledge Representation and Reasoning<br>Exercise Session 1</h1>
+
+    <!-- EXERCISE 1 -->
+    <h2 class="exercise-title">Exercise 1. Truth Tables (*)</h2>
+    <div class="question">
+        <p>Build the truth tables of the following formulas. Remember the precedence of the operators.</p>
+        <ol>
+            <li>\( x \lor y \land x \)</li>
+            <li>\( x \land y \lor \neg z \)</li>
+            <li>\( (x \lor \neg z) \land \neg x \)</li>
+            <li>\( \neg(p \land (\neg p \lor q \lor s)) \lor q \land s \)</li>
+            <li>\( (x \lor y \land \neg x \lor \neg w) \land z \)</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Build truth tables for the given formulas, respecting operator precedence: <strong>\( \neg \) (NOT), then \( \land \) (AND), then \( \lor \) (OR)</strong>.</p>
+        
+        <h4>1. \( x \lor y \land x \)</h4>
+        <p>Because \( \land \) has higher precedence than \( \lor \), this is evaluated as \( x \lor (y \land x) \). By the absorption law, this simply evaluates to \( x \).</p>
+        <table>
+            <tr><th>\( x \)</th><th>\( y \)</th><th>\( y \land x \)</th><th>\( x \lor (y \land x) \)</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td><span class="ans-true">1</span></td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td><span class="ans-true">1</span></td></tr>
+        </table>
+
+        <h4>2. \( x \land y \lor \neg z \)</h4>
+        <p>Evaluated as \( (x \land y) \lor (\neg z) \).</p>
+        <table>
+            <tr><th>\( x \)</th><th>\( y \)</th><th>\( z \)</th><th>\( \neg z \)</th><th>\( x \land y \)</th><th>\( (x \land y) \lor \neg z \)</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td><span class="ans-true">1</span></td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td><span class="ans-true">1</span></td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td><span class="ans-true">1</span></td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td><span class="ans-true">1</span></td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td></tr>
+        </table>
+
+        <h4>3. \( (x \lor \neg z) \land \neg x \)</h4>
+        <table>
+            <tr><th>\( x \)</th><th>\( z \)</th><th>\( \neg x \)</th><th>\( \neg z \)</th><th>\( (x \lor \neg z) \)</th><th>\( (x \lor \neg z) \land \neg x \)</th></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td><span class="ans-true">1</span></td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td><span class="ans-false">0</span></td></tr>
+        </table>
+        <p><em>(Note: Formulas 4 and 5 follow the exact same tabular process of breaking down components by precedence).</em></p>
+    </div>
+
+    <!-- EXERCISE 2 -->
+    <h2 class="exercise-title">Exercise 2. Boolean Functions (*)</h2>
+    <div class="question">
+        <p>Build a ternary Boolean function (over the variables \( x, y, z \)) that returns false when <strong>at least</strong> one variable is false.</p>
+        <p>Express this Boolean function as a formula and as a truth table.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Build a ternary function \( f(x,y,z) \) that returns <code>false</code> when <em>at least one</em> variable is <code>false</code>.</p>
+        <p><strong>Logic:</strong> The only way the function returns <code>true</code> is if <strong>all</strong> variables are <code>true</code>. This corresponds to the logical AND of all three variables.</p>
+        <ul>
+            <li><strong>Formula:</strong> \( f(x, y, z) = x \land y \land z \)</li>
+            <li><strong>Truth Table:</strong> Only the row with all 1s returns 1.</li>
+        </ul>
+        <table>
+            <tr><th>\( x \)</th><th>\( y \)</th><th>\( z \)</th><th>\( f(x,y,z) \)</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td><span class="ans-false">0</span></td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td><span class="ans-true">1</span></td></tr>
+        </table>
+    </div>
+
+    <!-- EXERCISE 3 -->
+    <h2 class="exercise-title">Exercise 3. Types of Formulas (*)</h2>
+    <div class="question">
+        <p>Use truth tables (and, if needed, the equivalences seen during the lecture) to verify whether the following formulas are tautologies, contradictions, or non-tautological satisfiable formulas.</p>
+        <ol>
+            <li>\( \neg x \to x \to \neg x \)</li>
+            <li>\( (x \to y) \land (\neg y \to \neg x) \)</li>
+            <li>\( (x \to \neg y) \to (\neg y \to \neg x) \)</li>
+            <li>\( x \land y \lor (\neg x \land \neg y) \lor z \)</li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Determine if the formulas are Tautologies (always true), Contradictions (always false), or Satisfiable (sometimes true, sometimes false).</p>
+        
+        <h4>1. \( \neg x \to (x \to \neg x) \)</h4>
+        <ul>
+            <li><em>Simplification:</em> Recall that \( A \to B \equiv \neg A \lor B \).</li>
+            <li>\( x \to \neg x \equiv \neg x \lor \neg x \equiv \neg x \)</li>
+            <li>\( \neg x \to \neg x \equiv \neg(\neg x) \lor \neg x \equiv x \lor \neg x \equiv \top \)</li>
+            <li><strong>Result: <span class="ans-true">Tautology</span></strong></li>
+        </ul>
+
+        <h4>2. \( (x \to y) \land (\neg y \to \neg x) \)</h4>
+        <ul>
+            <li><em>Simplification:</em> \( (\neg y \to \neg x) \) is the contrapositive of \( (x \to y) \), so they mean the same thing logically.</li>
+            <li>The formula is just \( (x \to y) \land (x \to y) \equiv x \to y \).</li>
+            <li><strong>Result: <span style="color:#d29922;font-weight:bold;">Satisfiable</span></strong> (True when \( x=0 \), false when \( x=1, y=0 \)).</li>
+        </ul>
+
+        <h4>3. \( (x \to \neg y) \to (\neg y \to \neg x) \)</h4>
+        <ul>
+            <li><em>Test values:</em> Let \( x = 1, y = 1 \).
+                <ul><li>\( (1 \to 0) \to (0 \to 0) \implies 0 \to 1 \implies 1 \)</li></ul>
+            </li>
+            <li><em>Test values:</em> Let \( x = 1, y = 0 \).
+                <ul><li>\( (1 \to 1) \to (1 \to 0) \implies 1 \to 0 \implies 0 \)</li></ul>
+            </li>
+            <li><strong>Result: <span style="color:#d29922;font-weight:bold;">Satisfiable</span></strong> (Not a tautology because it can evaluate to false).</li>
+        </ul>
+
+        <h4>4. \( x \land y \lor (\neg x \land \neg y) \lor z \)</h4>
+        <ul>
+            <li><em>Interpretation:</em> True if \( x \) and \( y \) share the same value (both true or both false) OR if \( z \) is true. False if \( x \neq y \) and \( z = 0 \).</li>
+            <li><strong>Result: <span style="color:#d29922;font-weight:bold;">Satisfiable</span></strong></li>
+        </ul>
+    </div>
+
+    <!-- EXERCISE 4 -->
+    <h2 class="exercise-title">Exercise 4. Expressivity (**)</h2>
+    <div class="question">
+        <p>Can every propositional knowledge base be expressed as a propositional formula?</p>
+        <p>If the answer is <strong>yes</strong>, argue why; if it is <strong>no</strong>, give at least <strong>two</strong> examples of KBs which cannot be expressed.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Answer: YES.</strong></p>
+        <p><strong>Reasoning:</strong> A propositional Knowledge Base is fundamentally a set of propositional clauses (like a set of Horn clauses). Because the KB assumes all its facts and rules must hold true simultaneously, the entire KB can be represented mathematically as the conjunction (\( \land \)) of all its rules. Since combining formulas with logical ANDs just creates one large well-formed propositional formula, any propositional KB is expressible as a single propositional formula.</p>
+    </div>
+
+    <!-- EXERCISE 5 -->
+    <h2 class="exercise-title">Exercise 5. Knowledge Bases (**)</h2>
+    <div class="question">
+        <p>For the following truth table, construct a knowledge base (expressed as a set of propositional rules) which represents the same knowledge, or argue why it cannot be done.</p>
+        <table style="width: 50%; margin: 15px auto;">
+            <tr><th>\( x \)</th><th>\( y \)</th><th>\( z \)</th><th>\( K \)</th></tr>
+            <tr><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+            <tr><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+            <tr><td>0</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+        </table>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Construct a KB (set of Horn clauses) from the given truth table.</p>
+        <p><strong>Analysis:</strong></p>
+        <ul>
+            <li>The table \( K \) evaluates to 1 (True) only for states <code>0 0 0</code> and <code>1 1 0</code>.</li>
+            <li>Notice two patterns for the true states:
+                <ol>
+                    <li>\( z \) is ALWAYS false (\( \neg z \)).</li>
+                    <li>\( x \) and \( y \) are ALWAYS identical (\( x \leftrightarrow y \)).</li>
+                </ol>
+            </li>
+        </ul>
+        <p><strong>Conversion to rules (Horn clauses):</strong></p>
+        <ul>
+            <li>\( \neg z \) restricts \( z \) from ever being true. As a rule: <code>\( \gets z \)</code></li>
+            <li>\( x \leftrightarrow y \) means \( x \to y \) AND \( y \to x \). As rules: <code>\( y \gets x \)</code> and <code>\( x \gets y \)</code>.</li>
+        </ul>
+        <p><strong>Resulting KB:</strong></p>
+        <ul>
+            <li>\( y \gets x \)</li>
+            <li>\( x \gets y \)</li>
+            <li>\( \gets z \)</li>
+        </ul>
+    </div>
+
+    <!-- EXERCISE 6 -->
+    <h2 class="exercise-title">Exercise 6. Reasoning (*)</h2>
+    <div class="question">
+        <p>Consider the following knowledge base \( K \):</p>
+        <div style="display: flex; justify-content: space-around;">
+            <div>
+                \( u \gets \)<br>
+                \( x \gets v \)<br>
+                \( z \gets v, x \)<br>
+                \( z \gets w, x \)<br>
+                \( p \gets \)<br>
+                \( r \gets s, t \)
+            </div>
+            <div>
+                \( y \gets x, z, u \)<br>
+                \( u \gets y, z \)<br>
+                \( z \gets y, u \)<br>
+                \( v \gets \)<br>
+                \( t \gets w, u \)<br>
+                \( \gets z, s \)
+            </div>
+        </div>
+        <ol>
+            <li>Compute the redux \( \widehat{K} \)</li>
+            <li>Find all the facts that are entailed by \( K \)</li>
+            <li>Decide whether the following clauses are consequences of \( K \):
+                <ul style="list-style-type: none;">
+                    <li>a) \( t \gets x \)</li>
+                    <li>b) \( q \gets q \)</li>
+                    <li>c) \( r \gets y, s \)</li>
+                    <li>d) \( \gets x \)</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Process the KB using forward chaining and structural simplification.</p>
+        
+        <h4>1. Compute the redux \( \widehat{K} \):</h4>
+        <p>The "redux" is the KB after we remove all rules that contain variables in their body which can <em>never</em> be proven. Looking at the KB, the atoms \( w \) and \( s \) do not appear as the "head" of any valid rule, so they are unprovable (always false). We cross out any rule relying on \( w \) or \( s \):</p>
+        <ul>
+            <li>Cross out: \( z \gets w, x \) ; \( r \gets s, t \) ; \( t \gets w, u \) ; \( \gets z, s \)</li>
+            <li><strong>\( \widehat{K} \) becomes:</strong> \( u \gets \), \( x \gets v \), \( z \gets v, x \), \( p \gets \), \( y \gets x, z, u \), \( u \gets y, z \), \( z \gets y, u \), \( v \gets \).</li>
+        </ul>
+
+        <h4>2. Entailed Facts (Forward Chaining):</h4>
+        <ul>
+            <li>Base facts: <strong>\( u, v, p \)</strong></li>
+            <li>Using \( v \), rule \( x \gets v \) gives <strong>\( x \)</strong>.</li>
+            <li>Using \( v, x \), rule \( z \gets v, x \) gives <strong>\( z \)</strong>.</li>
+            <li>Using \( x, z, u \), rule \( y \gets x, z, u \) gives <strong>\( y \)</strong>.</li>
+            <li><strong>Entailed:</strong> <strong>\( u, v, p, x, z, y \)</strong></li>
+        </ul>
+
+        <h4>3. Consequences:</h4>
+        <ul>
+            <li><strong>a) \( t \gets x \) <span class="ans-false">(NO)</span>:</strong> \( x \) is true, but \( t \) is not entailed by the KB. So \( x \implies t \) is false.</li>
+            <li><strong>b) \( q \gets q \) <span class="ans-true">(YES)</span>:</strong> \( q \implies q \) is a tautology (always true).</li>
+            <li><strong>c) \( r \gets y, s \) <span class="ans-true">(YES)</span>:</strong> This means \( y \land s \implies r \). Since \( s \) is unprovable (false in all models), the premise \( y \land s \) is always false. A false premise makes an implication vacuously <strong>true</strong>.</li>
+            <li><strong>d) \( \gets x \) <span class="ans-false">(NO)</span>:</strong> This means \( \neg x \). Since \( x \) is entailed (always true), \( \neg x \) is always false.</li>
+        </ul>
+    </div>
+
+    <!-- EXERCISE 7 -->
+    <h2 class="exercise-title">Exercise 7. Formulas (***)</h2>
+    <div class="question">
+        <p>During the lecture we saw a method to transform any Boolean function into a formula (see Question 5). This method is very inefficient if the formula maps many valuations to true.</p>
+        <p>Devise a method that works better in this scenario.<br>
+        <strong>Hint:</strong> recall the properties of propositional formulas.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Devise an efficient method to get a formula from a Boolean function when it maps <em>many</em> valuations to True.</p>
+        <p><strong>Method:</strong> Standard DNF (sum of minterms) is inefficient if there are many True rows. Instead:</p>
+        <ol>
+            <li>Target the <strong>False</strong> rows to build a DNF formula for the <em>negation</em> of the function (\( \neg \varphi \)).</li>
+            <li>Then, negate that entire formula to get \( \varphi \).</li>
+            <li>Use <strong>De Morgan's Laws</strong> to push the negations inward, converting it into a much shorter Conjunctive Normal Form (CNF).</li>
+        </ol>
+        <p><strong>From the Professor's Example:</strong></p>
+        <p>Assume the function is False at <code>000</code> and <code>111</code>.</p>
+        <ul>
+            <li>\( \neg \varphi = (\neg x \land \neg y \land \neg z) \lor (x \land y \land z) \)</li>
+            <li>\( \varphi = \neg( (\neg x \land \neg y \land \neg z) \lor (x \land y \land z) ) \)</li>
+            <li>Apply De Morgan's: <strong>\( \varphi = (x \lor y \lor z) \land (\neg x \lor \neg y \lor \neg z) \)</strong></li>
+        </ul>
+    </div>
+
+    <!-- EXERCISE 8 -->
+    <h2 class="exercise-title">Exercise 8. Tautologies (***)</h2>
+    <div class="question">
+        <p>The soundness of the fact extraction algorithm seen during the lecture (unit propagation) depends on the following property:</p>
+        <p>if \( \varphi \to \psi \) and \( \psi \to \xi \) are both tautologies, then \( \varphi \to \xi \) is also a tautology.</p>
+        <p>Show that this property holds always in propositional logic.</p>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Prove transitivity of implication: If \( \varphi \to \psi \) and \( \psi \to \xi \) are tautologies, then \( \varphi \to \xi \) is a tautology.</p>
+        <p><strong>Semantic Proof:</strong></p>
+        <p>We use a valuation function \( \nu() \) where \( 1 \) is true and \( 0 \) is false.</p>
+        <ol>
+            <li>Assume \( \nu(\varphi \to \psi) = 1 \) and \( \nu(\psi \to \xi) = 1 \) for all assignments.</li>
+            <li>We want to prove \( \nu(\varphi \to \xi) = 1 \).</li>
+            <li>If \( \nu(\varphi) = 0 \), then \( \nu(\varphi \to \xi) = 1 \) trivially (false implies anything).</li>
+            <li>If \( \nu(\varphi) = 1 \):
+                <ul>
+                    <li>Because \( \nu(\varphi \to \psi) = 1 \), it must be that \( \nu(\psi) = 1 \).</li>
+                    <li>Because \( \nu(\psi \to \xi) = 1 \) and we know \( \nu(\psi) = 1 \), it must be that \( \nu(\xi) = 1 \).</li>
+                </ul>
+            </li>
+            <li>Since \( \nu(\varphi)=1 \) logically necessitates \( \nu(\xi)=1 \), the implication \( \nu(\varphi \to \xi) = 1 \) always holds.</li>
+        </ol>
+        <p>Thus, it is a tautology.</p>
+    </div>
+
+    <!-- EXERCISE 9 -->
+    <h2 class="exercise-title">Exercise 9. KE (**)</h2>
+    <div class="question">
+        <ol>
+            <li>Construct a KB expressing the following knowledge (decide first which propositional variables to use):
+                <ul>
+                    <li>platypi are monotremata</li>
+                    <li>monotremata are mammals and oviparous</li>
+                    <li>hairy animals are not oviparous</li>
+                    <li>hairy animals which are mammals are venomous</li>
+                </ul>
+            </li>
+            <li>Are hairy (animal) monotremata also platypi? <strong>Justify</strong></li>
+            <li>Are hairy (animal) monotremata also whales? <strong>Justify</strong></li>
+        </ol>
+    </div>
+
+    <div class="solution">
+        <h3>Solution</h3>
+        <p><strong>Goal:</strong> Construct a KB from English sentences and reason with it. Let's use variables: \( p \) (platypus), \( m \) (monotreme), \( a \) (mammal), \( o \) (oviparous), \( h \) (hairy), \( v \) (venomous).</p>
+        
+        <h4>1. Construct KB:</h4>
+        <ul>
+            <li>Platypi are monotremata: \( m \gets p \)</li>
+            <li>Monotremata are mammals and oviparous: \( a \gets m \) and \( o \gets m \)</li>
+            <li>Hairy animals are not oviparous: \( \gets h, o \) <em>(meaning \( h \land o \implies False \))</em></li>
+            <li>Hairy animals which are mammals are venomous: \( v \gets h, a \)</li>
+        </ul>
+
+        <h4>2. Are hairy (animal) monotremata also platypi? (<span class="ans-true">YES</span>)</h4>
+        <ul>
+            <li><strong>Justification:</strong> Assume we have an animal that is both hairy (\( h \)) and a monotreme (\( m \)). From \( m \), our KB infers it is oviparous (\( o \gets m \)). Now we have a creature that is both hairy (\( h \)) and oviparous (\( o \)). However, our KB specifically forbids this (\( \gets h, o \)). This creates a logical contradiction (False).</li>
+            <li>By the <em>Principle of Explosion</em> (ex falso quodlibet), anything follows from a contradiction. Therefore, a hairy monotreme mathematically entails being a platypus.</li>
+        </ul>
+
+        <h4>3. Are hairy (animal) monotremata also whales? (<span class="ans-true">YES</span>)</h4>
+        <ul>
+            <li><strong>Justification:</strong> YES, for the exact same reason. The premise "hairy monotreme" breaks the logical rules of our KB, generating a contradiction. From a contradiction, any conclusion—even being a whale—is logically entailed.</li>
+        </ul>
+    </div>
+  <h1>Knowledge Representation and Reasoning<br>Exercise Session 2</h1>
+    <h2 class="exercise-title">Exercise 1: Truth Table Generation</h2>
+<div class="question">
+    <p>Construct a complete truth table for the following Boolean logic function:</p>
+    <p>\( F(A, B, C) = (A \land \neg B) \lor (B \oplus C) \)</p>
+</div>
+
+<div class="solution">
+    <h3>Solution</h3>
+    <p>To build the truth table, we can break the expression down into its intermediate components: \( \neg B \), \( A \land \neg B \), and \( B \oplus C \) (where \(\oplus\) represents the XOR operation).</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>\(A\)</th>
+                <th>\(B\)</th>
+                <th>\(C\)</th>
+                <th>\(\neg B\)</th>
+                <th>\(A \land \neg B\)</th>
+                <th>\(B \oplus C\)</th>
+                <th>\(F\)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td>
+            </tr>
+            <tr>
+                <td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td>
+            </tr>
+            <tr>
+                <td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td>
+            </tr>
+            <tr>
+                <td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td>
+            </tr>
+            <tr>
+                <td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td><span class="ans-true">1</span></td>
+            </tr>
+            <tr>
+                <td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td><span class="ans-true">1</span></td>
+            </tr>
+            <tr>
+                <td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td><span class="ans-true">1</span></td>
+            </tr>
+            <tr>
+                <td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td><span class="ans-false">0</span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="exercise-title">Exercise 2: Algebraic Simplification</h2>
+<div class="question">
+    <p>Using the theorems and postulates of Boolean algebra, simplify the following expression to its minimal Sum of Products (SOP) form:</p>
+    <p>\( Y = A\overline{B}C + A\overline{B}\overline{C} + \overline{A}\overline{B}C \)</p>
+</div>
+
+<div class="solution">
+    <h3>Solution</h3>
+    <p>We can simplify the expression step-by-step by grouping terms and applying Boolean postulates:</p>
+    
+    <h4>Step 1: Factor out common variables</h4>
+    <p>Notice that the first two terms share \( A\overline{B} \). We can factor this out:</p>
+    <p>\( Y = A\overline{B}(C + \overline{C}) + \overline{A}\overline{B}C \)</p>
+    
+    <h4>Step 2: Apply the Complementarity Law</h4>
+    <p>According to the complementarity law, \( C + \overline{C} = 1 \). Substituting this in gives:</p>
+    <p>\( Y = A\overline{B}(1) + \overline{A}\overline{B}C \)</p>
+    <p>\( Y = A\overline{B} + \overline{A}\overline{B}C \)</p>
+
+    <h4>Step 3: Factor again</h4>
+    <p>Now, both remaining terms share \( \overline{B} \). Let's factor it out:</p>
+    <p>\( Y = \overline{B}(A + \overline{A}C) \)</p>
+
+    <h4>Step 4: Apply the Redundancy Law</h4>
+    <p>The redundancy law states that \( A + \overline{A}C = A + C \). Substituting this back yields our final simplified expression:</p>
+    <p>\( Y = \overline{B}(A + C) \)</p>
+    <p><em>In Sum of Products form: \( Y = A\overline{B} + \overline{B}C \)</em></p>
+</div>
+
+<h2 class="exercise-title">Exercise 3: De Morgan's Laws</h2>
+<div class="question">
+    <p>Apply De Morgan's Laws to find the complement of the following expression. Simplify the final result.</p>
+    <p>\( F = (A + B) \cdot (\overline{C} + D) \)</p>
+</div>
+
+<div class="solution">
+    <h3>Solution</h3>
+    <p>We need to find \( \overline{F} \), the complement of the entire expression. De Morgan's Laws state that \( \overline{X \cdot Y} = \overline{X} + \overline{Y} \) and \( \overline{X + Y} = \overline{X} \cdot \overline{Y} \).</p>
+    
+    <h4>Step 1: Invert the overall expression</h4>
+    <p>\( \overline{F} = \overline{(A + B) \cdot (\overline{C} + D)} \)</p>
+    
+    <h4>Step 2: Break the main AND operator</h4>
+    <p>Apply De Morgan's Law to the central AND operator, changing it to an OR operator and splitting the bar:</p>
+    <p>\( \overline{F} = \overline{(A + B)} + \overline{(\overline{C} + D)} \)</p>
+    
+    <h4>Step 3: Break the internal OR operators</h4>
+    <p>Apply De Morgan's Law to the individual terms. The ORs become ANDs:</p>
+    <p>\( \overline{F} = (\overline{A} \cdot \overline{B}) + (\overline{\overline{C}} \cdot \overline{D}) \)</p>
+    
+    <h4>Step 4: Cancel double negations</h4>
+    <p>Since \( \overline{\overline{C}} = C \), the final simplified complement is:</p>
+    <p>\( \overline{F} = \overline{A}\overline{B} + C\overline{D} \)</p>
+</div>
+
+</body>
+</html>
